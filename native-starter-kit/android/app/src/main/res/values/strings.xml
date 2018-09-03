@@ -1,0 +1,6 @@
+<resources>
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey"></string>
+    <string name="app_name">NativeStarterKit</string>
+    <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true">undefined</string>
+    <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true">undefined</string>
+</resources>
