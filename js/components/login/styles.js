@@ -1,4 +1,3 @@
-
 const React = require('react-native');
 
 const { StyleSheet, Dimensions } = React;
@@ -21,7 +20,7 @@ export default {
   },
   bg: {
     flex: 1,
-    marginTop: deviceHeight / 1.75,
+    marginTop: 70,
     paddingTop: 20,
     paddingLeft: 10,
     paddingRight: 10,
@@ -34,5 +33,10 @@ export default {
   btn: {
     marginTop: 20,
     alignSelf: 'center',
+  },
+  title: {
+    marginBottom: 70,
+    textAlign: 'center',
+    fontSize: 36,
   },
 };
