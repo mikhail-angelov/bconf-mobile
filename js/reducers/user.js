@@ -1,7 +1,8 @@
-import { AUTH_USER, DEAUTH_USER } from "../actions/user";
+import { AUTH_USER, DEAUTH_USER, AUTH_ERROR } from "../constants/actions";
 
 export const initialState = {
-  name: ""
+  name: "",
+  authError: false
 };
 
 const user = (state = initialState, action) => {
@@ -11,8 +12,14 @@ const user = (state = initialState, action) => {
       return {
         ...initialState,
         authenticated: true,
-        bootstrapped: true,
+        authError: false,
         username
+      };
+    }
+    case AUTH_ERROR: {
+      return {
+        ...initialState,
+        authError: true
       };
     }
     case DEAUTH_USER: {
