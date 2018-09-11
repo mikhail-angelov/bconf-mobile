@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import styled from "styled-components";
 
 type Props = {};
 class App extends Component<Props> {
@@ -27,15 +28,7 @@ class App extends Component<Props> {
               padding: 20
             }}
           >
-            <Text
-              style={{
-                textAlign: "center",
-                marginBottom: 15,
-                fontSize: 15
-              }}
-            >
-              Downloading update...
-            </Text>
+            <DemoText>Downloading update...</DemoText>
           </View>
         </View>
       );
@@ -44,3 +37,10 @@ class App extends Component<Props> {
 }
 
 export default App;
+
+const DemoText = styled(Text)`
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 15px;
+  color: red;
+`;
