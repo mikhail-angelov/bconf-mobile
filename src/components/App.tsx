@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import styled from "styled-components";
+import Welcome from "./WelcomeScreen/welcome";
 
 type Props = {};
 class App extends Component<Props> {
@@ -10,7 +11,7 @@ class App extends Component<Props> {
   }
 
   render() {
-    if (true) {
+    {
       return (
         <View
           style={{
@@ -29,6 +30,7 @@ class App extends Component<Props> {
             }}
           >
             <DemoText>Downloading update...</DemoText>
+            <Welcome />
           </View>
         </View>
       );
