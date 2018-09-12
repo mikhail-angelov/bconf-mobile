@@ -1,17 +1,18 @@
-/** @format */
-
 import { Navigation } from "react-native-navigation";
-import App from "./src/components/App";
-import { name as appName } from "./app.json";
+import { Provider } from "redux";
+import { registerScreens } from "./src/screens";
+import configureStore from "./src/store/configureStore";
 
-Navigation.registerComponent(appName, () => App);
+const store = configureStore();
+
+registerScreens(store, Provider);
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({
     root: {
       component: {
         id: "root",
-        name: appName
+        name: "MobileDemo"
       }
     }
   });
