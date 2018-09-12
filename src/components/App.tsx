@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Text, View, AsyncStorage, StyleSheet } from "react-native";
+import { View, AsyncStorage, ActivityIndicator } from "react-native";
 import { goToAuth, goHome, goWelcome } from "../navigation/navigation";
 import { USER_KEY } from "../utils/config";
+import styled from "styled-components";
 
-export default class App extends React.Component {
+class App extends React.Component {
   async componentDidMount() {
     try {
       const user = await AsyncStorage.getItem(USER_KEY);
@@ -21,20 +22,18 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Loading</Text>
-      </View>
+      <Wrap>
+        <ActivityIndicator size="large" color="#000" />
+      </Wrap>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  welcome: {
-    fontSize: 28
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  }
-});
+export default App;
+
+const Wrap = styled(View)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+`;
