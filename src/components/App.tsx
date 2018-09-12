@@ -12,7 +12,8 @@ class App extends React.Component {
       if (user) {
         goHome();
       } else {
-        goToAuth();
+        //goToAuth();
+        goWelcome();
       }
     } catch (err) {
       console.log("error: ", err);
