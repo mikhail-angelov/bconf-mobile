@@ -5,10 +5,12 @@ import {
   ScrollView,
   Dimensions,
   Animated,
+  ActivityIndicator,
   Text,
   TouchableOpacity
 } from "react-native";
 import { goToAuth } from "../../navigation/navigation";
+import SignIn from "../SignIn";
 import styled from "styled-components";
 
 const { width } = Dimensions.get("window");
@@ -47,6 +49,11 @@ export default class Welcome extends Component {
             onScroll={Animated.event([
               { nativeEvent: { contentOffset: { x: this.scrollX } } }
             ])}
+            onMomentumScrollEnd={() => {
+              if (position._a._value / width > 2) {
+                goToAuth();
+              }
+            }}
             scrollEventThrottle={16}
           >
             {photos.map((item, i) => {
@@ -69,6 +76,17 @@ export default class Welcome extends Component {
                 </View>
               );
             })}
+            <View
+              style={{
+                width,
+                height: width + 100,
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <ActivityIndicator size="large" color="#000" />
+            </View>
           </ScrollView>
         </View>
         <View style={{ flexDirection: "row" }}>

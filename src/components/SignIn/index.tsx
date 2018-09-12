@@ -1,12 +1,14 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View, Dimensions } from "react-native";
 import Input from "../CommonUIElements/Input/Input";
 import Button from "../CommonUIElements/Button/Button";
 import styled from "styled-components";
 
+const { width } = Dimensions.get("window");
+
 const SignIn = () => {
   return (
-    <SignUpView>
+    <View style={{ width: width }}>
       <Header>
         <Title>SIGN IN</Title>
         <Annotation>Company name</Annotation>
@@ -16,15 +18,12 @@ const SignIn = () => {
         <Input placeholder="Password" />
         <Button onPress={() => console.log("Hello!")}>Sign Up</Button>
       </Body>
-    </SignUpView>
+    </View>
   );
 };
 
 export default SignIn;
 
-const SignUpView = styled(View)`
-  flex: 1;
-`;
 const Title = styled(Text)`
   font-size: 36px;
   text-align: center;
