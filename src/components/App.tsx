@@ -1,18 +1,40 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
+import { Text, View, AsyncStorage, StyleSheet } from "react-native";
+import { goToAuth, goHome, goWelcome } from "../navigation/navigation";
+import { USER_KEY } from "../utils/config";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+export default class App extends React.Component {
+  async componentDidMount() {
+    try {
+      const user = await AsyncStorage.getItem(USER_KEY);
+      console.log("user: ", user);
+      if (user) {
+        goHome();
+      } else {
+        goToAuth();
+      }
+    } catch (err) {
+      console.log("error: ", err);
+      goToAuth();
+    }
   }
 
   render() {
     return (
-      <View>
-        <Text>Hello!</Text>
+      <View style={styles.container}>
+        <Text style={styles.welcome}>Loading</Text>
       </View>
     );
   }
 }
 
-export default App;
+const styles = StyleSheet.create({
+  welcome: {
+    fontSize: 28
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
+});
