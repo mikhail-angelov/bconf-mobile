@@ -8,7 +8,7 @@ const { width } = Dimensions.get("window");
 
 class SignIn extends React.Component {
   state = {
-    xPosition: new Animated.Value(-300)
+    xPosition: new Animated.Value(300)
   };
 
   componentDidMount() {

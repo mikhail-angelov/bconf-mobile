@@ -36,9 +36,14 @@ const photos = [
 
 export default class Welcome extends Component {
   scrollX = new Animated.Value(0);
-
+  // handleScroll = event => {
+  //   Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX } } }])(
+  //     event
+  //   );
+  // };
   render() {
     let position = Animated.divide(this.scrollX, width);
+
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View style={{ width, height: width + 100 }}>
