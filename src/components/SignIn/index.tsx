@@ -1,26 +1,41 @@
 import React from "react";
-import { Text, View, Dimensions } from "react-native";
+import { Text, View, Dimensions, Animated, Easing } from "react-native";
 import Input from "../CommonUIElements/Input/Input";
 import Button from "../CommonUIElements/Button/Button";
 import styled from "styled-components";
 
 const { width } = Dimensions.get("window");
 
-const SignIn = () => {
-  return (
-    <View style={{ width: width }}>
-      <Header>
-        <Title>SIGN IN</Title>
-        <Annotation>Company name</Annotation>
-      </Header>
-      <Body>
-        <Input placeholder="Login" />
-        <Input placeholder="Password" />
-        <Button onPress={() => console.log("Hello!")}>Sign Up</Button>
-      </Body>
-    </View>
-  );
-};
+class SignIn extends React.Component {
+  state = {
+    xPosition: new Animated.Value(-300)
+  };
+
+  componentDidMount() {
+    Animated.timing(this.state.xPosition, {
+      toValue: 0,
+      easing: Easing.back(0),
+      duration: 200
+    }).start();
+  }
+  render() {
+    return (
+      <Animated.View
+        style={{ width, transform: [{ translateX: this.state.xPosition }] }}
+      >
+        <Header>
+          <Title>SIGN IN</Title>
+          <Annotation>Company name</Annotation>
+        </Header>
+        <Body>
+          <Input placeholder="Login" />
+          <Input placeholder="Password" />
+          <Button onPress={() => console.log("Hello!")}>Sign Up</Button>
+        </Body>
+      </Animated.View>
+    );
+  }
+}
 
 export default SignIn;
 
