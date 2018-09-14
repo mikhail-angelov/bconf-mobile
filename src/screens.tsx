@@ -9,21 +9,25 @@ import configureStore from "./store/configureStore";
 
 const store = configureStore();
 
-function sceneCreator(sceneComp) {
-  return () => {
-    return class Wrapper extends React.Component {
-      render() {
-        return (
-          <Provider store={store}>{React.createElement(sceneComp)}</Provider>
-        );
-      }
-    };
-  };
-}
-
 export function registerScreens() {
-  Navigation.registerComponent("MobileDemo", sceneCreator(App));
-  Navigation.registerComponent("Welcome", sceneCreator(Welcome));
-  Navigation.registerComponent("SignIn", sceneCreator(SignIn));
-  Navigation.registerComponent("SignUp", sceneCreator(SignUp));
+  Navigation.registerComponent("MobileDemo", () => () => (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  ));
+  Navigation.registerComponent("Welcome", () => () => (
+    <Provider store={store}>
+      <Welcome />
+    </Provider>
+  ));
+  Navigation.registerComponent("SignIn", () => () => (
+    <Provider store={store}>
+      <SignIn />
+    </Provider>
+  ));
+  Navigation.registerComponent("SignUp", () => () => (
+    <Provider store={store}>
+      <SignUp />
+    </Provider>
+  ));
 }

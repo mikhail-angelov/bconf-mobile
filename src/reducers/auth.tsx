@@ -19,11 +19,17 @@ const auth = (state = initialState, action) => {
     case AUTH_ERROR: {
       return {
         ...initialState,
-        authError: true
+        authenticated: false,
+        authError: action.payload
       };
     }
     case DEAUTH_USER: {
-      return { ...initialState, bootstrapped: true, error: action.payload };
+      return {
+        ...initialState,
+        bootstrapped: true,
+        authenticated: false,
+        error: action.payload
+      };
     }
     default:
       return state;

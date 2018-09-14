@@ -1,6 +1,10 @@
 import { AUTH_USER, DEAUTH_USER, AUTH_ERROR } from "../constants/actions";
 import { setAuth } from "./helper";
 
+export const setAuthError = error => dispatch => {
+  return dispatch({ type: AUTH_ERROR, payload: error });
+};
+
 export const login = ({ username, password }) => dispatch => {
   try {
     if (username === "Admin" && password === "123456") {
@@ -10,12 +14,10 @@ export const login = ({ username, password }) => dispatch => {
         payload: username
       });
     } else {
-      return dispatch({
-        type: AUTH_ERROR
-      });
+      dispatch(setAuthError("Incorrect username or password"));
     }
   } catch (err) {
-    console.log(err);
+    setAuthError(err);
   }
 };
 

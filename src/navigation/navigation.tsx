@@ -23,15 +23,9 @@ export const goToAuth = () =>
 export const goHome = () =>
   Navigation.setRoot({
     root: {
-      stack: {
-        id: "App",
-        children: [
-          {
-            component: {
-              name: "MobileDemo"
-            }
-          }
-        ]
+      component: {
+        id: "SignUp",
+        name: "SignUp"
       }
     }
   });
