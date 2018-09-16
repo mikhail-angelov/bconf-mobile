@@ -1,31 +1,5 @@
-import { Navigation } from "react-native-navigation";
+import { emit, NAVIGATE_WELCOME, NAVIGATE_SIGNIN, NAVIGATE_SIGNUP } from '../helpers/eventBus'
 
-export const goWelcome = () =>
-  Navigation.setRoot({
-    root: {
-      component: {
-        id: "Welcome",
-        name: "Welcome"
-      }
-    }
-  });
-
-export const goToAuth = () =>
-  Navigation.setRoot({
-    root: {
-      component: {
-        id: "SignIn",
-        name: "SignIn"
-      }
-    }
-  });
-
-export const goHome = () =>
-  Navigation.setRoot({
-    root: {
-      component: {
-        id: "SignUp",
-        name: "SignUp"
-      }
-    }
-  });
+export const goWelcome = () => emit(NAVIGATE_WELCOME)
+export const goToAuth = () => emit(NAVIGATE_SIGNIN)
+export const goHome = () =>emit(NAVIGATE_SIGNUP)

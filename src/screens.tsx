@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import { Navigation } from "react-native-navigation";
+import React from "react";
 import { Provider } from "react-redux";
 import App from "./components/App";
 import Welcome from "./components/WelcomeScreen";
@@ -7,9 +6,9 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import configureStore from "./store/configureStore";
 
-const store = configureStore();
+const store = configureStore({});
 
-export function registerScreens() {
+export function registerScreens(Navigation) {
   Navigation.registerComponent("MobileDemo", () => () => (
     <Provider store={store}>
       <App />

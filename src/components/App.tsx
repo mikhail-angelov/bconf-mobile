@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { View, AsyncStorage, ActivityIndicator } from "react-native";
 import { goToAuth, goHome, goWelcome } from "../navigation/navigation";
 import { USER_KEY } from "../utils/config";
