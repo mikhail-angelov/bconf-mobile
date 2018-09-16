@@ -15,7 +15,32 @@ const SIGN_IN = "SIGN_IN";
 const SIGN_UP = "SIGN_UP";
 const FORGOT_PASSWORD = "FORGOT_PASSWORD";
 const CHANGE_PASSWORD = "CHANGE_PASSWORD";
-class SignIn extends React.Component {
+
+interface IProps {
+  login: any,
+  signUp: any,
+  forgotPassword: any,
+  changePassword: any,
+  auth: { authError: any }
+}
+
+interface IState {
+  xPosition: any,
+  password: string,
+  username: string,
+  newPassword: string,
+  repeatNewPassword: string,
+  email: string,
+  subView: string,
+  error: { username: string, password: string }
+}
+class SignIn extends React.Component<IProps, IState> {
+  private username: string = ''
+  private password: string = ''
+  private newPassword: string = ''
+  private repeatNewPassword: string = ''
+  private email: string = ''
+
   constructor(props) {
     super(props);
     this.state = {
@@ -26,11 +51,11 @@ class SignIn extends React.Component {
       repeatNewPassword: "",
       email: "",
       subView: SIGN_IN,
-      error: {}
+      error: { username: '', password: '' }
     };
     this.handleLogin = this.handleLogin.bind(this);
   }
-  componentDidMount() {
+  public componentDidMount() {
     Animated.timing(this.state.xPosition, {
       toValue: 0,
       easing: Easing.back(0),
@@ -38,13 +63,13 @@ class SignIn extends React.Component {
     }).start();
   }
 
-  componentWillReceiveProps(nextProps) {
+  public componentWillReceiveProps(nextProps) {
     if (nextProps.auth.authenticated) {
       goHome();
     }
   }
 
-  handleLogin() {
+  private handleLogin() {
     const { username, password } = this.state;
     if (!validateCommonField(username) && !validateCommonField(password)) {
       this.setState({
@@ -54,11 +79,11 @@ class SignIn extends React.Component {
         }
       });
     } else if (!validateCommonField(username)) {
-      this.setState({ error: { username: "Please, enter username" } });
+      this.setState({ error: { username: "Please, enter username", password: '' } });
     } else if (!validateCommonField(password)) {
-      this.setState({ error: { password: "Please, enter password" } });
+      this.setState({ error: { username:'', password: "Please, enter password" } });
     } else {
-      this.setState({ error: {} });
+      this.setState({ error: {username:'',password: ''} });
       this.props.login({
         username: this.state.username,
         password: this.state.password
@@ -66,7 +91,7 @@ class SignIn extends React.Component {
     }
   }
 
-  loginView() {
+  private loginView() {
     return (
       <Animated.View
         style={{ width, transform: [{ translateX: this.state.xPosition }] }}
@@ -113,7 +138,7 @@ class SignIn extends React.Component {
     );
   }
 
-  signUpView() {
+  private signUpView() {
     return (
       <Animated.View
         style={{ width, transform: [{ translateX: this.state.xPosition }] }}
@@ -130,6 +155,7 @@ class SignIn extends React.Component {
             }}
             onChangeText={username => this.setState({ username })}
             value={this.state.username}
+            error=""
           />
           <Input
             placeholder="Email"
@@ -138,6 +164,7 @@ class SignIn extends React.Component {
             }}
             onChangeText={email => this.setState({ email })}
             value={this.state.email}
+            error=""
           />
           <Input
             placeholder="Password"
@@ -146,6 +173,7 @@ class SignIn extends React.Component {
             }}
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
+            error=""
           />
           <Button
             onPress={() =>
@@ -168,7 +196,7 @@ class SignIn extends React.Component {
     );
   }
 
-  forgotPassordView() {
+  private forgotPassordView() {
     return (
       <Animated.View
         style={{ width, transform: [{ translateX: this.state.xPosition }] }}
@@ -185,6 +213,7 @@ class SignIn extends React.Component {
             }}
             onChangeText={username => this.setState({ username })}
             value={this.state.username}
+            error=""
           />
           <Input
             placeholder="Email"
@@ -193,6 +222,7 @@ class SignIn extends React.Component {
             }}
             onChangeText={email => this.setState({ email })}
             value={this.state.email}
+            error=""
           />
           <Button
             onPress={() =>
@@ -214,7 +244,7 @@ class SignIn extends React.Component {
     );
   }
 
-  changePasswordView() {
+  private changePasswordView() {
     return (
       <Animated.View
         style={{ width, transform: [{ translateX: this.state.xPosition }] }}
@@ -231,6 +261,7 @@ class SignIn extends React.Component {
             }}
             onChangeText={newPassword => this.setState({ newPassword })}
             value={this.state.newPassword}
+            error=""
           />
           <Input
             placeholder="Repeat new password"
@@ -241,6 +272,7 @@ class SignIn extends React.Component {
               this.setState({ repeatNewPassword })
             }
             value={this.state.repeatNewPassword}
+            error=""
           />
           <Button
             onPress={() =>
@@ -262,7 +294,7 @@ class SignIn extends React.Component {
     );
   }
 
-  viewSelector(subView) {
+  private viewSelector(subView) {
     if (subView === SIGN_UP) {
       return this.signUpView();
     } else if (subView === FORGOT_PASSWORD) {
@@ -274,16 +306,16 @@ class SignIn extends React.Component {
     }
   }
 
-  render() {
+  public render() {
     return <View>{this.viewSelector(this.state.subView)}</View>;
   }
 }
 
-export const mapDispatchToProps = {
+const mapDispatchToProps = {
   login
 };
 
-export const mapStateToProps = state => ({ auth: state.auth });
+const mapStateToProps = state => ({ auth: state.auth });
 
 export default connect(
   mapStateToProps,

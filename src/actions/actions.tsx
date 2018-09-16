@@ -22,6 +22,6 @@ export const login = ({ username, password }) => dispatch => {
 };
 
 export const logout = () => dispatch => {
-  setAuth({});
+  setAuth({username: '', password:''});
   dispatch({ type: DEAUTH_USER });
 };

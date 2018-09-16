@@ -1,6 +1,6 @@
 import storage from "./storage";
 
-export const auth = {};
+export const auth = {username:'', password:''};
 export const setAuth = ({ username, password }) => {
   auth.username = username;
   auth.password = password;

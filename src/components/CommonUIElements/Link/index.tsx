@@ -2,12 +2,6 @@ import React from "react";
 import { Button, Text } from "react-native";
 import styled from "styled-components";
 
-const UILink = ({ ...otherProps }) => {
-  return <CustomButton {...otherProps} />;
-};
-
-export default UILink;
-
 const CustomButton = styled(Button)`
   border: 1px solid #bbb;
   border-radius: 5px;
@@ -18,3 +12,7 @@ const CustomButton = styled(Button)`
   align-items: center;
   justify-content: center;
 `;
+
+const UILink = (otherProps) => (<CustomButton {...otherProps} />);
+
+export default UILink;
