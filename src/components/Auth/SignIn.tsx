@@ -38,7 +38,7 @@ interface IState {
 }
 class SignIn extends React.Component<IProps, IState> {
   state = {
-    xPosition: new Animated.Value(-300),
+    xPosition: new Animated.Value(300),
     password: "",
     username: "",
     newPassword: "",
