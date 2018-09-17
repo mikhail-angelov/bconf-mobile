@@ -5,22 +5,20 @@ import { USER_KEY } from "../utils/config";
 import styled from "styled-components";
 
 class App extends React.Component {
-  async componentDidMount() {
+  public async componentDidMount() {
     try {
       const user = await AsyncStorage.getItem(USER_KEY);
-      console.log("user: ", user);
       if (user) {
         goHome();
       } else {
         goWelcome();
       }
     } catch (err) {
-      console.log("error: ", err);
       goToAuth();
     }
   }
 
-  render() {
+  public render() {
     return (
       <Wrap>
         <ActivityIndicator size="large" color="#000" />

@@ -35,14 +35,9 @@ const photos = [
 ];
 
 export default class Welcome extends Component {
-  scrollX = new Animated.Value(0);
-  // handleScroll = event => {
-  //   Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX } } }])(
-  //     event
-  //   );
-  // };
-  render() {
-    let position = Animated.divide(this.scrollX, width);
+  private scrollX = new Animated.Value(0);
+  public render() {
+    const position: any = Animated.divide(this.scrollX, width);
 
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -55,7 +50,7 @@ export default class Welcome extends Component {
               { nativeEvent: { contentOffset: { x: this.scrollX } } }
             ])}
             onMomentumScrollEnd={() => {
-              if (position._a._value / width > 2) {
+              if (position.__getValue() / width > 2) {
                 goToAuth();
               }
             }}
@@ -96,7 +91,7 @@ export default class Welcome extends Component {
         </View>
         <View style={{ flexDirection: "row" }}>
           {photos.map((_, i) => {
-            let opacity = position.interpolate({
+            const opacity = position.interpolate({
               inputRange: [i - 1, i, i + 1],
               outputRange: [0.3, 1, 0.3],
 

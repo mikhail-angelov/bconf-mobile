@@ -17,29 +17,29 @@ const FORGOT_PASSWORD = "FORGOT_PASSWORD";
 const CHANGE_PASSWORD = "CHANGE_PASSWORD";
 
 interface IProps {
-  login: any,
-  signUp: any,
-  forgotPassword: any,
-  changePassword: any,
-  auth: { authError: any }
+  login: Function;
+  signUp: Function;
+  forgotPassword: Function;
+  changePassword: Function;
+  auth: { authError: any };
 }
 
 interface IState {
-  xPosition: any,
-  password: string,
-  username: string,
-  newPassword: string,
-  repeatNewPassword: string,
-  email: string,
-  subView: string,
-  error: { username: string, password: string }
+  xPosition: Animated.AnimatedValue;
+  password: string;
+  username: string;
+  newPassword: string;
+  repeatNewPassword: string;
+  email: string;
+  subView: string;
+  error: { username: string; password: string };
 }
 class SignIn extends React.Component<IProps, IState> {
-  private username: string = ''
-  private password: string = ''
-  private newPassword: string = ''
-  private repeatNewPassword: string = ''
-  private email: string = ''
+  private username: string = "";
+  private password: string = "";
+  private newPassword: string = "";
+  private repeatNewPassword: string = "";
+  private email: string = "";
 
   constructor(props) {
     super(props);
@@ -51,10 +51,15 @@ class SignIn extends React.Component<IProps, IState> {
       repeatNewPassword: "",
       email: "",
       subView: SIGN_IN,
-      error: { username: '', password: '' }
+      error: { username: "", password: "" }
     };
     this.handleLogin = this.handleLogin.bind(this);
   }
+
+  public render() {
+    return <View>{this.viewSelector(this.state.subView)}</View>;
+  }
+
   public componentDidMount() {
     Animated.timing(this.state.xPosition, {
       toValue: 0,
@@ -79,11 +84,15 @@ class SignIn extends React.Component<IProps, IState> {
         }
       });
     } else if (!validateCommonField(username)) {
-      this.setState({ error: { username: "Please, enter username", password: '' } });
+      this.setState({
+        error: { username: "Please, enter username", password: "" }
+      });
     } else if (!validateCommonField(password)) {
-      this.setState({ error: { username:'', password: "Please, enter password" } });
+      this.setState({
+        error: { username: "", password: "Please, enter password" }
+      });
     } else {
-      this.setState({ error: {username:'',password: ''} });
+      this.setState({ error: { username: "", password: "" } });
       this.props.login({
         username: this.state.username,
         password: this.state.password
@@ -304,10 +313,6 @@ class SignIn extends React.Component<IProps, IState> {
     } else {
       return this.loginView();
     }
-  }
-
-  public render() {
-    return <View>{this.viewSelector(this.state.subView)}</View>;
   }
 }
 
