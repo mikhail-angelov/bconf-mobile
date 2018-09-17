@@ -1,5 +1,10 @@
-import { emit, NAVIGATE_WELCOME, NAVIGATE_SIGNIN, NAVIGATE_SIGNUP } from '../helpers/eventBus'
+import {
+  emit,
+  NAVIGATE_WELCOME,
+  NAVIGATE_SIGNIN,
+  NAVIGATE_CHAT
+} from "../helpers/eventBus";
 
-export const goWelcome = () => emit(NAVIGATE_WELCOME)
-export const goToAuth = () => emit(NAVIGATE_SIGNIN)
-export const goHome = () =>emit(NAVIGATE_SIGNUP)
+export const goWelcome = () => emit(NAVIGATE_WELCOME);
+export const goToAuth = () => emit(NAVIGATE_SIGNIN);
+export const goHome = () => emit(NAVIGATE_CHAT);

@@ -10,7 +10,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { goToAuth } from "../../navigation/navigation";
-import SignIn from "../SignIn";
+import SignIn from "../Auth/SignIn";
 import styled from "styled-components";
 
 const { width } = Dimensions.get("window");

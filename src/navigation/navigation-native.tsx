@@ -1,5 +1,10 @@
 import { Navigation } from "react-native-navigation";
-import { on, NAVIGATE_WELCOME, NAVIGATE_SIGNIN, NAVIGATE_SIGNUP } from '../helpers/eventBus'
+import {
+  on,
+  NAVIGATE_WELCOME,
+  NAVIGATE_SIGNIN,
+  NAVIGATE_CHAT
+} from "../helpers/eventBus";
 
 on(NAVIGATE_WELCOME, () =>
   Navigation.setRoot({
@@ -9,24 +14,32 @@ on(NAVIGATE_WELCOME, () =>
         name: "Welcome"
       }
     }
-  }));
+  })
+);
+on(NAVIGATE_CHAT, () => {
+  Navigation.setRoot({
+    root: {
+      component: {
+        id: "Chat",
+        name: "Chat"
+      }
+    }
+  });
+});
 
 on(NAVIGATE_SIGNIN, () =>
   Navigation.setRoot({
     root: {
-      component: {
+      stack: {
         id: "SignIn",
-        name: "SignIn"
+        children: [
+          {
+            component: {
+              name: "SignIn"
+            }
+          }
+        ]
       }
     }
-  }));
-
-  on(NAVIGATE_SIGNUP, () =>
-  Navigation.setRoot({
-    root: {
-      component: {
-        id: "SignUp",
-        name: "SignUp"
-      }
-    }
-  }));
+  })
+);

@@ -2,9 +2,11 @@ import React from "react";
 import { Provider } from "react-redux";
 import App from "./components/App";
 import Welcome from "./components/WelcomeScreen";
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
+import SignIn from "./components/Auth/SignIn";
+import SignUp from "./components/Auth/SignUp";
 import configureStore from "./store/configureStore";
+import ForgotPassword from "./components/Auth/ForgotPassword";
+import { Chat } from "./components/Chat";
 
 const store = configureStore({});
 
@@ -27,6 +29,16 @@ export function registerScreens(Navigation) {
   Navigation.registerComponent("SignUp", () => () => (
     <Provider store={store}>
       <SignUp />
+    </Provider>
+  ));
+  Navigation.registerComponent("ForgotPassword", () => () => (
+    <Provider store={store}>
+      <ForgotPassword />
+    </Provider>
+  ));
+  Navigation.registerComponent("Chat", () => () => (
+    <Provider store={store}>
+      <Chat />
     </Provider>
   ));
 }

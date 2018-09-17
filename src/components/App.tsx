@@ -1,5 +1,5 @@
 import React from "react";
-import { View, AsyncStorage, ActivityIndicator } from "react-native";
+import { AsyncStorage, ActivityIndicator, View } from "react-native";
 import { goToAuth, goHome, goWelcome } from "../navigation/navigation";
 import { USER_KEY } from "../utils/config";
 import styled from "styled-components";

@@ -7,4 +7,4 @@ export const emit = emitter.emit;
 
 export const NAVIGATE_WELCOME = "NAVIGATE_WELCOME";
 export const NAVIGATE_SIGNIN = "NAVIGATE_SIGNIN";
-export const NAVIGATE_SIGNUP = "NAVIGATE_SIGNUP";
+export const NAVIGATE_CHAT = "NAVIGATE_CHAT";
