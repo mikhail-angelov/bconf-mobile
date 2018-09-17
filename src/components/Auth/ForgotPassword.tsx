@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Header, Title, Annotation, Body } from "./styled";
 import Input from "../CommonUIElements/Input";
 import Button from "../CommonUIElements/Button";
-import { remindPassword } from "../../actions/actions";
+import { remindPassword } from "../../actions/auth";
 import { connect } from "react-redux";
 
 interface Props {

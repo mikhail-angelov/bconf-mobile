@@ -50,7 +50,7 @@ export default class Welcome extends Component {
               { nativeEvent: { contentOffset: { x: this.scrollX } } }
             ])}
             onMomentumScrollEnd={() => {
-              if (position.__getValue() / width > 2) {
+              if (position.__getValue() > 2) {
                 goToAuth();
               }
             }}

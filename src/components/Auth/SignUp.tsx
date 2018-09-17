@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Input from "../CommonUIElements/Input";
 import Button from "../CommonUIElements/Button";
 import { Header, Title, Annotation, Body } from "./styled";
-import { signUp } from "../../actions/actions";
+import { signUp } from "../../actions/auth";
 import { connect } from "react-redux";
 
 interface IProps {

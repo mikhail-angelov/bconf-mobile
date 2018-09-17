@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Dimensions, Animated, Easing } from "react-native";
 import { goHome } from "../../navigation/navigation";
-import { login } from "../../actions/actions";
+import { login } from "../../actions/auth";
 import Input from "../CommonUIElements/Input";
 import Button from "../CommonUIElements/Button";
 import Link from "../CommonUIElements/Link";
