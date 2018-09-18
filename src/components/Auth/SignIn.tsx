@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Dimensions, Animated, Easing } from "react-native";
 import { goHome } from "../../navigation/navigation";
 import { login } from "../../actions/auth";
+import { socketFire } from "../../actions/helper";
 import Input from "../CommonUIElements/Input";
 import Button from "../CommonUIElements/Button";
 import Link from "../CommonUIElements/Link";
@@ -34,15 +35,19 @@ interface IState {
   error: { username: string; password: string };
 }
 class SignIn extends React.Component<IProps, IState> {
-  public state = {
-    xPosition: new Animated.Value(300),
-    password: "",
-    username: "",
-    newPassword: "",
-    repeatNewPassword: "",
-    email: "",
-    error: { username: "", password: "" }
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      xPosition: new Animated.Value(300),
+      password: "",
+      username: "",
+      newPassword: "",
+      repeatNewPassword: "",
+      email: "",
+      error: { username: "", password: "" }
+    };
+    socketFire();
+  }
 
   public render() {
     return (

@@ -1,5 +1,6 @@
 import axios from "axios";
 import storage from "./storage";
+import io from "socket.io-client";
 
 export const auth = { username: "", password: "" };
 export const setAuth = ({ username, password }) => {
@@ -8,5 +9,16 @@ export const setAuth = ({ username, password }) => {
   storage.save("AUTH", auth);
 };
 
-export const doJsonRequest = opts =>
+export const doJsonRequest = opts => {
   axios(opts).then(response => response.data);
+};
+
+export const socketFire = () => {
+  const socket = io("https://now-tlruuxqgrs.now.sh");
+  socket.on("connection", msg => {
+    console.log("connection", msg);
+  });
+  socket.on("chat message", msg => {
+    console.log("chat message", msg);
+  });
+};
