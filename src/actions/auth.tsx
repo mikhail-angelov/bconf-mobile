@@ -18,16 +18,15 @@ export const login = ({ username, password }) => async dispatch => {
     const resp = await doJsonRequest({
       url: AUTH_URL,
       method: "post",
-      data: { username: username }
+      data: { username }
     });
-    console.log("res", resp);
+
     setAuth({ username, password });
     return dispatch({
       type: AUTH_USER,
       payload: username
     });
   } catch (e) {
-    console.log("errr", e);
     dispatch(setAuthError("Incorrect username or password"));
   }
 };

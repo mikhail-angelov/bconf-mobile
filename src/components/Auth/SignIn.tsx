@@ -19,10 +19,7 @@ import {
 const { width } = Dimensions.get("window");
 
 interface IProps {
-  login: Function;
-  signUp: Function;
-  forgotPassword: Function;
-  changePassword: Function;
+  login: ({ username, password }) => void;
   auth: { authError: any };
   componentId: string;
 }
@@ -37,7 +34,7 @@ interface IState {
   error: { username: string; password: string };
 }
 class SignIn extends React.Component<IProps, IState> {
-  state = {
+  public state = {
     xPosition: new Animated.Value(300),
     password: "",
     username: "",

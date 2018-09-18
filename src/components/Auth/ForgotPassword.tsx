@@ -7,15 +7,15 @@ import Button from "../CommonUIElements/Button";
 import { remindPassword } from "../../actions/auth";
 import { connect } from "react-redux";
 
-interface Props {
-  remindPassword: Function;
+interface IProps {
+  remindPassword: ({ username, password }) => void;
 }
-class ForgotPassword extends React.Component<Props> {
-  state = {
+class ForgotPassword extends React.Component<IProps> {
+  public state = {
     email: "",
     username: ""
   };
-  render() {
+  public render() {
     return (
       <ForgotPasswordView>
         <Header>

@@ -8,10 +8,7 @@ import { signUp } from "../../actions/auth";
 import { connect } from "react-redux";
 
 interface IProps {
-  login: Function;
-  signUp: Function;
-  forgotPassword: Function;
-  changePassword: Function;
+  signUp: ({ username, email, password }) => void;
   auth: { authError: any };
   componentId: string;
 }
@@ -23,7 +20,7 @@ interface IState {
   error: { username: string; password: string };
 }
 class SignUp extends React.Component<IProps, IState> {
-  state = {
+  public state = {
     username: "",
     password: "",
     email: "",

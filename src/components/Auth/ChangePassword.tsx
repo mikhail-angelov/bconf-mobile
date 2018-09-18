@@ -1,21 +1,20 @@
 import React from "react";
-import { Text, View } from "react-native";
-import styled from "styled-components";
+import { View } from "react-native";
 import { Header, Title, Annotation, Body } from "./styled";
 import Input from "../CommonUIElements/Input";
 import Button from "../CommonUIElements/Button";
 import { changePassword } from "../../actions/auth";
 import { connect } from "react-redux";
 
-interface Props {
-  changePassword: Function;
+interface IProps {
+  changePassword: (newPassword: string) => void;
 }
-class ChangePassword extends React.Component<Props> {
-  state = {
+class ChangePassword extends React.Component<IProps> {
+  public state = {
     newPassword: "",
     repeatNewPassword: ""
   };
-  render() {
+  public render() {
     return (
       <View>
         <Header>
@@ -38,12 +37,7 @@ class ChangePassword extends React.Component<Props> {
             error=""
           />
           <Button
-            onPress={() =>
-              this.props.changePassword({
-                username: this.state.newPassword,
-                password: this.state.repeatNewPassword
-              })
-            }
+            onPress={() => this.props.changePassword(this.state.newPassword)}
           >
             Change Password
           </Button>
