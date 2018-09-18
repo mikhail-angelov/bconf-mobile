@@ -36,11 +36,11 @@ export const logout = () => dispatch => {
   dispatch({ type: DEAUTH_USER });
 };
 
-export const signUp = ({ username, password }) => dispatch => {
+export const signUp = ({ username, email, password }) => dispatch => {
   setAuth({ username, password });
   return dispatch({
     type: SIGN_UP_USER,
-    payload: { username, password }
+    payload: { username, email, password }
   });
 };
 
