@@ -6,7 +6,7 @@ import styled from "styled-components";
 const UIButton = ({ children, ...otherProps }) => {
   return (
     <CustomButton {...otherProps}>
-      <CustomButtonText> {children} </CustomButtonText>
+      <CustomButtonText {...otherProps}> {children} </CustomButtonText>
     </CustomButton>
   );
 };
@@ -23,10 +23,11 @@ const CustomButton = styled(TouchableOpacity)`
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: ${props => (props.disabled ? 0.5 : 1)};
 `;
 
 const CustomButtonText = styled(Text)`
-  color: #fff;
+  color: ${props => (props.disabled ? "lightgrey" : "white")};
   font-size: 24px;
   text-align: center;
 `;
