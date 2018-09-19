@@ -3,7 +3,7 @@ import { TextInput, Text, View } from "react-native";
 import styled from "styled-components";
 
 const UIInput = ({ error, ...otherProps }) => {
-  if (!error) {
+  if (error.length < 1) {
     return <CustomInput {...otherProps} />;
   } else {
     return (
@@ -14,7 +14,6 @@ const UIInput = ({ error, ...otherProps }) => {
     );
   }
 };
-
 export default UIInput;
 
 const CustomInput = styled(TextInput)`
