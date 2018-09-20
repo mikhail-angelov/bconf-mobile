@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import styled from "styled-components";
 import Button from "../CommonUIElements/Button";
 import ValidatedInput from "./ValidatedInput";
@@ -8,16 +8,14 @@ import { signUp } from "../../actions/auth";
 import { connect } from "react-redux";
 import { validate } from "../../helpers/validator";
 
+interface ISignUpData {
+  username: string;
+  email: string;
+  password: string;
+}
 interface IProps {
-  signUp: (
-    {
-      username,
-      email,
-      password
-    }: { username: string; email: string; password: string }
-  ) => void;
-  auth: { authError: any };
-  componentId: string;
+  signUp: (data: ISignUpData) => void;
+  auth: any;
 }
 
 interface IState {
@@ -82,11 +80,19 @@ class SignUp extends React.Component<IProps, IState> {
           <Button disabled={!this.isFormValid()} onPress={this.handleSignUp}>
             Sign Up
           </Button>
+          {this.props.auth.signUpError.length > 1 && (
+            <NetworkError> {this.props.auth.signUpError}</NetworkError>
+          )}
         </Body>
       </SignUpView>
     );
   }
 }
+
+const NetworkError = styled(Text)`
+  color: red;
+  font-size: 12px;
+`;
 
 const SignUpView = styled(View)`
   flex: 1;

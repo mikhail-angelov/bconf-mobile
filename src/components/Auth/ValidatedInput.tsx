@@ -2,10 +2,11 @@ import React from "react";
 import { TextInput, Text, View } from "react-native";
 import styled from "styled-components";
 import _ from "lodash";
+import { IValidationResult } from "../../helpers/validator";
 
 interface IProps {
   value: string;
-  rule: (value) => { result: boolean; errorText: string };
+  rule: (value) => IValidationResult;
   placeholder: string;
   onChangeText: (value) => void;
 }
@@ -13,11 +14,11 @@ interface IState {
   error: string;
   valid: boolean;
 }
-interface ICust {
-  debouncedValidation: () => void;
-}
-class ValidatedInput extends React.Component<IProps, IState, ICust> {
-  private debouncedValidation = _.debounce(
+
+type RuleFunction = (text) => { result: boolean; errorText: string };
+
+class ValidatedInput extends React.Component<IProps, IState> {
+  private debouncedValidation: (text: string) => void = _.debounce(
     text => this.validateField(text, this.props.rule),
     800
   );
@@ -46,10 +47,8 @@ class ValidatedInput extends React.Component<IProps, IState, ICust> {
       </View>
     );
   }
-  private validateField = (
-    value: string,
-    rule: (text) => { result: boolean; errorText: string }
-  ) => {
+
+  private validateField = (value: string, rule: RuleFunction) => {
     const validationResult = rule(value);
 
     if (!validationResult.result) {

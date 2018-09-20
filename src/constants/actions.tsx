@@ -4,3 +4,4 @@ export const AUTH_ERROR = "AUTH_ERROR";
 export const SIGN_UP_USER = "SIGN_UP_USER";
 export const REMIND_PASSWORD = "REMIND_PASSWORD";
 export const CHANGE_PASSWORD = "CHANGE_PASSWORD";
+export const SIGN_UP_ERROR = "SIGN_UP_ERROR";
