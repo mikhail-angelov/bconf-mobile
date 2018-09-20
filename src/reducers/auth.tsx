@@ -1,8 +1,14 @@
-import { AUTH_USER, DEAUTH_USER, AUTH_ERROR } from "../constants/actions";
+import {
+  AUTH_USER,
+  DEAUTH_USER,
+  AUTH_ERROR,
+  SIGN_UP_ERROR
+} from "../constants/actions";
 
 export const initialState = {
   name: "",
-  authError: false
+  authError: "",
+  signUpError: ""
 };
 
 const auth = (state = initialState, action) => {
@@ -12,7 +18,7 @@ const auth = (state = initialState, action) => {
       return {
         ...initialState,
         authenticated: true,
-        authError: false,
+        authError: "",
         username
       };
     }
@@ -29,6 +35,13 @@ const auth = (state = initialState, action) => {
         bootstrapped: true,
         authenticated: false,
         error: action.payload
+      };
+    }
+    case SIGN_UP_ERROR: {
+      return {
+        ...initialState,
+        authenticated: false,
+        signUpError: action.payload
       };
     }
     default:

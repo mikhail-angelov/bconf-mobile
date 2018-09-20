@@ -1,31 +1,55 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import styled from "styled-components";
-import Input from "../CommonUIElements/Input";
 import Button from "../CommonUIElements/Button";
+import ValidatedInput from "./ValidatedInput";
 import { Header, Title, Annotation, Body } from "./styled";
 import { signUp } from "../../actions/auth";
 import { connect } from "react-redux";
+import { validate } from "../../helpers/validator";
 
+interface ISignUpData {
+  username: string;
+  email: string;
+  password: string;
+}
 interface IProps {
-  signUp: ({ username, email, password }) => void;
-  auth: { authError: any };
-  componentId: string;
+  signUp: (data: ISignUpData) => void;
+  auth: any;
 }
 
 interface IState {
   password: string;
   username: string;
   email: string;
-  error: { username: string; password: string };
+  error: { username: string; password: string; email: string };
 }
 class SignUp extends React.Component<IProps, IState> {
-  public state = {
-    username: "",
-    password: "",
-    email: "",
-    error: { username: "", password: "" }
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      password: "",
+      email: "",
+      error: { username: "", email: "", password: "" }
+    };
+    this.handleSignUp = this.handleSignUp.bind(this);
+  }
+
+  public handleSignUp() {
+    if (this.isFormValid()) {
+      this.props.signUp({
+        username: this.state.username,
+        email: this.state.email,
+        password: this.state.password
+      });
+    }
+  }
+
+  public isFormValid = () =>
+    validate.username(this.state.username).result &&
+    validate.email(this.state.email).result &&
+    validate.password(this.state.password).result;
 
   public render() {
     return (
@@ -35,34 +59,40 @@ class SignUp extends React.Component<IProps, IState> {
           <Annotation>Company name</Annotation>
         </Header>
         <Body>
-          <Input
+          <ValidatedInput
+            placeholder="Username"
+            onChangeText={username => this.setState({ username })}
+            value={this.state.username}
+            rule={validate.username}
+          />
+          <ValidatedInput
             placeholder="Email"
             onChangeText={email => this.setState({ email })}
             value={this.state.email}
-            error=""
+            rule={validate.email}
           />
-          <Input
+          <ValidatedInput
             placeholder="Password"
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
-            error=""
+            rule={validate.password}
           />
-          <Button
-            onPress={() =>
-              this.props.signUp({
-                username: this.state.username,
-                email: this.state.email,
-                password: this.state.password
-              })
-            }
-          >
+          <Button disabled={!this.isFormValid()} onPress={this.handleSignUp}>
             Sign Up
           </Button>
+          {this.props.auth.signUpError.length > 1 && (
+            <NetworkError> {this.props.auth.signUpError}</NetworkError>
+          )}
         </Body>
       </SignUpView>
     );
   }
 }
+
+const NetworkError = styled(Text)`
+  color: red;
+  font-size: 12px;
+`;
 
 const SignUpView = styled(View)`
   flex: 1;

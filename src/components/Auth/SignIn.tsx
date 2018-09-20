@@ -7,7 +7,6 @@ import { socketFire } from "../../actions/helper";
 import Input from "../CommonUIElements/Input";
 import Button from "../CommonUIElements/Button";
 import Link from "../CommonUIElements/Link";
-import { validateEmail, validateCommonField } from "../../helpers/validator";
 import { Navigation } from "react-native-navigation";
 import {
   Header,
@@ -118,28 +117,28 @@ class SignIn extends React.Component<IProps, IState> {
 
   private handleLogin() {
     const { username, password } = this.state;
-    if (!validateCommonField(username) && !validateCommonField(password)) {
-      this.setState({
-        error: {
-          username: "Please, enter username",
-          password: "Please, enter password"
-        }
-      });
-    } else if (!validateCommonField(username)) {
-      this.setState({
-        error: { username: "Please, enter username", password: "" }
-      });
-    } else if (!validateCommonField(password)) {
-      this.setState({
-        error: { username: "", password: "Please, enter password" }
-      });
-    } else {
-      this.setState({ error: { username: "", password: "" } });
-      this.props.login({
-        username: this.state.username,
-        password: this.state.password
-      });
-    }
+    // if (!validateCommonField(username) && !validateCommonField(password)) {
+    //   this.setState({
+    //     error: {
+    //       username: "Please, enter username",
+    //       password: "Please, enter password"
+    //     }
+    //   });
+    // } else if (!validateCommonField(username)) {
+    //   this.setState({
+    //     error: { username: "Please, enter username", password: "" }
+    //   });
+    // } else if (!validateCommonField(password)) {
+    //   this.setState({
+    //     error: { username: "", password: "Please, enter password" }
+    //   });
+    // } else {
+    this.setState({ error: { username: "", password: "" } });
+    this.props.login({
+      username: this.state.username,
+      password: this.state.password
+    });
+    // }
   }
 }
 
