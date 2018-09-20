@@ -1,6 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Dimensions, Animated, Easing } from "react-native";
+import {
+  Dimensions,
+  Animated,
+  Easing,
+  KeyboardAvoidingView
+} from "react-native";
 import { goHome } from "../../navigation/navigation";
 import { login } from "../../actions/auth";
 import { socketFire } from "../../actions/helper";
@@ -28,9 +33,6 @@ interface IState {
   xPosition: Animated.AnimatedValue;
   password: string;
   username: string;
-  newPassword: string;
-  repeatNewPassword: string;
-  email: string;
   error: { username: string; password: string };
 }
 class SignIn extends React.Component<IProps, IState> {
@@ -40,9 +42,6 @@ class SignIn extends React.Component<IProps, IState> {
       xPosition: new Animated.Value(300),
       password: "",
       username: "",
-      newPassword: "",
-      repeatNewPassword: "",
-      email: "",
       error: { username: "", password: "" }
     };
     socketFire();
@@ -53,50 +52,57 @@ class SignIn extends React.Component<IProps, IState> {
       <Animated.View
         style={{ width, transform: [{ translateX: this.state.xPosition }] }}
       >
-        <Header>
-          <Title>SIGN IN</Title>
-          <Annotation>Company name</Annotation>
-        </Header>
-        <Body>
-          <Input
-            placeholder="Login"
-            onChangeText={username => this.setState({ username })}
-            value={this.state.username}
-            error={this.state.error.username}
-          />
-          <Input
-            placeholder="Password"
-            onChangeText={password => this.setState({ password })}
-            value={this.state.password}
-            error={this.state.error.password}
-          />
-          <LoginErrorNotification>
-            {this.props.auth.authError}
-          </LoginErrorNotification>
-          <Button onPress={() => this.handleLogin()}>Sign In</Button>
-          <Link
-            color="#000"
-            onPress={() => {
-              Navigation.push("SignIn", {
-                component: {
-                  name: "SignUp"
-                }
-              });
-            }}
-            title="Sign Up"
-          />
-          <Link
-            color="#000"
-            onPress={() => {
-              Navigation.push("SignIn", {
-                component: {
-                  name: "ForgotPassword"
-                }
-              });
-            }}
-            title="Forgot Password"
-          />
-        </Body>
+        <KeyboardAvoidingView behavior="padding">
+          <Header>
+            <Title>SIGN IN</Title>
+            <Annotation>Company name</Annotation>
+          </Header>
+          <Body>
+            <Input
+              placeholder="Login"
+              onChangeText={username => this.setState({ username })}
+              value={this.state.username}
+              error={this.state.error.username}
+            />
+            <Input
+              placeholder="Password"
+              onChangeText={password => this.setState({ password })}
+              value={this.state.password}
+              error={this.state.error.password}
+            />
+            <LoginErrorNotification>
+              {this.props.auth.authError}
+            </LoginErrorNotification>
+            <Button
+              onPress={() => this.handleLogin()}
+              disabled={!this.allFieldsFilled()}
+            >
+              Sign In
+            </Button>
+            <Link
+              color="#000"
+              onPress={() => {
+                Navigation.push("SignIn", {
+                  component: {
+                    name: "SignUp"
+                  }
+                });
+              }}
+              title="Sign Up"
+            />
+            <Link
+              color="#000"
+              onPress={() => {
+                Navigation.push("SignIn", {
+                  component: {
+                    name: "ForgotPassword"
+                  }
+                });
+              }}
+              title="Forgot Password"
+            />
+          </Body>
+        </KeyboardAvoidingView>
       </Animated.View>
     );
   }
@@ -115,30 +121,19 @@ class SignIn extends React.Component<IProps, IState> {
     }
   }
 
+  public allFieldsFilled() {
+    return this.state.username.length > 2 && this.state.password.length > 7;
+  }
+
   private handleLogin() {
     const { username, password } = this.state;
-    // if (!validateCommonField(username) && !validateCommonField(password)) {
-    //   this.setState({
-    //     error: {
-    //       username: "Please, enter username",
-    //       password: "Please, enter password"
-    //     }
-    //   });
-    // } else if (!validateCommonField(username)) {
-    //   this.setState({
-    //     error: { username: "Please, enter username", password: "" }
-    //   });
-    // } else if (!validateCommonField(password)) {
-    //   this.setState({
-    //     error: { username: "", password: "Please, enter password" }
-    //   });
-    // } else {
-    this.setState({ error: { username: "", password: "" } });
-    this.props.login({
-      username: this.state.username,
-      password: this.state.password
-    });
-    // }
+    if (this.allFieldsFilled()) {
+      this.setState({ error: { username: "", password: "" } });
+      this.props.login({
+        username,
+        password
+      });
+    }
   }
 }
 

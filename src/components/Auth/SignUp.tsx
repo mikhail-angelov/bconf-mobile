@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { KeyboardAvoidingView, Text } from "react-native";
 import styled from "styled-components";
 import Button from "../CommonUIElements/Button";
 import ValidatedInput from "./ValidatedInput";
@@ -53,7 +53,7 @@ class SignUp extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <SignUpView>
+      <SignUpView behavior="padding">
         <Header>
           <Title>SIGN UP</Title>
           <Annotation>Company name</Annotation>
@@ -94,7 +94,7 @@ const NetworkError = styled(Text)`
   font-size: 12px;
 `;
 
-const SignUpView = styled(View)`
+const SignUpView = styled(KeyboardAvoidingView)`
   flex: 1;
   justify-content: center;
   align-items: center;
