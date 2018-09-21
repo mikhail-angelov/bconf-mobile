@@ -28,3 +28,8 @@ export const LoginErrorNotification = styled(Text)`
   color: red;
   text-align: left;
 `;
+
+export const ErrorText = styled(Text)`
+  color: red;
+  font-size: 12px;
+`;

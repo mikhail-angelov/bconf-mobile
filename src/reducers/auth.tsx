@@ -2,13 +2,15 @@ import {
   AUTH_USER,
   DEAUTH_USER,
   AUTH_ERROR,
-  SIGN_UP_ERROR
+  SIGN_UP_ERROR,
+  REMIND_PASSWORD_ERROR
 } from "../constants/actions";
 
 export const initialState = {
   name: "",
   authError: "",
-  signUpError: ""
+  signUpError: "",
+  remindPasswordError: ""
 };
 
 const auth = (state = initialState, action) => {
@@ -16,7 +18,7 @@ const auth = (state = initialState, action) => {
     case AUTH_USER: {
       const username = action.payload;
       return {
-        ...initialState,
+        ...state,
         authenticated: true,
         authError: "",
         username
@@ -24,14 +26,14 @@ const auth = (state = initialState, action) => {
     }
     case AUTH_ERROR: {
       return {
-        ...initialState,
+        ...state,
         authenticated: false,
         authError: action.payload
       };
     }
     case DEAUTH_USER: {
       return {
-        ...initialState,
+        ...state,
         bootstrapped: true,
         authenticated: false,
         error: action.payload
@@ -39,9 +41,15 @@ const auth = (state = initialState, action) => {
     }
     case SIGN_UP_ERROR: {
       return {
-        ...initialState,
+        ...state,
         authenticated: false,
         signUpError: action.payload
+      };
+    }
+    case REMIND_PASSWORD_ERROR: {
+      return {
+        ...state,
+        remindPasswordError: action.payload
       };
     }
     default:
