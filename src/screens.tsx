@@ -6,14 +6,14 @@ import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
 import configureStore from "./store/configureStore";
 import ForgotPassword from "./components/Auth/ForgotPassword";
-import { Chat } from "./components/Chat";
+import Chat from "./components/Chat";
 
-const store = configureStore({});
+export const store = configureStore({});
 
 export function registerScreens(Navigation) {
   Navigation.registerComponent("MobileDemo", () => () => (
     <Provider store={store}>
-      <App />
+      <Chat />
     </Provider>
   ));
   Navigation.registerComponent("Welcome", () => () => (
