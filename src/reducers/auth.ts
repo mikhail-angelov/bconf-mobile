@@ -8,7 +8,8 @@ import {
 export const initialState = {
   name: "",
   authError: "",
-  signUpError: ""
+  signUpError: "",
+  authenticated: false
 };
 
 const auth = (state = initialState, action) => {
@@ -16,7 +17,7 @@ const auth = (state = initialState, action) => {
     case AUTH_USER: {
       const username = action.payload;
       return {
-        ...initialState,
+        ...state,
         authenticated: true,
         authError: "",
         username
@@ -24,14 +25,14 @@ const auth = (state = initialState, action) => {
     }
     case AUTH_ERROR: {
       return {
-        ...initialState,
+        ...state,
         authenticated: false,
         authError: action.payload
       };
     }
     case DEAUTH_USER: {
       return {
-        ...initialState,
+        ...state,
         bootstrapped: true,
         authenticated: false,
         error: action.payload
@@ -39,7 +40,7 @@ const auth = (state = initialState, action) => {
     }
     case SIGN_UP_ERROR: {
       return {
-        ...initialState,
+        ...state,
         authenticated: false,
         signUpError: action.payload
       };

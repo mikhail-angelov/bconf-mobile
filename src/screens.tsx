@@ -13,7 +13,7 @@ export const store = configureStore({});
 export function registerScreens(Navigation) {
   Navigation.registerComponent("MobileDemo", () => () => (
     <Provider store={store}>
-      <Chat />
+      <App />
     </Provider>
   ));
   Navigation.registerComponent("Welcome", () => () => (

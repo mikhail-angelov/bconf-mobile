@@ -15,13 +15,13 @@ export const doJsonRequest = opts => {
   axios(opts).then(response => response.data);
 };
 
-export const socketFire = () => {
-  const socket = io("https://bconf.xyz");
-  socket.on("connection", message => {
-    console.log("connection", message);
-  });
-  socket.on("chat message", message => {
-    console.log("chat message", message);
-    store.dispatch({ type: NEW_MESSAGE, payload: message });
-  });
-};
+// export const socketFire = () => {
+//   const socket = io("https://bconf.xyz");
+//   socket.on("connection", message => {
+//     console.log("connection", message);
+//   });
+//   socket.on("chat message", message => {
+//     console.log("chat message", message);
+//     store.dispatch({ type: NEW_MESSAGE, payload: message });
+//   });
+// };

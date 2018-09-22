@@ -16,7 +16,7 @@ import { sendMessage } from "../../actions/chat";
 class Chat extends React.Component {
   constructor(props) {
     super(props);
-    socketFire();
+    // socketFire();
   }
   public render() {
     return (

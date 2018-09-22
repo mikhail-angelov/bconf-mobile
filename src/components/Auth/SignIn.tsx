@@ -44,7 +44,7 @@ class SignIn extends React.Component<IProps, IState> {
       username: "",
       error: { username: "", password: "" }
     };
-    socketFire();
+    //socketFire();
   }
 
   public render() {
