@@ -6,7 +6,7 @@ import {
   REMIND_PASSWORD_ERROR
 } from "../constants/actions";
 
-export const initialState = {
+const initialState = {
   name: "",
   authError: "",
   signUpError: "",

@@ -14,7 +14,7 @@ export const doJsonRequest = opts => {
 };
 
 export const socketFire = () => {
-  const socket = io("https://now-tlruuxqgrs.now.sh");
+  const socket = io("https://bconf.xyz/");
   socket.on("connection", msg => {
     console.log("connection", msg);
   });
