@@ -33,7 +33,6 @@ export const login = ({ username, password }) => async dispatch => {
       method: "post",
       data: { username }
     });
-
     setAuth({ username, password });
     return dispatch({
       type: AUTH_USER,
