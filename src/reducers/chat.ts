@@ -5,11 +5,11 @@ import {
 } from "../constants/actions";
 
 export const initialState = {
-  messages: []
+  messages: [],
+  chats: []
 };
 
 const chat = (state = initialState, action) => {
-  // console.log(action);
   switch (action.type) {
     case SEND_MESSAGE:
     case RECEIVE_MESSAGE:
