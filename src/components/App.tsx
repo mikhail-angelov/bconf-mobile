@@ -1,17 +1,18 @@
 import React from "react";
+import _ from "lodash";
 import { AsyncStorage, ActivityIndicator, View } from "react-native";
 import { goToAuth, goHome, goWelcome } from "../navigation/navigation";
-import { USER_KEY } from "../utils/config";
+import { AUTH } from "../constants/storage";
 import styled from "styled-components";
 
 class App extends React.Component {
   public async componentDidMount() {
     try {
-      const user = await AsyncStorage.getItem(USER_KEY);
-      if (user) {
-        goHome();
-      } else {
+      const user = (await AsyncStorage.getItem(AUTH)) || {};
+      if (_.isEmpty(user)) {
         goWelcome();
+      } else {
+        goHome();
       }
     } catch (err) {
       goToAuth();
