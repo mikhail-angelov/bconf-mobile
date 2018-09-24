@@ -20,7 +20,7 @@ type RuleFunction = (text) => { result: boolean; errorText: string };
 class ValidatedInput extends React.Component<IProps, IState> {
   private debouncedValidation: (text: string) => void = _.debounce(
     text => this.validateField(text, this.props.rule),
-    800
+    2000
   );
 
   constructor(props) {
