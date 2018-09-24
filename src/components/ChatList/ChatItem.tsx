@@ -3,13 +3,20 @@ import { Text, View, TouchableOpacity } from "react-native";
 import { Navigation } from "react-native-navigation";
 import styled from "styled-components";
 
-export const ChatListItem = ({ name, id }) => {
+interface IProps {
+  name: string;
+  id: number;
+}
+export const ChatListItem = ({ name, id }: IProps) => {
   return (
     <ChatListItemWrapper
       onPress={() => {
         Navigation.push("ChatList", {
           component: {
-            name: "Chat"
+            name: "Chat",
+            passProps: {
+              chatId: id
+            }
           }
         });
       }}
