@@ -63,12 +63,16 @@ class SignIn extends React.Component<IProps, IState> {
               onChangeText={username => this.setState({ username })}
               value={this.state.username}
               error={this.state.error.username}
+              textContentType="username"
             />
             <Input
               placeholder="Password"
               onChangeText={password => this.setState({ password })}
               value={this.state.password}
               error={this.state.error.password}
+              type="password"
+              textContentType="password"
+              secureTextEntry={true}
             />
             <LoginErrorNotification>
               {this.props.auth.authError}

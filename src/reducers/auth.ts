@@ -2,14 +2,16 @@ import {
   AUTH_USER,
   DEAUTH_USER,
   AUTH_ERROR,
-  SIGN_UP_ERROR
+  SIGN_UP_ERROR,
+  REMIND_PASSWORD_ERROR
 } from "../constants/actions";
 
-export const initialState = {
+const initialState = {
   name: "",
   authError: "",
   signUpError: "",
-  authenticated: false
+  authenticated: false,
+  remindPasswordError: ""
 };
 
 const auth = (state = initialState, action) => {
@@ -43,6 +45,12 @@ const auth = (state = initialState, action) => {
         ...state,
         authenticated: false,
         signUpError: action.payload
+      };
+    }
+    case REMIND_PASSWORD_ERROR: {
+      return {
+        ...state,
+        remindPasswordError: action.payload
       };
     }
     default:

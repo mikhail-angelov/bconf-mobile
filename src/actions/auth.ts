@@ -4,12 +4,13 @@ import {
   AUTH_ERROR,
   SIGN_UP_USER,
   REMIND_PASSWORD,
+  REMIND_PASSWORD_ERROR,
   CHANGE_PASSWORD,
   SIGN_UP_ERROR
 } from "../constants/actions";
 import { setAuth, doJsonRequest } from "./helper";
-import { AUTH_URL, SIGN_UP_URL } from "./endpoinds";
-import { goHome } from "../navigation/navigation";
+import { AUTH_URL, SIGN_UP_URL, REMIND_PASSWORD_URL } from "./endpoinds";
+import { goHome, goToAuth } from "../navigation/navigation";
 
 export const setAuthError = error => dispatch => {
   return dispatch({ type: AUTH_ERROR, payload: error });
@@ -17,6 +18,11 @@ export const setAuthError = error => dispatch => {
 
 export const setSignUpError = error => ({
   type: SIGN_UP_ERROR,
+  payload: error
+});
+
+export const setRemindPasswordError = error => ({
+  type: REMIND_PASSWORD_ERROR,
   payload: error
 });
 
@@ -61,10 +67,22 @@ export const signUp = ({ username, email, password }) => async dispatch => {
   }
 };
 
-export const remindPassword = ({ email }) => ({
-  type: REMIND_PASSWORD,
-  payload: email
-});
+export const remindPassword = email => async dispatch => {
+  try {
+    await doJsonRequest({
+      url: REMIND_PASSWORD_URL,
+      method: "post",
+      data: { email }
+    });
+    dispatch({
+      type: REMIND_PASSWORD,
+      payload: email
+    });
+    goToAuth();
+  } catch (e) {
+    dispatch(setRemindPasswordError("No such email registered, try again"));
+  }
+};
 
 export const changePassword = ({ password, oldPassword }) => ({
   type: CHANGE_PASSWORD,

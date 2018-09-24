@@ -1,9 +1,9 @@
 import React from "react";
-import { KeyboardAvoidingView, Text } from "react-native";
+import { KeyboardAvoidingView } from "react-native";
 import styled from "styled-components";
 import Button from "../CommonUIElements/Button";
 import ValidatedInput from "./ValidatedInput";
-import { Header, Title, Annotation, Body } from "./styled";
+import { Header, Title, Annotation, Body, ErrorText } from "./styled";
 import { signUp } from "../../actions/auth";
 import { connect } from "react-redux";
 import { validate } from "../../helpers/validator";
@@ -81,18 +81,13 @@ class SignUp extends React.Component<IProps, IState> {
             Sign Up
           </Button>
           {this.props.auth.signUpError.length > 1 && (
-            <NetworkError> {this.props.auth.signUpError}</NetworkError>
+            <ErrorText> {this.props.auth.signUpError}</ErrorText>
           )}
         </Body>
       </SignUpView>
     );
   }
 }
-
-const NetworkError = styled(Text)`
-  color: red;
-  font-size: 12px;
-`;
 
 const SignUpView = styled(KeyboardAvoidingView)`
   flex: 1;
