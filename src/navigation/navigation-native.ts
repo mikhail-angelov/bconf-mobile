@@ -3,7 +3,7 @@ import {
   on,
   NAVIGATE_WELCOME,
   NAVIGATE_SIGNIN,
-  NAVIGATE_CHAT
+  NAVIGATE_CHAT_LIST
 } from "../helpers/eventBus";
 
 on(NAVIGATE_WELCOME, () =>
@@ -16,12 +16,23 @@ on(NAVIGATE_WELCOME, () =>
     }
   })
 );
-on(NAVIGATE_CHAT, () => {
+on(NAVIGATE_CHAT_LIST, () => {
   Navigation.setRoot({
     root: {
-      component: {
-        id: "Chat",
-        name: "Chat"
+      stack: {
+        options: {
+          topBar: {
+            visible: true
+          }
+        },
+        id: "ChatList",
+        children: [
+          {
+            component: {
+              name: "ChatList"
+            }
+          }
+        ]
       }
     }
   });
