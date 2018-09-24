@@ -10,6 +10,7 @@ const initialState = {
   name: "",
   authError: "",
   signUpError: "",
+  authenticated: false,
   remindPasswordError: ""
 };
 

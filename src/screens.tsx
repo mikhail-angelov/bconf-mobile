@@ -6,7 +6,7 @@ import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
 import configureStore from "./store/configureStore";
 import ForgotPassword from "./components/Auth/ForgotPassword";
-import { Chat } from "./components/Chat";
+import Chat from "./components/Chat";
 
 const store = configureStore({});
 

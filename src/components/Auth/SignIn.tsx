@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { goHome } from "../../navigation/navigation";
 import { login } from "../../actions/auth";
-import { socketFire } from "../../actions/helper";
+
 import Input from "../CommonUIElements/Input";
 import Button from "../CommonUIElements/Button";
 import Link from "../CommonUIElements/Link";
@@ -44,7 +44,7 @@ class SignIn extends React.Component<IProps, IState> {
       username: "",
       error: { username: "", password: "" }
     };
-    socketFire();
+    //socketFire();
   }
 
   public render() {
