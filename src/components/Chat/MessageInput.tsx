@@ -1,29 +1,27 @@
 import React from "react";
-import { View, Text, TextInput, Button } from "react-native";
+import { View, TextInput, Button } from "react-native";
 import styled from "styled-components";
 
-export class MessageInput extends React.Component {
+interface IProps {
+  handleSendMessage: (value) => void;
+}
+interface IState {
+  value: string;
+}
+export class MessageInput extends React.Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
       value: ""
     };
   }
+  public handleSending() {
+    this.props.handleSendMessage(this.state.value);
+    this.setState({ value: "" });
+  }
   public render() {
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          width: "100%",
-
-          padding: 4,
-          alignItems: "center",
-          justifyContent: "center",
-          borderWidth: 1,
-          borderColor: "#888",
-          backgroundColor: "#fff"
-        }}
-      >
+      <MessageInputView>
         <View style={{ flex: 4 }}>
           <TextInput
             onChangeText={text => {
@@ -31,23 +29,28 @@ export class MessageInput extends React.Component {
             }}
             value={this.state.value}
             style={{ backgroundColor: "transparent", fontSize: 24 }}
-            // onSubmitEditing={() => {
-            //   console.log("xxx");
-            // }}
           />
         </View>
         <View style={{ flex: 1 }}>
           <Button
-            onPress={() => {
-              this.props.handleSendMessage(this.state.value);
-              this.setState({ value: "" });
-            }}
+            onPress={this.handleSending}
             title="Send"
             color="rgb(0,122,255)"
             accessibilityLabel="Send message"
           />
         </View>
-      </View>
+      </MessageInputView>
     );
   }
 }
+
+const MessageInputView = styled(View)`
+  flex-direction: row;
+  width: 100%;
+  padding: 4;
+  align-items: "center";
+  justify-content: "center";
+  border-width: 1;
+  border-color: "#888";
+  background-color: "#fff";
+`;

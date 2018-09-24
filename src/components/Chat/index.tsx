@@ -1,26 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  KeyboardAvoidingView
-} from "react-native";
+import { KeyboardAvoidingView } from "react-native";
 import styled from "styled-components";
 import { MessageInput } from "./MessageInput";
 import { MessagesList } from "./MessagesList";
-import { socketFire } from "../../actions/helper";
+
 import { sendMessage } from "../../actions/chat";
 
-class Chat extends React.Component {
-  constructor(props) {
-    super(props);
-    // socketFire();
-  }
+interface IProps {
+  chat: any;
+  sendMessage: () => void;
+}
+class Chat extends React.PureComponent<IProps> {
   public render() {
     return (
-      <ChatView behavior="padding">
+      <ChatView>
         <MessagesList messages={this.props.chat.messages} />
         <MessageInput handleSendMessage={this.props.sendMessage} />
       </ChatView>
@@ -28,7 +22,9 @@ class Chat extends React.Component {
   }
 }
 
-const ChatView = styled(KeyboardAvoidingView)`
+const ChatView = styled(KeyboardAvoidingView).attrs({
+  behavior: "padding"
+})`
   flex: 1;
 `;
 

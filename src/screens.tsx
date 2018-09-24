@@ -8,7 +8,7 @@ import configureStore from "./store/configureStore";
 import ForgotPassword from "./components/Auth/ForgotPassword";
 import Chat from "./components/Chat";
 
-export const store = configureStore({});
+const store = configureStore({});
 
 export function registerScreens(Navigation) {
   Navigation.registerComponent("MobileDemo", () => () => (

@@ -1,14 +1,13 @@
 import React from "react";
-import { View, Text, TextInput, Button } from "react-native";
+import { View } from "react-native";
 import styled from "styled-components";
 import { Message } from "./Message";
 
 export const MessagesList = ({ messages }) => (
   <MessagesListWrapper>
-    {messages.map((message, idx) => {
-      console.log(idx);
-      return <Message key={idx} idx={idx} text={message} />;
-    })}
+    {messages.map((message, idx) => (
+      <Message key={idx} idx={idx} text={message} />
+    ))}
   </MessagesListWrapper>
 );
 
