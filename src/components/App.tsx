@@ -1,22 +1,26 @@
 import React from "react";
+import { connect } from "react-redux";
 import _ from "lodash";
 import { AsyncStorage, ActivityIndicator, View } from "react-native";
-import { goToAuth, goHome, goWelcome } from "../navigation/navigation";
 import { AUTH } from "../constants/storage";
+import { initialViev } from "../actions/auth";
 import styled from "styled-components";
 
-class App extends React.Component {
+interface IpropsUser {
+  userId: string;
+  token: string;
+}
+interface IProps {
+  user: IpropsUser;
+  auth: string;
+  initialViev: (user) => void;
+}
+
+class App extends React.Component<IProps> {
   public async componentDidMount() {
-    try {
-      const user = (await AsyncStorage.getItem(AUTH)) || {};
-      if (_.isEmpty(user)) {
-        goWelcome();
-      } else {
-        goHome();
-      }
-    } catch (err) {
-      goToAuth();
-    }
+    const auth = await AsyncStorage.getItem(AUTH);
+    const user = JSON.parse(auth);
+    this.props.initialViev(user);
   }
 
   public render() {
@@ -28,7 +32,16 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = {
+  initialViev
+};
+
+const mapStateToProps = state => ({ auth: state.auth });
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
 
 const Wrap = styled(View)`
   width: 100%;
