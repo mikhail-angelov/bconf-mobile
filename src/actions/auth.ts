@@ -8,24 +8,38 @@ import {
   CHANGE_PASSWORD,
   SIGN_UP_ERROR
 } from "../constants/actions";
-import { setAuth, doJsonRequest, getToken } from "./helper";
-import { AUTH_URL, SIGN_UP_URL, REMIND_PASSWORD_URL } from "./endpoinds";
+import { setAuth, doJsonRequest, doJsonAuthRequest } from "./helper";
+import {
+  AUTH_URL,
+  SIGN_UP_URL,
+  REMIND_PASSWORD_URL,
+  AUTH_CHECK_URL
+} from "./endpoinds";
+import { AsyncStorage } from "react-native";
+import { AUTH } from "../constants/storage";
 import { goHome, goToAuth, goWelcome } from "../navigation/navigation";
 
-export const initialViev = user => async dispatch => {
-  try {
-    if (!user.token && !user.userId) {
-      goWelcome();
-    } else {
+export const checkAuth = () => async dispatch => {
+  const auth = await AsyncStorage.getItem(AUTH);
+  const user = JSON.parse(auth);
+  if (user.token) {
+    try {
+      await doJsonRequest({
+        url: AUTH_CHECK_URL,
+        method: "post",
+        headers: { authorization: user.token }
+      });
       goHome();
-      return dispatch({
+      dispatch({
         type: AUTH_USER,
         payload: { token: user.token }
       });
+    } catch (err) {
+      goToAuth();
+      dispatch(setAuthError("Enter login and password"));
     }
-  } catch (err) {
-    goToAuth();
-    dispatch(setAuthError("Enter login and password"));
+  } else {
+    goWelcome();
   }
 };
 
@@ -86,11 +100,10 @@ export const signUp = ({ username, email, password }) => async dispatch => {
 
 export const remindPassword = email => async (dispatch, getStore) => {
   try {
-    await doJsonRequest({
+    await doJsonAuthRequest({
       url: REMIND_PASSWORD_URL,
       method: "post",
-      data: { email },
-      token: getToken(getStore())
+      data: { email }
     });
     dispatch({
       type: REMIND_PASSWORD,

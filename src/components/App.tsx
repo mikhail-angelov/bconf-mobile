@@ -1,28 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { AsyncStorage, ActivityIndicator, View } from "react-native";
-import { AUTH } from "../constants/storage";
-import { initialViev } from "../actions/auth";
+import { ActivityIndicator, View } from "react-native";
+import { checkAuth } from "../actions/auth";
 import styled from "styled-components";
 
-interface IpropsUser {
-  userId: string;
-  token: string;
-}
-interface IProps {
-  user: IpropsUser;
-  auth: string;
-  initialViev: (user) => void;
-}
-
-class App extends React.Component<IProps> {
-  public async componentDidMount() {
-    const auth = await AsyncStorage.getItem(AUTH);
-    const user = JSON.parse(auth);
-    this.props.initialViev(user);
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    props.checkAuth();
   }
-
   public render() {
     return (
       <Wrap>
@@ -33,7 +20,7 @@ class App extends React.Component<IProps> {
 }
 
 const mapDispatchToProps = {
-  initialViev
+  checkAuth
 };
 
 const mapStateToProps = state => ({ auth: state.auth });
