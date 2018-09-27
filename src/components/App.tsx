@@ -1,24 +1,15 @@
 import React from "react";
+import { connect } from "react-redux";
 import _ from "lodash";
-import { AsyncStorage, ActivityIndicator, View } from "react-native";
-import { goToAuth, goHome, goWelcome } from "../navigation/navigation";
-import { AUTH } from "../constants/storage";
+import { ActivityIndicator, View } from "react-native";
+import { checkAuth } from "../actions/auth";
 import styled from "styled-components";
 
 class App extends React.Component {
-  public async componentDidMount() {
-    try {
-      const user = (await AsyncStorage.getItem(AUTH)) || {};
-      if (_.isEmpty(user)) {
-        goWelcome();
-      } else {
-        goHome();
-      }
-    } catch (err) {
-      goToAuth();
-    }
+  constructor(props) {
+    super(props);
+    props.checkAuth();
   }
-
   public render() {
     return (
       <Wrap>
@@ -28,7 +19,16 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = {
+  checkAuth
+};
+
+const mapStateToProps = state => ({ auth: state.auth });
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
 
 const Wrap = styled(View)`
   width: 100%;

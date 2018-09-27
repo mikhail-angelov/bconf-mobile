@@ -3,7 +3,8 @@ import {
   DEAUTH_USER,
   AUTH_ERROR,
   SIGN_UP_ERROR,
-  REMIND_PASSWORD_ERROR
+  REMIND_PASSWORD_ERROR,
+  SIGN_UP_USER
 } from "../constants/actions";
 
 const initialState = {
@@ -16,13 +17,14 @@ const initialState = {
 
 const auth = (state = initialState, action) => {
   switch (action.type) {
-    case AUTH_USER: {
-      const username = action.payload;
+    case AUTH_USER:
+    case SIGN_UP_USER: {
+      const { token } = action.payload;
       return {
         ...state,
         authenticated: true,
         authError: "",
-        username
+        token
       };
     }
     case AUTH_ERROR: {
@@ -37,7 +39,8 @@ const auth = (state = initialState, action) => {
         ...state,
         bootstrapped: true,
         authenticated: false,
-        error: action.payload
+        error: action.payload,
+        token: ""
       };
     }
     case SIGN_UP_ERROR: {

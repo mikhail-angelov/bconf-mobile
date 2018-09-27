@@ -4,21 +4,22 @@ import { connect } from "react-redux";
 import { View } from "react-native";
 
 interface IProps {
-  chats: [];
+  chat: [];
 }
 class ChatList extends React.PureComponent<IProps> {
   public render() {
     return (
       <View>
-        <ChatListItem name={"My first chat"} id={1} />
-        <ChatListItem name={"My second chat"} id={2} />
+        {this.props.chat.chats.map(chat => (
+          <ChatListItem name={chat.name} id={chat._id} />
+        ))}
         <ChatListItem name={"My third chat"} id={3} />
       </View>
     );
   }
 }
 
-const mapStateToProps = state => ({ auth: state.auth, chat: state.chats });
+const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
 
 export default connect(
   mapStateToProps,

@@ -8,9 +8,40 @@ import {
   CHANGE_PASSWORD,
   SIGN_UP_ERROR
 } from "../constants/actions";
-import { setAuth, doJsonRequest } from "./helper";
-import { AUTH_URL, SIGN_UP_URL, REMIND_PASSWORD_URL } from "./endpoinds";
-import { goHome, goToAuth } from "../navigation/navigation";
+import { setAuth, doJsonRequest, doJsonAuthRequest } from "./helper";
+import {
+  AUTH_URL,
+  SIGN_UP_URL,
+  REMIND_PASSWORD_URL,
+  AUTH_CHECK_URL
+} from "./endpoinds";
+import { AsyncStorage } from "react-native";
+import { AUTH } from "../constants/storage";
+import { goHome, goToAuth, goWelcome } from "../navigation/navigation";
+
+export const checkAuth = () => async dispatch => {
+  const auth = await AsyncStorage.getItem(AUTH);
+  const user = JSON.parse(auth);
+  if (user.token) {
+    try {
+      await doJsonRequest({
+        url: AUTH_CHECK_URL,
+        method: "post",
+        headers: { authorization: user.token }
+      });
+      goHome();
+      dispatch({
+        type: AUTH_USER,
+        payload: { token: user.token }
+      });
+    } catch (err) {
+      goToAuth();
+      dispatch(setAuthError("Enter login and password"));
+    }
+  } else {
+    goWelcome();
+  }
+};
 
 export const setAuthError = error => dispatch => {
   return dispatch({ type: AUTH_ERROR, payload: error });
@@ -26,39 +57,40 @@ export const setRemindPasswordError = error => ({
   payload: error
 });
 
-export const login = ({ username, password }) => async dispatch => {
+export const login = ({ email, password }) => async dispatch => {
   try {
     const resp = await doJsonRequest({
       url: AUTH_URL,
       method: "post",
-      data: { username }
+      data: { email, password }
     });
-    setAuth({ username, password });
+    setAuth({ token: resp.token, userId: resp.user._id });
     return dispatch({
       type: AUTH_USER,
-      payload: username
+      payload: { token: resp.token }
     });
   } catch (e) {
+    console.log(e);
     dispatch(setAuthError("Incorrect username or password"));
   }
 };
 
 export const logout = () => dispatch => {
-  setAuth({ username: "", password: "" });
+  setAuth({ token: "", userId: "" });
   dispatch({ type: DEAUTH_USER });
 };
 
 export const signUp = ({ username, email, password }) => async dispatch => {
   try {
-    await doJsonRequest({
+    const resp = await doJsonRequest({
       url: SIGN_UP_URL,
       method: "post",
       data: { username, email, password }
     });
-    setAuth({ username, password });
+    setAuth({ token: resp.token, userId: resp._id });
     dispatch({
       type: SIGN_UP_USER,
-      payload: { username, email, password }
+      payload: { token: resp.token, userId: resp._id }
     });
     goHome();
   } catch (e) {
@@ -66,9 +98,9 @@ export const signUp = ({ username, email, password }) => async dispatch => {
   }
 };
 
-export const remindPassword = email => async dispatch => {
+export const remindPassword = email => async (dispatch, getStore) => {
   try {
-    await doJsonRequest({
+    await doJsonAuthRequest({
       url: REMIND_PASSWORD_URL,
       method: "post",
       data: { email }

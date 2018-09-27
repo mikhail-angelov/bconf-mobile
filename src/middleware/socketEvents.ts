@@ -1,4 +1,5 @@
 import io from "socket.io-client";
+import { getChats } from "../actions/chat";
 import { NEW_MESSAGE, AUTH_USER } from "../constants/actions";
 
 const socketEvents = store => next => action => {
@@ -11,6 +12,7 @@ const socketEvents = store => next => action => {
       console.log("chat message", message);
       store.dispatch({ type: NEW_MESSAGE, payload: message });
     });
+    store.dispatch(getChats());
   }
   return next(action);
 };

@@ -13,3 +13,5 @@ export const NEW_MESSAGE = "NEW_MESSAGE";
 export const OUTCOMING_MESSAGE = "OUTCOMING_MESSAGE";
 export const SEND_MESSAGE = "SEND_MESSAGE";
 export const RECEIVE_MESSAGE = "RECEIVE_MESSAGE";
+export const GET_CHATS = "GET_CHATS";
+export const GET_CHATS_ERROR = "GET_CHATS_ERROR";

@@ -24,7 +24,7 @@ import {
 const { width } = Dimensions.get("window");
 
 interface IProps {
-  login: ({ username, password }) => void;
+  login: ({ email, password }) => void;
   auth: { authError: any };
   componentId: string;
 }
@@ -32,8 +32,8 @@ interface IProps {
 interface IState {
   xPosition: Animated.AnimatedValue;
   password: string;
-  username: string;
-  error: { username: string; password: string };
+  email: string;
+  error: { email: string; password: string };
 }
 class SignIn extends React.Component<IProps, IState> {
   constructor(props) {
@@ -41,8 +41,8 @@ class SignIn extends React.Component<IProps, IState> {
     this.state = {
       xPosition: new Animated.Value(300),
       password: "",
-      username: "",
-      error: { username: "", password: "" }
+      email: "",
+      error: { email: "", password: "" }
     };
     //socketFire();
   }
@@ -59,11 +59,11 @@ class SignIn extends React.Component<IProps, IState> {
           </Header>
           <Body>
             <Input
-              placeholder="Login"
-              onChangeText={username => this.setState({ username })}
-              value={this.state.username}
-              error={this.state.error.username}
-              textContentType="username"
+              placeholder="Email"
+              onChangeText={email => this.setState({ email })}
+              value={this.state.email}
+              error={this.state.error.email}
+              textContentType="email"
             />
             <Input
               placeholder="Password"
@@ -126,15 +126,15 @@ class SignIn extends React.Component<IProps, IState> {
   }
 
   public allFieldsFilled() {
-    return this.state.username.length > 2 && this.state.password.length > 7;
+    return this.state.email.length > 2 && this.state.password.length > 7;
   }
 
   private handleLogin() {
-    const { username, password } = this.state;
+    const { email, password } = this.state;
     if (this.allFieldsFilled()) {
-      this.setState({ error: { username: "", password: "" } });
+      this.setState({ error: { email: "", password: "" } });
       this.props.login({
-        username,
+        email,
         password
       });
     }
