@@ -2,15 +2,23 @@ import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { Navigation } from "react-native-navigation";
 import styled from "styled-components";
-
 interface IProps {
   name: string;
   id: number;
+  setActiveChat: () => void;
+  getMessages: () => void;
 }
-export const ChatListItem = ({ name, id }: IProps) => {
+export const ChatListItem = ({
+  name,
+  id,
+  setActiveChat,
+  getMessages
+}: IProps) => {
   return (
     <ChatListItemWrapper
       onPress={() => {
+        setActiveChat();
+        getMessages();
         Navigation.push("ChatList", {
           component: {
             name: "Chat",

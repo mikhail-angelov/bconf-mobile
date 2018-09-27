@@ -24,7 +24,6 @@ class Chat extends React.PureComponent<IProps> {
   public render() {
     return (
       <ChatView>
-        <Button onPress={this.props.logout}>LogOut</Button>
         <MessagesList messages={this.props.chat.messages} />
         <MessageInput handleSendMessage={this.props.sendMessage} />
       </ChatView>
