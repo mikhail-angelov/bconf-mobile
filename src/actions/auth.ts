@@ -22,7 +22,7 @@ import { goHome, goToAuth, goWelcome } from "../navigation/navigation";
 export const checkAuth = () => async dispatch => {
   const auth = await AsyncStorage.getItem(AUTH);
   const user = JSON.parse(auth);
-  if (user.token) {
+  if (user && user.token) {
     try {
       await doJsonRequest({
         url: AUTH_CHECK_URL,

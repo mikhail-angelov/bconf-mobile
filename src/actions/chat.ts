@@ -7,15 +7,16 @@ import {
   SET_ACTIVE_CHAT
 } from "../constants/actions";
 import io from "socket.io-client";
-import { doJsonAuthRequest } from "./helper";
+import { doJsonAuthRequest, getToken } from "./helper";
 import { BASE_URL, CHAT_URL, MESSAGE_URL } from "./endpoinds";
 
-export const sendMessage = message => {
-  const socket = io.connect(BASE_URL);
-  socket.emit("chat message", message);
+export const sendMessage = (chatId, message) => {
+  const token = getToken();
   return {
     type: OUTCOMING_MESSAGE,
-    payload: message
+    payload: chatId,
+    message,
+    token
   };
 };
 

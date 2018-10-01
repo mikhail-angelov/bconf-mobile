@@ -13,6 +13,7 @@ interface IProps {
   chat: any;
   sendMessage: () => void;
   logout: () => void;
+  activeChat: string;
 }
 class Chat extends React.PureComponent<IProps> {
   public componentWillReceiveProps(nextProps) {
@@ -25,7 +26,10 @@ class Chat extends React.PureComponent<IProps> {
     return (
       <ChatView>
         <MessagesList messages={this.props.chat.messages} />
-        <MessageInput handleSendMessage={this.props.sendMessage} />
+        <MessageInput
+          chatId={this.props.chat.activeChat}
+          handleSendMessage={this.props.sendMessage}
+        />
       </ChatView>
     );
   }
