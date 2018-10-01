@@ -4,19 +4,18 @@ import {
   GET_CHATS_ERROR,
   GET_MESSAGES_ERROR,
   GET_MESSAGES,
-  SET_ACTIVE_CHAT
+  SET_ACTIVE_CHAT,
+  SEND_MESSAGE
 } from "../constants/actions";
 import io from "socket.io-client";
 import { doJsonAuthRequest, getToken } from "./helper";
 import { BASE_URL, CHAT_URL, MESSAGE_URL } from "./endpoinds";
 
 export const sendMessage = (chatId, message) => {
-  const token = getToken();
   return {
-    type: OUTCOMING_MESSAGE,
+    type: SEND_MESSAGE,
     payload: chatId,
-    message,
-    token
+    message
   };
 };
 

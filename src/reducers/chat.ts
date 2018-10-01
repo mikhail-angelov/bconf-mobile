@@ -17,7 +17,6 @@ export const initialState = {
 
 const chat = (state = initialState, action) => {
   switch (action.type) {
-    case SEND_MESSAGE:
     case RECEIVE_MESSAGE:
     case NEW_MESSAGE: {
       const newMessageAttached = [...state.messages, action.payload];

@@ -28,14 +28,64 @@ export const ChatListItem = ({
           }
         });
       }}
-    >
-      <Text>{name}</Text>
+      >
+      <AvatarSide>
+        <Avatar>
+          <Text>Avatar</Text>
+        </Avatar>
+      </AvatarSide>
+      <Center>
+        <ChatName>{name}</ChatName>
+        <Text>Last Message</Text>
+      </Center>
+      <RightSide>
+        <Text>30 sep</Text>
+      </RightSide>
     </ChatListItemWrapper>
   );
 };
 
 const ChatListItemWrapper = styled(TouchableOpacity)`
-  height: 70px;
+  height: 100px;
   width: 100%;
-  border: 1px solid grey;
+  border: 1px solid black;
+  display: flex;
+  flexDirection: row;
+`;
+
+const AvatarSide = styled(View)`
+  width: 25%;
+  height: 100%;
+  display: flex;
+  alignItems: center;
+  justifyContent: center;
+`;
+
+const Avatar = styled(View)`
+  height: 80%;
+  width: 80%;
+  backgroundColor: #fff;
+  borderRadius: 50;
+  borderWidth: 2;
+  display: flex;
+  alignItems: center;
+  shadowColor: #000;
+  justifyContent: center;
+  shadowOpacity: 0.8;
+  shadowRadius: 2;
+`;
+
+const Center = styled(View)`
+  width: 60%;
+  height: 100%;
+  padding: 10px;
+`;
+
+const ChatName = styled(Text)`
+  fontWeight: 700;
+`;
+
+const RightSide = styled(View)`
+  width: 20%;
+  height: 100%;
 `;
