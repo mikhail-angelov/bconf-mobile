@@ -48,10 +48,3 @@ export const getMessages = chatId => async dispatch => {
     dispatch({ type: GET_MESSAGES_ERROR });
   }
 };
-
-export const setActiveChat = chatId => async dispatch => {
-  dispatch({
-    type: SET_ACTIVE_CHAT,
-    payload: chatId
-  });
-};

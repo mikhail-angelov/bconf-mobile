@@ -5,23 +5,17 @@ import styled from "styled-components";
 interface IProps {
   name: string;
   id: number;
-  setActiveChat: () => void;
-  getMessages: () => void;
-  scrollToChat: () => void;
+  setActiveChatAndGetMessages: () => void;
 }
 export const ChatListItem = ({
   name,
   id,
-  setActiveChat,
-  getMessages,
-  scrollToChat
+  setActiveChatAndGetMessages,
 }: IProps) => {
   return (
     <ChatListItemWrapper
       onPress={() => {
-        setActiveChat();
-        getMessages();
-        scrollToChat();
+        setActiveChatAndGetMessages()
       }}
     >
       <AvatarSide>

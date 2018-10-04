@@ -1,7 +1,7 @@
 import React from "react";
 import { ChatListItem } from "./ChatItem";
 import { connect } from "react-redux";
-import { ScrollView, Animated, Dimensions, PixelRatio } from "react-native";
+import { ScrollView, Animated, Dimensions } from "react-native";
 import { getMessages, setActiveChat } from "../../actions/chat";
 import Chat from "../Chat";
 
@@ -16,12 +16,23 @@ interface IProps {
 }
 
 class ChatList extends React.PureComponent<IProps> {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeChat: ""
+    };
+  }
   private scrollX = new Animated.Value(0);
-  
+
   public scrollToChat = () => {
-    this.scroller.scrollTo({x:width});
+    this.scroller.scrollTo({ x: width });
   };
+
+  public setActiveChatAndGetMessages(chatId) {
+    this.setState({ activeChat: chatId })
+    this.props.getMessages(chatId)
+    this.scrollToChat()
+  }
 
   public render() {
     const position: any = Animated.divide(this.scrollX, width)
@@ -36,7 +47,7 @@ class ChatList extends React.PureComponent<IProps> {
         scrollEventThrottle={16}
         onMomentumScrollEnd={() => {
           if (position.__getValue() === 0) {
-            this.props.setActiveChat(null)
+            this.setState({ activeChat: "" })
           }
         }}
       >
@@ -46,13 +57,11 @@ class ChatList extends React.PureComponent<IProps> {
             <ChatListItem
               name={chat.name}
               id={chat._id}
-              setActiveChat={() => this.props.setActiveChat(chat._id)}
-              getMessages={() => this.props.getMessages(chat._id)}
-              scrollToChat={() => this.scrollToChat()}
+              setActiveChatAndGetMessages={() => this.setActiveChatAndGetMessages(chat._id)}
             />
           ))}
         </ScrollView>
-        {this.props.chat.activeChat ? <Chat width={width}></Chat> : null}
+        {this.state.activeChat ? <Chat width={width}></Chat> : null}
       </ScrollView>
     );
   }
