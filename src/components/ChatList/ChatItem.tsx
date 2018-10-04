@@ -7,28 +7,23 @@ interface IProps {
   id: number;
   setActiveChat: () => void;
   getMessages: () => void;
+  scrollToChat: () => void;
 }
 export const ChatListItem = ({
   name,
   id,
   setActiveChat,
-  getMessages
+  getMessages,
+  scrollToChat
 }: IProps) => {
   return (
     <ChatListItemWrapper
       onPress={() => {
         setActiveChat();
         getMessages();
-        Navigation.push("ChatList", {
-          component: {
-            name: "Chat",
-            passProps: {
-              chatId: id
-            }
-          }
-        });
+        scrollToChat();
       }}
-      >
+    >
       <AvatarSide>
         <Avatar>
           <Text>Avatar</Text>
@@ -48,7 +43,7 @@ export const ChatListItem = ({
 const ChatListItemWrapper = styled(TouchableOpacity)`
   height: 100px;
   width: 100%;
-  border: 1px solid black;
+  borderTopWidth: 0.5;
   display: flex;
   flexDirection: row;
 `;
@@ -62,8 +57,8 @@ const AvatarSide = styled(View)`
 `;
 
 const Avatar = styled(View)`
-  height: 80%;
-  width: 80%;
+  height: 70%;
+  width: 70%;
   backgroundColor: #fff;
   borderRadius: 50;
   borderWidth: 2;

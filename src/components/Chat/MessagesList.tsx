@@ -4,10 +4,12 @@ import { ScrollView } from "react-native";
 import styled from "styled-components";
 import { Message } from "./Message";
 
-export const MessagesList = ({ messages }) => (
+export const MessagesList = ({ messages, userEmail }) => (
   <MessagesListWrapper>
     {_.map(messages, message => (
-      <Message key={message._id} idx={message._id} text={message.text} />
+      <Message key={message._id} idx={message._id} 
+      text={message.text} isMyMessage={message.author.email === userEmail}
+      timestamp={message.timestamp} />
     ))}
   </MessagesListWrapper>
 );
