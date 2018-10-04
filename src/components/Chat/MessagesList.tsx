@@ -1,17 +1,20 @@
 import React from "react";
-import { View } from "react-native";
+import _ from "lodash";
+import { ScrollView } from "react-native";
 import styled from "styled-components";
 import { Message } from "./Message";
 
-export const MessagesList = ({ messages }) => (
+export const MessagesList = ({ messages, userEmail }) => (
   <MessagesListWrapper>
-    {messages.map((message, idx) => (
-      <Message key={idx} idx={idx} text={message} />
+    {_.map(messages, message => (
+      <Message key={message._id} idx={message._id} 
+      text={message.text} isMyMessage={message.author.email === userEmail}
+      timestamp={message.timestamp} />
     ))}
   </MessagesListWrapper>
 );
 
-const MessagesListWrapper = styled(View)`
+const MessagesListWrapper = styled(ScrollView)`
   flex: 1;
   padding: 20px;
   display: flex;

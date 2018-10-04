@@ -22,9 +22,9 @@ import { goHome, goToAuth, goWelcome } from "../navigation/navigation";
 export const checkAuth = () => async dispatch => {
   const auth = await AsyncStorage.getItem(AUTH);
   const user = JSON.parse(auth);
-  if (user.token) {
+  if (user && user.token) {
     try {
-      await doJsonRequest({
+      const userInfo = await doJsonRequest({
         url: AUTH_CHECK_URL,
         method: "post",
         headers: { authorization: user.token }
@@ -32,7 +32,7 @@ export const checkAuth = () => async dispatch => {
       goHome();
       dispatch({
         type: AUTH_USER,
-        payload: { token: user.token }
+        payload: { token: user.token, name: userInfo.user.name, email: userInfo.user.email }
       });
     } catch (err) {
       goToAuth();
@@ -67,7 +67,7 @@ export const login = ({ email, password }) => async dispatch => {
     setAuth({ token: resp.token, userId: resp.user._id });
     return dispatch({
       type: AUTH_USER,
-      payload: { token: resp.token }
+      payload: { token: resp.token, name: resp.name, email }
     });
   } catch (e) {
     console.log(e);

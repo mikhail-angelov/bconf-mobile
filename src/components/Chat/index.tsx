@@ -6,13 +6,15 @@ import Button from "../CommonUIElements/Button";
 import styled from "styled-components";
 import { MessageInput } from "./MessageInput";
 import { MessagesList } from "./MessagesList";
-import { goToAuth } from "../../navigation/navigation";
+import { goToAuth, goHome } from "../../navigation/navigation";
 import { sendMessage } from "../../actions/chat";
 
 interface IProps {
   chat: any;
+  auth: any;
   sendMessage: () => void;
   logout: () => void;
+  activeChat: string;
 }
 class Chat extends React.PureComponent<IProps> {
   public componentWillReceiveProps(nextProps) {
@@ -23,10 +25,12 @@ class Chat extends React.PureComponent<IProps> {
 
   public render() {
     return (
-      <ChatView>
-        <Button onPress={this.props.logout}>LogOut</Button>
-        <MessagesList messages={this.props.chat.messages} />
-        <MessageInput handleSendMessage={this.props.sendMessage} />
+      <ChatView style={{ width: this.props.width }}>
+        <MessagesList messages={this.props.chat.messages} userEmail={this.props.auth.email} />
+        <MessageInput
+          chatId={this.props.chat.activeChat}
+          handleSendMessage={this.props.sendMessage}
+        />
       </ChatView>
     );
   }

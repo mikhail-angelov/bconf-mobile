@@ -19,12 +19,14 @@ const auth = (state = initialState, action) => {
   switch (action.type) {
     case AUTH_USER:
     case SIGN_UP_USER: {
-      const { token } = action.payload;
+      const { token, name, email } = action.payload;
       return {
         ...state,
         authenticated: true,
         authError: "",
-        token
+        token,
+        name,
+        email
       };
     }
     case AUTH_ERROR: {

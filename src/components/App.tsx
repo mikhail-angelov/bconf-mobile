@@ -23,7 +23,7 @@ const mapDispatchToProps = {
   checkAuth
 };
 
-const mapStateToProps = state => ({ auth: state.auth });
+const mapStateToProps = ({auth}) => ({ auth });
 
 export default connect(
   mapStateToProps,

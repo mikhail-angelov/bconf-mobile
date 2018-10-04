@@ -15,3 +15,6 @@ export const SEND_MESSAGE = "SEND_MESSAGE";
 export const RECEIVE_MESSAGE = "RECEIVE_MESSAGE";
 export const GET_CHATS = "GET_CHATS";
 export const GET_CHATS_ERROR = "GET_CHATS_ERROR";
+export const GET_MESSAGES = "GET_MESSAGES";
+export const GET_MESSAGES_ERROR = "GET_MESSAGES_ERROR";
+export const SET_ACTIVE_CHAT = "SET_ACTIVE_CHAT";

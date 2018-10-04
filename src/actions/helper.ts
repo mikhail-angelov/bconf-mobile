@@ -17,8 +17,13 @@ export const doJsonRequest = opts => {
 };
 
 export const doJsonAuthRequest = async opts => {
+  const token = await getToken()
+  opts = { ...opts, headers: { authorization: token } };
+  return axios(opts).then(response => response.data);
+};
+
+export const getToken = async () => {
   const auth = await AsyncStorage.getItem(AUTH);
   const user = JSON.parse(auth);
-  opts = { ...opts, headers: { authorization: user.token } };
-  return axios(opts).then(response => response.data);
+  return user.token;
 };
