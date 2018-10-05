@@ -37,7 +37,6 @@ export const ChatListItem = ({
 const ChatListItemWrapper = styled(TouchableOpacity)`
   height: 100px;
   width: 100%;
-  borderTopWidth: 0.5;
   display: flex;
   flexDirection: row;
 `;
