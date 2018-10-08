@@ -1,7 +1,11 @@
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { Navigation } from "react-native-navigation";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import styled from "styled-components";
+
+import { SOFT_BLUE_COLOR } from "../../helpers/styleConstants";
+
 interface IProps {
     title: string;
 }
@@ -13,11 +17,15 @@ export default class Header extends React.Component<IProps> {
         const { title } = this.props
         return (
             <HeaderWrapper>
-                <Overlay/>
+                <Overlay />
                 <Head>
-                    <Text></Text>
+                    <TouchableOpacity>
+                        <Icon.Button name="align-left" backgroundColor="transparent" color={SOFT_BLUE_COLOR} />
+                    </TouchableOpacity>
                     <Title>{title}</Title>
-                    <View></View>
+                    <TouchableOpacity>
+                        <Icon.Button name="user" backgroundColor="transparent" color={SOFT_BLUE_COLOR} style={{}} />
+                    </TouchableOpacity>
                 </Head>
             </HeaderWrapper>
         );
@@ -28,10 +36,7 @@ const HeaderWrapper = styled(View)`
   width: 100%;
   display: flex;
   flexDirection: column;
-  shadowColor: #000;
-  shadowOpacity: 0.6;
   borderBottomWidth: 0.8;
-  borderColor: #eed;
 `;
 
 const Overlay = styled(View)`
@@ -45,20 +50,14 @@ const Head = styled(View)`
   display: flex;
   flexDirection: row;
   textAlign: center;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Title = styled(Text)`
-  fontWeight: 700;
   color: #000;
-  fontSize: 36px;
+  fontSize: 22px;
+  font-weight: 500;
   textAlign: center;
-  shadowColor: null;
-  shadowOpacity: 0;
-  borderBottomWidth: 0;
-  borderColor: null;
+  width: 75%;
 `;
-
-const Icon = styled(TouchableOpacity)`
-  width: 15%;
-`;
-

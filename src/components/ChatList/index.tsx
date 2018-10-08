@@ -40,7 +40,7 @@ class ChatList extends React.PureComponent<IProps> {
     const position: any = Animated.divide(this.scrollX, width)
     return (
       <ChatListWrapper>
-        <Header title="Chat" />
+        <Header title="Chats" />
         <ScrollView
           ref={scroller => this.scroller = scroller}
           horizontal={true}
