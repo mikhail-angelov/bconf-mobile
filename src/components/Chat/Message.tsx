@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { View, Text } from "react-native";
 import moment from "moment";
 
-const MESSAGE_TIMESTAMP_FORMAT = "MM/DD/YYYY, hh:mm";
+import { MESSAGE_TIMESTAMP_FORMAT } from '../../helpers/constants'
 
 export const Message = ({ text, idx, isMyMessage, timestamp }) => {
 

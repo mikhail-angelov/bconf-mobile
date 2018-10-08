@@ -4,6 +4,7 @@ import { KeyboardAvoidingView } from "react-native";
 import { logout } from "../../actions/auth";
 import Button from "../CommonUIElements/Button";
 import styled from "styled-components";
+import Header from "../Header";
 import { MessageInput } from "./MessageInput";
 import { MessagesList } from "./MessagesList";
 import { goToAuth, goHome } from "../../navigation/navigation";
@@ -14,7 +15,11 @@ interface IProps {
   auth: any;
   sendMessage: () => void;
   logout: () => void;
-  activeChat: string;
+  backToChatList: () => void;
+  backButton: () => void;
+  activeChatId: string;
+  activeChatName: string;
+  width: string;
 }
 class Chat extends React.PureComponent<IProps> {
   public componentWillReceiveProps(nextProps) {
@@ -24,12 +29,14 @@ class Chat extends React.PureComponent<IProps> {
   }
 
   public render() {
+    const { chat, width, backToChatList, auth, sendMessage } = this.props
     return (
-      <ChatView style={{ width: this.props.width }}>
-        <MessagesList messages={this.props.chat.messages} userEmail={this.props.auth.email} />
+      <ChatView style={{ width: width }}>
+        <Header title={chat.activeChatName} width={width} backButton={backToChatList} />
+        <MessagesList messages={chat.messages} userEmail={auth.email} />
         <MessageInput
-          chatId={this.props.chat.activeChat}
-          handleSendMessage={this.props.sendMessage}
+          chatId={chat.activeChatId}
+          handleSendMessage={sendMessage}
         />
       </ChatView>
     );
@@ -39,7 +46,9 @@ class Chat extends React.PureComponent<IProps> {
 const ChatView = styled(KeyboardAvoidingView).attrs({
   behavior: "padding"
 })`
-  flex: 1;
+  display: flex;
+  flexDirection: column;
+  height: 100%;
 `;
 
 const mapDispatchToProps = {

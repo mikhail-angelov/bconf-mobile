@@ -1,7 +1,7 @@
 import React from "react";
 import { ChatListItem } from "./ChatItem";
 import { connect } from "react-redux";
-import { ScrollView, Animated, Dimensions, View, StatusBar } from "react-native";
+import { ScrollView, Animated, Dimensions, View, StatusBar, TouchableOpacity } from "react-native";
 import styled from "styled-components";
 import { getMessages, setActiveChat } from "../../actions/chat";
 import Chat from "../Chat";
@@ -11,17 +11,18 @@ const { width } = Dimensions.get('window')
 interface IProps {
   chat: [];
   getMessages: (_id) => void;
-  setActiveChat: (_id) => void;
+  setActiveChat: (_id, name) => void;
   scroller: () => void;
-  activeChat: string;
+  messageListView: boolean;
   _id: string;
+  name: string;
 }
 
 class ChatList extends React.PureComponent<IProps> {
   constructor(props) {
     super(props);
     this.state = {
-      activeChat: ""
+      messageListView: false
     };
   }
   private scrollX = new Animated.Value(0);
@@ -30,18 +31,33 @@ class ChatList extends React.PureComponent<IProps> {
     this.scroller.scrollTo({ x: width });
   };
 
-  public setActiveChatAndGetMessages(chatId) {
-    this.setState({ activeChat: chatId })
+  public scrollToChatList = () => {
+    this.scroller.scrollTo({ x: 0 });
+  };
+
+  public setActiveChatAndGetMessages(chatId, chatName) {
+    this.setState({ messageListView: true })
+    this.props.setActiveChat(chatId, chatName)
     this.props.getMessages(chatId)
     this.scrollToChat()
+  }
+
+  public resetActiveChat() {
+    this.scrollToChatList()
+    if (width === 0) {
+      this.props.setActiveChat(null, null)
+      this.setState({ messageListView: false })
+    }
   }
 
   public render() {
     const position: any = Animated.divide(this.scrollX, width)
     return (
       <ChatListWrapper>
-        <Header title="Chats" />
         <ScrollView
+          style={{
+            height: '100%'
+          }}
           ref={scroller => this.scroller = scroller}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -51,21 +67,27 @@ class ChatList extends React.PureComponent<IProps> {
           scrollEventThrottle={16}
           onMomentumScrollEnd={() => {
             if (position.__getValue() === 0) {
-              this.setState({ activeChat: "" })
+              this.resetActiveChat()
             }
           }}
         >
-          <ScrollView
-            style={{ width }}>
-            {this.props.chat.chats.map(chat => (
-              <ChatListItem
-                name={chat.name}
-                id={chat._id}
-                setActiveChatAndGetMessages={() => this.setActiveChatAndGetMessages(chat._id)}
-              />
-            ))}
-          </ScrollView>
-          {this.state.activeChat ? <Chat width={width}></Chat> : null}
+          <TouchableOpacity style={{ width }}>
+            <Header title="Chats" width={width} />
+            <ScrollView
+              style={{ width }}>
+              {this.props.chat.chats.map(chat => (
+                <ChatListItem
+                  name={chat.name}
+                  id={chat._id}
+                  lastMessageText={chat.lastMessageText}
+                  lastMessageAuthor={chat.lastMessageAuthor}
+                  lastMessageTimestamp={chat.lastMessageTimestamp}
+                  setActiveChatAndGetMessages={() => this.setActiveChatAndGetMessages(chat._id, chat.name)}
+                />
+              ))}
+            </ScrollView>
+          </TouchableOpacity>
+          {this.state.messageListView ? <Chat width={width} backToChatList={() => this.resetActiveChat()} ></Chat> : null}
         </ScrollView>
       </ChatListWrapper>
     );
