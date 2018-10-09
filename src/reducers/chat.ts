@@ -37,8 +37,8 @@ const chat = (state = initialState, action) => {
       return { ...state, getChatsError: true };
     }
     case SET_ACTIVE_CHAT: {
-      const { chatId, chatName } = action.payload;
-      return { ...state, activeChatId: chatId, activeChatName: chatName };
+      const { chatId, chatName, chatColor } = action.payload;
+      return { ...state, activeChatId: chatId, activeChatName: chatName, activeChatColor: chatColor  };
     }
     default: {
       return state;

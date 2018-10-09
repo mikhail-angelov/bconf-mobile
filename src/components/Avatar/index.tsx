@@ -2,12 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { View, Text, Image } from "react-native";
 
-export const Avatar = ({ size, srcImg, name, }) => {
-
+export const Avatar = ({ size, srcImg, name, chatColor }: IAvatarProps) => {
   return (
-    <AvatarWrapper>
+    <AvatarWrapper chatColor={chatColor}>
       {srcImg ? <AvaImg source={{ uri: srcImg }} /> :
-        <AvaText>{name[0].toUpperCase()}</AvaText>}
+        <AvaText size={size} >{name[0].toUpperCase()}</AvaText>}
     </AvatarWrapper>
   );
 };
@@ -16,14 +15,16 @@ interface IAvatarProps {
   size: string;
   source: () => void;
   name: string;
+  srcImg: string;
+  chatColor: string;
 }
 
-const AvatarWrapper = styled(View)`
-      height:75%;
-      width: 75%;
+const AvatarWrapper = styled(View).attrs({})`
+      height:65%;
+      width: 65%;
       backgroundColor: #fff;
       borderRadius: 50;
-      borderWidth: 2;
+      borderWidth: 3;
       borderColor: #fff;
       display: flex;
       alignItems: center;
@@ -31,6 +32,8 @@ const AvatarWrapper = styled(View)`
       justifyContent: center;
       shadowOpacity: 0.2;
       shadowRadius: 5;
+      backgroundColor: ${(props: IAvatarProps) =>
+    props.chatColor};
     `;
 
 const AvaImg = styled(Image)`
@@ -39,5 +42,8 @@ const AvaImg = styled(Image)`
 `;
 
 const AvaText = styled(Text)`
-    fontSize: 12px;
+    fontSize: ${(props: IAvatarProps) =>
+    props.size === "small" ? "12px" : "24px"
+  }};
+    color: #fff;
   `;

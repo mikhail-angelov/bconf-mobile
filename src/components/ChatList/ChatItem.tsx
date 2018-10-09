@@ -11,6 +11,7 @@ interface IProps {
   name: string;
   lastMessageText: string;
   lastMessageAuthor: string;
+  chatColor: string;
   id: number;
   lastMessageTimestamp: number;
   setActiveChatAndGetMessages: () => void;
@@ -22,6 +23,7 @@ export const ChatListItem = ({
   lastMessageText,
   lastMessageAuthor,
   lastMessageTimestamp,
+  chatColor
 }: IProps) => {
   return (
     <ChatListItemWrapper
@@ -30,7 +32,7 @@ export const ChatListItem = ({
       }}
     >
       <AvatarSide>
-        <Avatar name={name} />
+        <Avatar name={name} chatColor={chatColor}/>
       </AvatarSide>
       <LastMessageArea>
         <ChatName>{name}</ChatName>
@@ -53,7 +55,7 @@ const ChatListItemWrapper = styled(TouchableOpacity)`
   width: 100%;
   display: flex;
   flexDirection: row;
-  padding: 0 10px 10px 10px;
+  padding: 0 10px 10px 0px;
 `;
 
 const AvatarSide = styled(View)`
@@ -67,11 +69,11 @@ const AvatarSide = styled(View)`
 const LastMessageArea = styled(View)`
   width: 55%;
   height: 100%;
-  padding: 10px;
+  paddingTop: 15px;
 `;
 
 const ChatName = styled(Text)`
-  fontWeight: 700;
+  fontWeight: 500;
   fontSize: 18px;
 `;
 
@@ -97,5 +99,6 @@ const Timestamp = styled(Text)`
   fontSize: 12px;
   color: ${GRAY_COLOR};
   textAlign: right;
-  paddingTop: 10px;
+  paddingTop: 20px;
 `;
+

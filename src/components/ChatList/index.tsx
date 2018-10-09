@@ -11,11 +11,12 @@ const { width } = Dimensions.get('window')
 interface IProps {
   chat: [];
   getMessages: (_id) => void;
-  setActiveChat: (_id, name) => void;
+  setActiveChat: (_id, name, chatColor) => void;
   scroller: () => void;
   messageListView: boolean;
   _id: string;
   name: string;
+  chatColor: string;
 }
 
 class ChatList extends React.PureComponent<IProps> {
@@ -35,9 +36,9 @@ class ChatList extends React.PureComponent<IProps> {
     this.scroller.scrollTo({ x: 0 });
   };
 
-  public setActiveChatAndGetMessages(chatId, chatName) {
+  public setActiveChatAndGetMessages(chatId, chatName, chatColor) {
     this.setState({ messageListView: true })
-    this.props.setActiveChat(chatId, chatName)
+    this.props.setActiveChat(chatId, chatName, chatColor)
     this.props.getMessages(chatId)
     this.scrollToChat()
   }
@@ -77,10 +78,11 @@ class ChatList extends React.PureComponent<IProps> {
                 <ChatListItem
                   name={chat.name}
                   id={chat._id}
+                  chatColor={chat.chatColor}
                   lastMessageText={chat.lastMessageText}
                   lastMessageAuthor={chat.lastMessageAuthor}
                   lastMessageTimestamp={chat.lastMessageTimestamp}
-                  setActiveChatAndGetMessages={() => this.setActiveChatAndGetMessages(chat._id, chat.name)}
+                  setActiveChatAndGetMessages={() => this.setActiveChatAndGetMessages(chat._id, chat.name, chat.chatColor)}
                 />
               ))}
             </ScrollView>

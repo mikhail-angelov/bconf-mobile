@@ -20,6 +20,7 @@ interface IProps {
   activeChatId: string;
   activeChatName: string;
   width: string;
+  chatColor: string;
 }
 class Chat extends React.PureComponent<IProps> {
   public componentWillReceiveProps(nextProps) {
@@ -32,7 +33,7 @@ class Chat extends React.PureComponent<IProps> {
     const { chat, width, backToChatList, auth, sendMessage } = this.props
     return (
       <ChatView style={{ width: width }}>
-        <Header title={chat.activeChatName} width={width} backButton={backToChatList} />
+        <Header title={chat.activeChatName} width={width} backButton={backToChatList} chatColor={chat.activeChatColor}/>
         <MessagesList messages={chat.messages} userEmail={auth.email} />
         <MessageInput
           chatId={chat.activeChatId}

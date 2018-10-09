@@ -27,3 +27,10 @@ export const getToken = async () => {
   const user = JSON.parse(auth);
   return user.token;
 };
+
+export function getRandomColor(chatId) {
+  const colors = ['#FFCCFF', '#9999FF', '#66CCCC', '#99FFCC', "#22AAAA",
+    '#FFCC00', '#FFCCCC', '#996699', '#66CCFF', "#332244"];
+  const rand = Math.floor(chatId.charCodeAt(0) / 12);
+  return colors[rand];
+}

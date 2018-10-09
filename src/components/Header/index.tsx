@@ -11,6 +11,7 @@ import { SOFT_BLUE_COLOR } from "../../helpers/styleConstants";
 interface IProps {
     title: string;
     width: string;
+    chatColor: string;
     backButton: () => void
 }
 export default class Header extends React.Component<IProps> {
@@ -18,12 +19,12 @@ export default class Header extends React.Component<IProps> {
         super(props);
     }
     public render() {
-        const { title, width, backButton } = this.props
+        const { title, width, backButton, chatColor } = this.props
         return (
             <HeaderWrapper style={{ width }}>
                 <Overlay />
                 <Head>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={{ width: '15%' }}>
                         <Icon.Button
                             onPress={backButton}
                             name={title === 'Chats' ? "align-left" : "arrow-left"}
@@ -34,8 +35,9 @@ export default class Header extends React.Component<IProps> {
                         <Text style={{ fontSize: 22, fontWeight: "500", }}>{title}</Text>
                         {title !== 'Chats' ? <Text style={{ fontSize: 12, fontWeight: "300", }}>Last seen recently</Text> : null}
                     </Title>
-                    <TouchableOpacity style={{ width: 70,  display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {title === 'Chats' ? <Icon.Button name="user" backgroundColor="transparent" color={SOFT_BLUE_COLOR} style={{ marginRight: 0 }} /> : <Avatar name={title} />}
+                    <TouchableOpacity style={{ width: "15%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {title === 'Chats' ? <Icon.Button name="user" backgroundColor="transparent" color={SOFT_BLUE_COLOR} style={{ marginRight: 0 }} /> :
+                            <Avatar name={title} size="small" chatColor={chatColor}/>}
                     </TouchableOpacity>
                 </Head>
             </HeaderWrapper>
@@ -51,8 +53,8 @@ const HeaderWrapper = styled(View)`
   display: flex;
   justifyContent: center;
   flexDirection: column;
-  borderBottomWidth: 0.3;
-  borderColor: ${GRAY_COLOR};
+  borderBottomWidth: 3;
+  borderColor: rgba(0,0,0,0.05);
   height: 90px;
 `;
 
