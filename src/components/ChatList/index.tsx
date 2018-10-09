@@ -42,12 +42,10 @@ class ChatList extends React.PureComponent<IProps> {
     this.scrollToChat()
   }
 
-  public resetActiveChat() {
+  public resetActiveChat = () => {
     this.scrollToChatList()
-    if (width === 0) {
-      this.props.setActiveChat(null, null)
-      this.setState({ messageListView: false })
-    }
+    this.props.setActiveChat(null, null)
+    this.setState({ messageListView: false })
   }
 
   public render() {
@@ -87,7 +85,7 @@ class ChatList extends React.PureComponent<IProps> {
               ))}
             </ScrollView>
           </TouchableOpacity>
-          {this.state.messageListView ? <Chat width={width} backToChatList={() => this.resetActiveChat()} ></Chat> : null}
+          {this.state.messageListView ? <Chat width={width} backToChatList={() => this.scrollToChatList()} ></Chat> : null}
         </ScrollView>
       </ChatListWrapper>
     );

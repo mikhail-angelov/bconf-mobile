@@ -4,6 +4,7 @@ import { Navigation } from "react-native-navigation";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styled from "styled-components";
 
+import { Avatar } from "../Avatar";
 import { GRAY_COLOR } from "../../helpers/styleConstants";
 import { SOFT_BLUE_COLOR } from "../../helpers/styleConstants";
 
@@ -33,8 +34,8 @@ export default class Header extends React.Component<IProps> {
                         <Text style={{ fontSize: 22, fontWeight: "500", }}>{title}</Text>
                         {title !== 'Chats' ? <Text style={{ fontSize: 12, fontWeight: "300", }}>Last seen recently</Text> : null}
                     </Title>
-                    <TouchableOpacity>
-                        <Icon.Button name="user" backgroundColor="transparent" color={SOFT_BLUE_COLOR} style={{}} />
+                    <TouchableOpacity style={{ width: 70,  display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {title === 'Chats' ? <Icon.Button name="user" backgroundColor="transparent" color={SOFT_BLUE_COLOR} style={{ marginRight: 0 }} /> : <Avatar name={title} />}
                     </TouchableOpacity>
                 </Head>
             </HeaderWrapper>
@@ -48,11 +49,11 @@ export default class Header extends React.Component<IProps> {
 //   shadowRadius: 5;
 const HeaderWrapper = styled(View)`
   display: flex;
+  justifyContent: center;
   flexDirection: column;
   borderBottomWidth: 0.3;
   borderColor: ${GRAY_COLOR};
   height: 90px;
-  justifyContent: center;
 `;
 
 const Overlay = styled(View)`
@@ -66,12 +67,12 @@ const Head = styled(View)`
   flexDirection: row;
   textAlign: center;
   alignItems: center;
-  justifyContent: center;
+  justifyContent: space-between;
 `;
 
 const Title = styled(View)`
   color: #000;
-  width: 75%;
+  width: 70%;
   display: flex;
   flexDirection: column;
   alignItems: center;

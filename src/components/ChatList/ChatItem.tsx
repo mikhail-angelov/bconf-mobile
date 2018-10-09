@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
+import { Avatar } from "../Avatar";
 import styled from "styled-components";
 import moment from "moment";
 
@@ -29,9 +30,7 @@ export const ChatListItem = ({
       }}
     >
       <AvatarSide>
-        <Avatar>
-          <Text>Avatar</Text>
-        </Avatar>
+        <Avatar name={name} />
       </AvatarSide>
       <LastMessageArea>
         <ChatName>{name}</ChatName>
@@ -54,7 +53,7 @@ const ChatListItemWrapper = styled(TouchableOpacity)`
   width: 100%;
   display: flex;
   flexDirection: row;
-  padding: 10px;
+  padding: 0 10px 10px 10px;
 `;
 
 const AvatarSide = styled(View)`
@@ -63,21 +62,6 @@ const AvatarSide = styled(View)`
   display: flex;
   alignItems: center;
   justifyContent: center;
-`;
-
-const Avatar = styled(View)`
-  height: 85%;
-  width: 75%;
-  backgroundColor: #fff;
-  borderRadius: 50;
-  borderWidth: 2;
-  borderColor: #fff;
-  display: flex;
-  alignItems: center;
-  shadowColor: #000;
-  justifyContent: center;
-  shadowOpacity: 0.2;
-  shadowRadius: 5;
 `;
 
 const LastMessageArea = styled(View)`
