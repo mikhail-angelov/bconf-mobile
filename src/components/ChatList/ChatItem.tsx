@@ -32,7 +32,7 @@ export const ChatListItem = ({
       }}
     >
       <AvatarSide>
-        <Avatar name={name} chatColor={chatColor}/>
+        <Avatar name={name} chatColor={chatColor} />
       </AvatarSide>
       <LastMessageArea>
         <ChatName>{name}</ChatName>
@@ -56,6 +56,10 @@ const ChatListItemWrapper = styled(TouchableOpacity)`
   display: flex;
   flexDirection: row;
   padding: 0 10px 10px 0px;
+  backgroundColor: #fff;
+  &:active {
+    backgroundColor: #fff;
+  }
 `;
 
 const AvatarSide = styled(View)`

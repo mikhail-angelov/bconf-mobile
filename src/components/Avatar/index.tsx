@@ -20,7 +20,7 @@ interface IAvatarProps {
 }
 
 const AvatarWrapper = styled(View).attrs({})`
-      height:65%;
+      height: 65%;
       width: 65%;
       backgroundColor: #fff;
       borderRadius: 50;

@@ -13,20 +13,21 @@ interface IProps {
     width: string;
     chatColor: string;
     backButton: () => void
+    toggleMenu: () => void
 }
 export default class Header extends React.Component<IProps> {
     constructor(props) {
         super(props);
     }
     public render() {
-        const { title, width, backButton, chatColor } = this.props
+        const { title, width, backButton, chatColor, toggleMenu } = this.props
         return (
             <HeaderWrapper style={{ width }}>
                 <Overlay />
                 <Head>
                     <TouchableOpacity style={{ width: '15%' }}>
                         <Icon.Button
-                            onPress={backButton}
+                            onPress={title === 'Chats' ? toggleMenu : backButton}
                             name={title === 'Chats' ? "align-left" : "arrow-left"}
                             backgroundColor="#fff"
                             color={SOFT_BLUE_COLOR} />
@@ -56,6 +57,7 @@ const HeaderWrapper = styled(View)`
   borderBottomWidth: 3;
   borderColor: rgba(0,0,0,0.05);
   height: 90px;
+  backgroundColor: #fff;
 `;
 
 const Overlay = styled(View)`

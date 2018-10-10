@@ -19,4 +19,5 @@ const MessagesListWrapper = styled(ScrollView)`
   padding: 0 20px;
   display: flex;
   flex-direction: column;
+  backgroundColor: #FFF;
 `;
