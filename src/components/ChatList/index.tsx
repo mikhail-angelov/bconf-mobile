@@ -4,10 +4,12 @@ import { connect } from "react-redux";
 import { ScrollView, Animated, Dimensions, View, StatusBar, TouchableOpacity } from "react-native";
 import SideMenu from 'react-native-side-menu';
 import styled from "styled-components";
+import { goHome } from "../../navigation/navigation";
+import { logout } from "../../actions/auth";
 import { getMessages, setActiveChat } from "../../actions/chat";
+import ChatMenu from "../ChatMenu";
 import Chat from "../Chat";
 import Header from "../Header";
-import Menu from "../Menu";
 
 const { width } = Dimensions.get('window')
 interface IProps {
@@ -21,6 +23,8 @@ interface IProps {
   scroller: object;
   chats: object;
   width: number;
+  goHome: () => void;
+  logout: () => void;
 }
 
 interface IState {
@@ -67,7 +71,8 @@ class ChatList extends React.Component<IProps, IState> {
     const position: any = Animated.divide(this.scrollX, width)
     return (
       <SideMenu
-        menu={<Menu />}
+        menu={<ChatMenu
+          chatMenuItems={[{ title: "Chats", handler: goHome }, { title: "Logout", handler: this.props.logout }]} />}
         isOpen={this.state.isMenuOpen}
         onChange={this.toggleMenu}
       >
@@ -109,7 +114,7 @@ class ChatList extends React.Component<IProps, IState> {
             {this.state.messageListView ? <Chat width={width} backToChatList={() => this.scrollToChatList()} ></Chat> : null}
           </ScrollView>
         </ChatListWrapper>
-      </SideMenu>
+      </SideMenu >
     );
   }
 }
@@ -126,7 +131,8 @@ const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
 
 const mapDispatchToProps = {
   getMessages,
-  setActiveChat
+  setActiveChat,
+  logout
 };
 
 export default connect(

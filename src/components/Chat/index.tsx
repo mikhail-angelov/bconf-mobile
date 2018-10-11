@@ -13,7 +13,7 @@ import { sendMessage } from "../../actions/chat";
 interface IProps {
   chat: any;
   auth: any;
-  sendMessage: () => void;
+  sendMessage: (chatId, text) => void;
   logout: () => void;
   backToChatList: () => void;
   backButton: () => void;
@@ -30,14 +30,13 @@ class Chat extends React.PureComponent<IProps> {
   }
 
   public render() {
-    const { chat, width, backToChatList, auth, sendMessage } = this.props
+    const { chat, width, backToChatList, auth } = this.props
     return (
       <ChatView style={{ width: width }}>
-        <Header title={chat.activeChatName} width={width} backButton={backToChatList} chatColor={chat.activeChatColor}/>
+        <Header title={chat.activeChatName} width={width} backButton={backToChatList} chatColor={chat.activeChatColor} />
         <MessagesList messages={chat.messages} userEmail={auth.email} />
         <MessageInput
-          chatId={chat.activeChatId}
-          handleSendMessage={sendMessage}
+          handleSendMessage={(message) => this.props.sendMessage(chat.activeChatId, message)}
         />
       </ChatView>
     );

@@ -3,7 +3,7 @@ import { View, TextInput, Button } from "react-native";
 import styled from "styled-components";
 
 interface IProps {
-  handleSendMessage: (chatId, value) => void;
+  handleSendMessage: (value) => void;
   chatId: string;
 }
 interface IState {
@@ -17,11 +17,12 @@ export class MessageInput extends React.Component<IProps, IState> {
     };
     this.handleSending = this.handleSending.bind(this);
   }
-  public handleSending() {
-    this.props.handleSendMessage(this.props.chatId, this.state.value);
+  public handleSending(message) {
+    this.props.handleSendMessage(message);
     this.setState({ value: "" });
   }
   public render() {
+    const { value } = this.state
     return (
       <MessageInputView>
         <View style={{ flex: 4 }}>
@@ -29,13 +30,13 @@ export class MessageInput extends React.Component<IProps, IState> {
             onChangeText={text => {
               this.setState({ value: text });
             }}
-            value={this.state.value}
+            value={value}
             style={{ backgroundColor: "transparent", fontSize: 24 }}
           />
         </View>
         <View style={{ flex: 1 }}>
           <Button
-            onPress={this.handleSending}
+            onPress={() => this.handleSending(value)}
             title="Send"
             color="rgb(0,122,255)"
             accessibilityLabel="Send message"

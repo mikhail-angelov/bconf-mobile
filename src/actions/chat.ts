@@ -15,20 +15,17 @@ import { BASE_URL, CHAT_URL, MESSAGE_URL } from "./endpoinds";
 export const sendMessage = (chatId, message) => {
   return {
     type: SEND_MESSAGE,
-    payload: chatId,
-    message
-  };
+    payload: { chatId, message }
+  }
 };
 
 export const getChats = () => async dispatch => {
   try {
-    const chats = await doJsonAuthRequest({
+    let chats = await doJsonAuthRequest({
       url: CHAT_URL,
       method: "get"
     });
-    _.map(chats, chat => {
-      return chat.chatColor = getRandomColor(chat._id)
-    })
+    chats = _.map(chats, chat => ({ ...chat, chatColor: getRandomColor(chat._id) }))
     dispatch({
       type: GET_CHATS,
       payload: chats
