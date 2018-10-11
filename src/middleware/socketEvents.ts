@@ -17,11 +17,11 @@ const socketEvents = store => next => action => {
       store.dispatch({ type: NEW_MESSAGE, payload: message });
     });
     store.dispatch(getChats());
-  } else if (action.type === SEND_MESSAGE){
+  } else if (action.type === SEND_MESSAGE) {
     console.log(socket)
     socket.emit("message", JSON.stringify({
-      chatId: action.payload,
-      text: action.message
+      chatId: action.payload.chatId,
+      text: action.payload.message
     }))
   }
   return next(action);

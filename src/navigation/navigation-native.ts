@@ -22,7 +22,8 @@ on(NAVIGATE_CHAT_LIST, () => {
       stack: {
         options: {
           topBar: {
-            visible: true
+            visible: false,
+
           }
         },
         id: "ChatList",
@@ -32,7 +33,7 @@ on(NAVIGATE_CHAT_LIST, () => {
               name: "ChatList"
             }
           }
-        ]
+        ],
       }
     }
   });

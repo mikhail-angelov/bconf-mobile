@@ -8,23 +8,24 @@ import {
   SEND_MESSAGE
 } from "../constants/actions";
 import io from "socket.io-client";
-import { doJsonAuthRequest, getToken } from "./helper";
+import _ from "lodash";
+import { doJsonAuthRequest, getToken, getRandomColor } from "./helper";
 import { BASE_URL, CHAT_URL, MESSAGE_URL } from "./endpoinds";
 
 export const sendMessage = (chatId, message) => {
   return {
     type: SEND_MESSAGE,
-    payload: chatId,
-    message
-  };
+    payload: { chatId, message }
+  }
 };
 
 export const getChats = () => async dispatch => {
   try {
-    const chats = await doJsonAuthRequest({
+    let chats = await doJsonAuthRequest({
       url: CHAT_URL,
       method: "get"
     });
+    chats = _.map(chats, chat => ({ ...chat, chatColor: getRandomColor(chat._id) }))
     dispatch({
       type: GET_CHATS,
       payload: chats
@@ -48,3 +49,8 @@ export const getMessages = chatId => async dispatch => {
     dispatch({ type: GET_MESSAGES_ERROR });
   }
 };
+
+export const setActiveChat = (chatId, chatName, chatColor) => ({
+  type: SET_ACTIVE_CHAT,
+  payload: { chatId, chatName, chatColor }
+});

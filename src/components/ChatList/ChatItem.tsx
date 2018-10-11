@@ -1,16 +1,29 @@
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
-import { Navigation } from "react-native-navigation";
+import { Avatar } from "../Avatar";
 import styled from "styled-components";
+import moment from "moment";
+
+import { MESSAGE_TIMESTAMP_FORMAT } from '../../helpers/constants'
+import { GRAY_COLOR } from "../../helpers/styleConstants";
+
 interface IProps {
   name: string;
+  lastMessageText: string;
+  lastMessageAuthor: string;
+  chatColor: string;
   id: number;
+  lastMessageTimestamp: number;
   setActiveChatAndGetMessages: () => void;
 }
 export const ChatListItem = ({
   name,
   id,
   setActiveChatAndGetMessages,
+  lastMessageText,
+  lastMessageAuthor,
+  lastMessageTimestamp,
+  chatColor
 }: IProps) => {
   return (
     <ChatListItemWrapper
@@ -19,17 +32,20 @@ export const ChatListItem = ({
       }}
     >
       <AvatarSide>
-        <Avatar>
-          <Text>Avatar</Text>
-        </Avatar>
+        <Avatar name={name} chatColor={chatColor} />
       </AvatarSide>
-      <Center>
+      <LastMessageArea>
         <ChatName>{name}</ChatName>
-        <Text>Last Message</Text>
-      </Center>
-      <RightSide>
-        <Text>30 sep</Text>
-      </RightSide>
+        <LastMessage>
+          <LastMessageAuthor>
+            {lastMessageAuthor ? `${lastMessageAuthor}: ` : "Empty chat"}
+          </LastMessageAuthor>
+          <LastMessageText>{lastMessageText}</LastMessageText>
+        </LastMessage>
+      </LastMessageArea>
+      <Timestamp>
+        {lastMessageTimestamp ? moment(lastMessageTimestamp).format(MESSAGE_TIMESTAMP_FORMAT) : ""}
+      </Timestamp>
     </ChatListItemWrapper>
   );
 };
@@ -37,9 +53,13 @@ export const ChatListItem = ({
 const ChatListItemWrapper = styled(TouchableOpacity)`
   height: 100px;
   width: 100%;
-  borderTopWidth: 0.5;
   display: flex;
   flexDirection: row;
+  padding: 0 10px 10px 0px;
+  backgroundColor: #fff;
+  &:active {
+    backgroundColor: #fff;
+  }
 `;
 
 const AvatarSide = styled(View)`
@@ -50,31 +70,39 @@ const AvatarSide = styled(View)`
   justifyContent: center;
 `;
 
-const Avatar = styled(View)`
-  height: 70%;
-  width: 70%;
-  backgroundColor: #fff;
-  borderRadius: 50;
-  borderWidth: 2;
-  display: flex;
-  alignItems: center;
-  shadowColor: #000;
-  justifyContent: center;
-  shadowOpacity: 0.8;
-  shadowRadius: 2;
-`;
-
-const Center = styled(View)`
-  width: 60%;
+const LastMessageArea = styled(View)`
+  width: 55%;
   height: 100%;
-  padding: 10px;
+  paddingTop: 15px;
 `;
 
 const ChatName = styled(Text)`
-  fontWeight: 700;
+  fontWeight: 500;
+  fontSize: 18px;
 `;
 
-const RightSide = styled(View)`
+const LastMessageAuthor = styled(Text)`
+  fontSize: 14px;
+`;
+
+const LastMessageText = styled(Text)`
+  fontSize: 14px;
+  color: ${GRAY_COLOR};
+`;
+
+const LastMessage = styled(View)`
+  fontSize: 14px;
+  display: flex;
+  flexDirection: row;
+  marginTop: 2px;
+`;
+
+const Timestamp = styled(Text)`
   width: 20%;
   height: 100%;
+  fontSize: 12px;
+  color: ${GRAY_COLOR};
+  textAlign: right;
+  paddingTop: 20px;
 `;
+
