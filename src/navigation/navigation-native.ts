@@ -20,17 +20,16 @@ on(NAVIGATE_CHAT_LIST, () => {
   Navigation.setRoot({
     root: {
       stack: {
-        options: {
-          topBar: {
-            visible: false,
-
-          }
-        },
         id: "ChatList",
         children: [
           {
             component: {
-              name: "ChatList"
+              name: "ChatList",
+              options: {
+                topBar: {
+                  visible: false,
+                }
+              },
             }
           }
         ],

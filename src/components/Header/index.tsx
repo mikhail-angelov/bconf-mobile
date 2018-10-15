@@ -12,7 +12,6 @@ interface IProps {
     title: string;
     width: string;
     chatColor: string;
-    backButton: () => void
     toggleMenu: () => void
 }
 export default class Header extends React.Component<IProps> {
@@ -20,14 +19,23 @@ export default class Header extends React.Component<IProps> {
         super(props);
     }
     public render() {
-        const { title, width, backButton, chatColor, toggleMenu } = this.props
+        const { title, width, chatColor, toggleMenu } = this.props
         return (
             <HeaderWrapper style={{ width }}>
                 <Overlay />
                 <Head>
                     <TouchableOpacity style={{ width: '15%' }}>
                         <Icon.Button
-                            onPress={title === 'Chats' ? toggleMenu : backButton}
+                            onPress={() => Navigation.setStackRoot("Chat", {
+                                component: {
+                                  name: 'ChatList',
+                                  options: {
+                                    topBar: {
+                                      visible: false
+                                    },
+                                  }
+                                }
+                              })}
                             name={title === 'Chats' ? "align-left" : "arrow-left"}
                             backgroundColor="#fff"
                             color={SOFT_BLUE_COLOR} />
@@ -38,7 +46,7 @@ export default class Header extends React.Component<IProps> {
                     </Title>
                     <TouchableOpacity style={{ width: "15%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         {title === 'Chats' ? <Icon.Button name="user" backgroundColor="transparent" color={SOFT_BLUE_COLOR} style={{ marginRight: 0 }} /> :
-                            <Avatar name={title} size="small" chatColor={chatColor}/>}
+                            <Avatar name={title} size="small" chatColor={chatColor} />}
                     </TouchableOpacity>
                 </Head>
             </HeaderWrapper>

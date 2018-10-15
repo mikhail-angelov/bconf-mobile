@@ -15,6 +15,7 @@ interface IProps {
   id: number;
   lastMessageTimestamp: number;
   setActiveChatAndGetMessages: () => void;
+  navigateToChat: any;
 }
 export const ChatListItem = ({
   name,
@@ -23,12 +24,14 @@ export const ChatListItem = ({
   lastMessageText,
   lastMessageAuthor,
   lastMessageTimestamp,
-  chatColor
+  chatColor,
+  navigateToChat
 }: IProps) => {
   return (
     <ChatListItemWrapper
       onPress={() => {
         setActiveChatAndGetMessages()
+        navigateToChat()
       }}
     >
       <AvatarSide>
