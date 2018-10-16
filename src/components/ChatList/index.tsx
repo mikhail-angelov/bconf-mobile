@@ -16,12 +16,11 @@ interface IProps {
   chat: [];
   getMessages: (_id) => void;
   setActiveChat: (_id, name, chatColor) => void;
-  messageListView: boolean;
   _id: string;
   name: string;
   chatColor: string;
-  scroller: object;
   chats: object;
+  chatMenuItems: object;
   width: number;
   goHome: () => void;
   logout: () => void;
@@ -29,18 +28,23 @@ interface IProps {
 
 interface IState {
   isMenuOpen: boolean;
-  messageListView: boolean;
 }
 
 class ChatList extends React.Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
-      messageListView: false,
       isMenuOpen: false
     };
   }
-  public scrollX = new Animated.Value(0);
+
+  public showChatMenu = () => {
+    this.setState({ isMenuOpen: true })
+  };
+
+  public closeChatMenu = () => {
+    this.setState({ isMenuOpen: false })
+  };
 
   public setActiveChatAndGetMessages(chatId, chatName, chatColor) {
     this.props.setActiveChat(chatId, chatName, chatColor)
@@ -51,55 +55,53 @@ class ChatList extends React.Component<IProps, IState> {
     this.props.setActiveChat(null, null, null)
   }
 
-  public toggleMenu = (bool) => {
-    this.setState({ isMenuOpen: bool || !this.state.isMenuOpen })
-  }
-
   public render() {
-    const position: any = Animated.divide(this.scrollX, width)
     return (
-      <ChatListWrapper>
-        <Header title="Chats" />
-        <ScrollView
-          style={{ width }}>
-          {this.props.chat.chats.map(chat => (
-            <ChatListItem
-              navigateToChat={() =>
-                Navigation.push("ChatList", {
-                  component: {
-                    name: 'Chat',
-                    passProps: {
-                      text: 'Pushed screen'
-                    },
-                    options: {
-                      topBar: {
-                        visible: false
-                      },
+      <View>
+        {this.state.isMenuOpen &&
+          <ChatMenu width={width} closeMenu={this.closeChatMenu}
+            chatMenuItems={[{ title: "Chats", handler: this.closeChatMenu }, { title: "Logout", handler: this.props.logout }]}
+          />}
+        <ChatListWrapper width={width}>
+          <Header title="Chats" showMenu={this.showChatMenu} />
+          <ScrollView>
+            {this.props.chat.chats.map(chat => (
+              <ChatListItem
+                navigateToChat={() =>
+                  Navigation.push("ChatList", {
+                    component: {
+                      name: 'Chat',
+                      options: {
+                        topBar: {
+                          visible: false
+                        },
+                      }
                     }
-                  }
-                })}
-              name={chat.name}
-              id={chat._id}
-              chatColor={chat.chatColor}
-              lastMessageText={chat.lastMessageText}
-              lastMessageAuthor={chat.lastMessageAuthor}
-              lastMessageTimestamp={chat.lastMessageTimestamp}
-              setActiveChatAndGetMessages={() => this.setActiveChatAndGetMessages(chat._id, chat.name, chat.chatColor)}
-            />
-          ))}
-        </ScrollView>
-      </ChatListWrapper>
+                  })}
+                name={chat.name}
+                id={chat._id}
+                chatColor={chat.chatColor}
+                lastMessageText={chat.lastMessageText}
+                lastMessageAuthor={chat.lastMessageAuthor}
+                lastMessageTimestamp={chat.lastMessageTimestamp}
+                setActiveChatAndGetMessages={() => this.setActiveChatAndGetMessages(chat._id, chat.name, chat.chatColor)}
+              />
+            ))}
+          </ScrollView>
+        </ChatListWrapper>
+      </View>
     );
   }
 }
 
 const ChatListWrapper = styled(View)`
-  display: flex;
-  flexDirection: column;
-  backgroundColor: #fff;
-  borderLeftWidth: 3;
-  borderColor: rgba(0,0,0,0.05);
-`;
+    display: flex;
+    flexDirection: column;
+    backgroundColor: #fff;
+    borderLeftWidth: 3;
+    borderColor: rgba(0,0,0,0.05);
+    height: 100%;
+  `;
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
 

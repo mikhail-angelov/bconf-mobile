@@ -11,36 +11,57 @@ interface IProps {
     size: string;
     chatColor: string;
     name: string;
+    width: string;
     chatMenuItems: object
+    closeMenu: () => void
 }
 class ChatMenu extends React.Component<IProps> {
     public render() {
-        const { chatMenuItems } = this.props
+        const { chatMenuItems, width, closeMenu } = this.props
         return (
-            <ChatMenuView>
-                <ChatMenuHeader>
-                    <AvatarWrap>
-                        <Avatar size="middle" chatColor="#996699" name='Anton' />
-                    </AvatarWrap>
-                    <AvatarUsername>Anton</AvatarUsername>
-                </ChatMenuHeader>
-                <ChatMenuBody>
-                    {_.map(chatMenuItems, item => (
-                        <ChatMenuItem>
-                            <ChatMenuTitle onPress={() => item.handler()}>{item.title}</ChatMenuTitle>
-                        </ChatMenuItem>
-                    ))}
-                </ChatMenuBody>
-            </ChatMenuView>
+            <View style={{ width: width }}>
+                <Overlay onPress={
+                    closeMenu
+                } />
+                <ChatMenuView>
+                    <ChatMenuHeader>
+                        <AvatarWrap>
+                            <Avatar size="middle" chatColor="#996699" name='Anton' />
+                        </AvatarWrap>
+                        <AvatarUsername>Anton</AvatarUsername>
+                    </ChatMenuHeader>
+                    <ChatMenuBody>
+                        {_.map(chatMenuItems, item => (
+                            <ChatMenuItem>
+                                <ChatMenuTitle onPress={() => item.handler()}>{item.title}</ChatMenuTitle>
+                            </ChatMenuItem>
+                        ))}
+                    </ChatMenuBody>
+                </ChatMenuView >
+            </View>
         );
     }
 }
+
+const Overlay = styled(TouchableOpacity)`
+    top: 0;
+    right: 0;
+    backgroundColor: rgba(0,0,0,0.8);
+    width: 100%;
+    height: 100%;
+    display: flex;
+  `;
 
 const ChatMenuView = styled(View)`
   display: flex;
   flexDirection: column;
   height: 100%;
+  width: 70%;
   paddingTop: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  backgroundColor: #fff;
 `;
 
 const ChatMenuHeader = styled(View)`
@@ -52,6 +73,7 @@ const ChatMenuHeader = styled(View)`
   borderColor: rgba(0,0,0,0.05);
   height: 70px;
   padding: 0 10px;
+  width: 100%;
 `;
 
 const AvatarWrap = styled(View)`

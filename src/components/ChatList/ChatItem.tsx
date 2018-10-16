@@ -76,7 +76,8 @@ const AvatarSide = styled(View)`
 const LastMessageArea = styled(View)`
   width: 55%;
   height: 100%;
-  paddingTop: 15px;
+  paddingTop: 20px;
+  paddingLeft:5px;
 `;
 
 const ChatName = styled(Text)`
@@ -107,5 +108,6 @@ const Timestamp = styled(Text)`
   color: ${GRAY_COLOR};
   textAlign: right;
   paddingTop: 20px;
+  paddingRight: 10px;
 `;
 

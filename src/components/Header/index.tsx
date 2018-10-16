@@ -13,31 +13,24 @@ interface IProps {
     width: string;
     chatColor: string;
     toggleMenu: () => void
+    showMenu: () => void
 }
 export default class Header extends React.Component<IProps> {
     constructor(props) {
         super(props);
     }
     public render() {
-        const { title, width, chatColor, toggleMenu } = this.props
+        const { title, width, chatColor, showMenu } = this.props
         return (
             <HeaderWrapper style={{ width }}>
                 <Overlay />
                 <Head>
                     <TouchableOpacity style={{ width: '15%' }}>
                         <Icon.Button
-                            onPress={() => Navigation.setStackRoot("Chat", {
-                                component: {
-                                  name: 'ChatList',
-                                  options: {
-                                    topBar: {
-                                      visible: false
-                                    },
-                                  }
-                                }
-                              })}
+                            onPress={title === 'Chats' ? () =>
+                                showMenu() : () => Navigation.popToRoot("ChatList")  }
                             name={title === 'Chats' ? "align-left" : "arrow-left"}
-                            backgroundColor="#fff"
+                        backgroundColor="#fff"
                             color={SOFT_BLUE_COLOR} />
                     </TouchableOpacity>
                     <Title>
