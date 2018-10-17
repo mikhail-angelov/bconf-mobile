@@ -1,7 +1,7 @@
 import React from "react";
 import { ChatListItem } from "./ChatItem";
 import { connect } from "react-redux";
-import { ScrollView, Animated, Dimensions, View, StatusBar, TouchableOpacity } from "react-native";
+import { ScrollView, Animated, Dimensions, View, Easing, TouchableOpacity } from "react-native";
 import styled from "styled-components";
 import { goHome } from "../../navigation/navigation";
 import { logout } from "../../actions/auth";
@@ -28,24 +28,32 @@ interface IProps {
 
 interface IState {
   isMenuOpen: boolean;
+  animated: any;
 }
 
 class ChatList extends React.Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
-      isMenuOpen: false
+      isMenuOpen: false,
+      animated: new Animated.Value(0),
     };
   }
 
   public showChatMenu = () => {
     this.setState({ isMenuOpen: true })
+    Animated.timing(this.state.animated, {
+      toValue: 1,
+      duration: 500,
+    }).start();
   };
 
   public closeChatMenu = () => {
-    this.setState({ isMenuOpen: false })
+    Animated.timing(this.state.animated, {
+      toValue: 0,
+      duration: 500,
+    }).start(() => this.setState({ isMenuOpen: false }));
   };
-
   public setActiveChatAndGetMessages(chatId, chatName, chatColor) {
     this.props.setActiveChat(chatId, chatName, chatColor)
     this.props.getMessages(chatId)
@@ -58,12 +66,13 @@ class ChatList extends React.Component<IProps, IState> {
   public render() {
     return (
       <View>
-        {this.state.isMenuOpen &&
-          <ChatMenu width={width} closeMenu={this.closeChatMenu}
-            chatMenuItems={[{ title: "Chats", handler: this.closeChatMenu }, { title: "Logout", handler: this.props.logout }]}
-          />}
+        <ChatMenu width={width} closeMenu={this.closeChatMenu}
+          isMenuOpen={this.state.isMenuOpen}
+          animated={this.state.animated}
+          chatMenuItems={[{ title: "Chats", handler: this.closeChatMenu }, { title: "Logout", handler: this.props.logout }]}
+        />
         <ChatListWrapper width={width}>
-          <Header title="Chats" showMenu={this.showChatMenu} />
+          <Header title="Chats" showMenu={this.showChatMenu}/>
           <ScrollView>
             {this.props.chat.chats.map(chat => (
               <ChatListItem
@@ -80,6 +89,7 @@ class ChatList extends React.Component<IProps, IState> {
                   })}
                 name={chat.name}
                 id={chat._id}
+                srcImg={"https://www.stickees.com/files/avatars/male-avatars/1697-andrew-sticker.png"}
                 chatColor={chat.chatColor}
                 lastMessageText={chat.lastMessageText}
                 lastMessageAuthor={chat.lastMessageAuthor}
@@ -95,13 +105,13 @@ class ChatList extends React.Component<IProps, IState> {
 }
 
 const ChatListWrapper = styled(View)`
-    display: flex;
-    flexDirection: column;
-    backgroundColor: #fff;
-    borderLeftWidth: 3;
-    borderColor: rgba(0,0,0,0.05);
-    height: 100%;
-  `;
+        display: flex;
+        flexDirection: column;
+        backgroundColor: #fff;
+        borderLeftWidth: 3;
+        borderColor: rgba(0,0,0,0.05);
+        height: 100%;
+      `;
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
 

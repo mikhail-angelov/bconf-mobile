@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { TouchableOpacity, View, Text } from "react-native";
+import { TouchableOpacity, View, Text, Animated } from "react-native";
 import styled from "styled-components";
 import _ from "lodash";
 import { Avatar } from "../Avatar";
@@ -12,18 +12,39 @@ interface IProps {
     chatColor: string;
     name: string;
     width: string;
+    isMenuOpen: boolean;
     chatMenuItems: object
+    animated: object
     closeMenu: () => void
 }
+
 class ChatMenu extends React.Component<IProps> {
+
     public render() {
-        const { chatMenuItems, width, closeMenu } = this.props
+        const { chatMenuItems, width, closeMenu, isMenuOpen, animated } = this.props
         return (
-            <View style={{ width: width }}>
-                <Overlay onPress={
-                    closeMenu
-                } />
-                <ChatMenuView>
+            <Animated.View
+                style={{
+                    width: width,
+                    height: '100%',
+                    position: 'absolute',
+                    zIndex: 20,
+                    bottom: 0,
+                    display: isMenuOpen ? 'flex' : 'none',
+                }}
+            >
+                <Overlay
+                    onPress={closeMenu} />
+                <ChatMenuView style={{
+                    transform: [{
+                        translateX: animated.interpolate(
+                            {
+                                inputRange: [0, 1],
+                                outputRange: [-width * 0.8, 0],
+                            }
+                        )
+                    }]
+                }}>
                     <ChatMenuHeader>
                         <AvatarWrap>
                             <Avatar size="middle" chatColor="#996699" name='Anton' />
@@ -38,7 +59,7 @@ class ChatMenu extends React.Component<IProps> {
                         ))}
                     </ChatMenuBody>
                 </ChatMenuView >
-            </View>
+            </Animated.View>
         );
     }
 }
@@ -52,7 +73,7 @@ const Overlay = styled(TouchableOpacity)`
     display: flex;
   `;
 
-const ChatMenuView = styled(View)`
+const ChatMenuView = styled(Animated.View)`
   display: flex;
   flexDirection: column;
   height: 100%;

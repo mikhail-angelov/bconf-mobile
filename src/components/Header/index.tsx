@@ -28,7 +28,7 @@ export default class Header extends React.Component<IProps> {
                     <TouchableOpacity style={{ width: '15%' }}>
                         <Icon.Button
                             onPress={title === 'Chats' ? () =>
-                                showMenu() : () => Navigation.popToRoot("ChatList")  }
+                            showMenu() : () => Navigation.popToRoot("ChatList")  }
                             name={title === 'Chats' ? "align-left" : "arrow-left"}
                         backgroundColor="#fff"
                             color={SOFT_BLUE_COLOR} />

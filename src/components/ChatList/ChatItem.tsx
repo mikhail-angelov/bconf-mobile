@@ -12,6 +12,7 @@ interface IProps {
   lastMessageText: string;
   lastMessageAuthor: string;
   chatColor: string;
+  srcImg: string;
   id: number;
   lastMessageTimestamp: number;
   setActiveChatAndGetMessages: () => void;
@@ -25,7 +26,8 @@ export const ChatListItem = ({
   lastMessageAuthor,
   lastMessageTimestamp,
   chatColor,
-  navigateToChat
+  navigateToChat,
+  srcImg
 }: IProps) => {
   return (
     <ChatListItemWrapper
@@ -35,7 +37,7 @@ export const ChatListItem = ({
       }}
     >
       <AvatarSide>
-        <Avatar name={name} chatColor={chatColor} />
+        <Avatar name={name} srcImg={srcImg} chatColor={chatColor} />
       </AvatarSide>
       <LastMessageArea>
         <ChatName>{name}</ChatName>
