@@ -1,10 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { KeyboardAvoidingView } from "react-native";
-import { logout } from "../../actions/auth";
-import Button from "../CommonUIElements/Button";
 import styled from "styled-components";
 import Header from "../Header";
+import { Navigation } from "react-native-navigation";
 import { MessageInput } from "./MessageInput";
 import { MessagesList } from "./MessagesList";
 import { goToAuth, goHome } from "../../navigation/navigation";
@@ -14,9 +13,6 @@ interface IProps {
   chat: any;
   auth: any;
   sendMessage: (chatId, text) => void;
-  logout: () => void;
-  backToChatList: () => void;
-  backButton: () => void;
   activeChatId: string;
   activeChatName: string;
   width: string;
@@ -30,10 +26,17 @@ class Chat extends React.PureComponent<IProps> {
   }
 
   public render() {
-    const { chat, width, backToChatList, auth } = this.props
+    const { chat, width, auth } = this.props
     return (
       <ChatView style={{ width: width }}>
-        <Header title={chat.activeChatName} width={width} backButton={backToChatList} chatColor={chat.activeChatColor} />
+        <Header
+          title={chat.activeChatName}
+          subTitle="last seen recently"
+          width={width}
+          isAvatarVisible={true}
+          leftIconFunction={() => Navigation.popToRoot("ChatList")}
+          chatColor={chat.activeChatColor}
+          leftIconName="arrow-left" />
         <MessagesList messages={chat.messages} userEmail={auth.email} />
         <MessageInput
           handleSendMessage={(message) => this.props.sendMessage(chat.activeChatId, message)}
@@ -52,8 +55,7 @@ const ChatView = styled(KeyboardAvoidingView).attrs({
 `;
 
 const mapDispatchToProps = {
-  sendMessage,
-  logout
+  sendMessage
 };
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });

@@ -10,6 +10,7 @@ import Chat from "./components/Chat";
 import Header from "./components/Header";
 import ChatList from "./components/ChatList";
 import ChatMenu from "./components/ChatMenu";
+import ProfileSettings from "./components/ProfileSettings";
 
 const store = configureStore({});
 
@@ -57,6 +58,11 @@ export function registerScreens(Navigation) {
   Navigation.registerComponent("ChatMenu", () => () => (
     <Provider store={store}>
       <ChatMenu />
+    </Provider>
+  ));
+  Navigation.registerComponent("ProfileSettings", () => () => (
+    <Provider store={store}>
+      <ProfileSettings />
     </Provider>
   ));
 }

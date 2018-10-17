@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { TouchableOpacity, View, Text, Animated } from "react-native";
+import { Navigation } from "react-native-navigation";
 import styled from "styled-components";
 import _ from "lodash";
 import { Avatar } from "../Avatar";
@@ -15,13 +16,14 @@ interface IProps {
     isMenuOpen: boolean;
     chatMenuItems: object
     animated: object
+    auth: object
     closeMenu: () => void
 }
 
 class ChatMenu extends React.Component<IProps> {
 
     public render() {
-        const { chatMenuItems, width, closeMenu, isMenuOpen, animated } = this.props
+        const { auth, chatMenuItems, width, closeMenu, isMenuOpen, animated } = this.props
         return (
             <Animated.View
                 style={{
@@ -45,16 +47,30 @@ class ChatMenu extends React.Component<IProps> {
                         )
                     }]
                 }}>
-                    <ChatMenuHeader>
+                    <ChatMenuHeader
+                        onPress={() =>
+                            Navigation.push("ChatList", {
+                                component: {
+                                    name: 'ProfileSettings',
+                                    options: {
+                                        topBar: {
+                                            visible: false
+                                        },
+                                    }
+                                }
+                            })}>
                         <AvatarWrap>
-                            <Avatar size="middle" chatColor="#996699" name='Anton' />
+                            <Avatar
+                                size="middle"
+                                chatColor="#996699"
+                                name={auth.name} />
                         </AvatarWrap>
-                        <AvatarUsername>Anton</AvatarUsername>
+                        <AvatarUsername>{auth.name}</AvatarUsername>
                     </ChatMenuHeader>
                     <ChatMenuBody>
                         {_.map(chatMenuItems, item => (
-                            <ChatMenuItem>
-                                <ChatMenuTitle onPress={() => item.handler()}>{item.title}</ChatMenuTitle>
+                            <ChatMenuItem onPress={() => item.handler()}>
+                                <ChatMenuTitle>{item.title}</ChatMenuTitle>
                             </ChatMenuItem>
                         ))}
                     </ChatMenuBody>
@@ -85,7 +101,7 @@ const ChatMenuView = styled(Animated.View)`
   backgroundColor: #fff;
 `;
 
-const ChatMenuHeader = styled(View)`
+const ChatMenuHeader = styled(TouchableOpacity)`
   display: flex;
   justifyContent: flex-start;
   alignItems: center;

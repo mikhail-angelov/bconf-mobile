@@ -1,14 +1,12 @@
 import React from "react";
 import { ChatListItem } from "./ChatItem";
 import { connect } from "react-redux";
-import { ScrollView, Animated, Dimensions, View, Easing, TouchableOpacity } from "react-native";
+import { ScrollView, Animated, Dimensions, View } from "react-native";
 import styled from "styled-components";
-import { goHome } from "../../navigation/navigation";
 import { logout } from "../../actions/auth";
 import { getMessages, setActiveChat } from "../../actions/chat";
 import { Navigation } from "react-native-navigation";
 import ChatMenu from "../ChatMenu";
-import Chat from "../Chat";
 import Header from "../Header";
 
 const { width } = Dimensions.get('window')
@@ -54,25 +52,43 @@ class ChatList extends React.Component<IProps, IState> {
       duration: 500,
     }).start(() => this.setState({ isMenuOpen: false }));
   };
+
   public setActiveChatAndGetMessages(chatId, chatName, chatColor) {
     this.props.setActiveChat(chatId, chatName, chatColor)
     this.props.getMessages(chatId)
   }
 
-  public resetActiveChat = () => {
-    this.props.setActiveChat(null, null, null)
-  }
+  // public resetActiveChat = () => {
+  //   this.props.setActiveChat(null, null, null)
+  // }
 
   public render() {
     return (
       <View>
-        <ChatMenu width={width} closeMenu={this.closeChatMenu}
+        <ChatMenu
+          width={width}
+          closeMenu={this.closeChatMenu}
           isMenuOpen={this.state.isMenuOpen}
           animated={this.state.animated}
           chatMenuItems={[{ title: "Chats", handler: this.closeChatMenu }, { title: "Logout", handler: this.props.logout }]}
         />
         <ChatListWrapper width={width}>
-          <Header title="Chats" showMenu={this.showChatMenu}/>
+          <Header
+            title="Chats"
+            leftIconFunction={this.showChatMenu}
+            rightIconFunction={() =>
+              Navigation.push("ChatList", {
+                component: {
+                  name: 'ProfileSettings',
+                  options: {
+                    topBar: {
+                      visible: false
+                    },
+                  }
+                }
+              })}
+            leftIconName="align-left"
+            rightIconName="user" />
           <ScrollView>
             {this.props.chat.chats.map(chat => (
               <ChatListItem

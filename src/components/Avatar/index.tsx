@@ -22,7 +22,6 @@ interface IAvatarProps {
 const AvatarWrapper = styled(View).attrs({})`
       height: 65%;
       width: 65%;
-      backgroundColor: #fff;
       borderRadius: 50;
       borderWidth: 3;
       borderColor: #fff;
@@ -33,7 +32,7 @@ const AvatarWrapper = styled(View).attrs({})`
       shadowOpacity: 0.2;
       shadowRadius: 5;
       backgroundColor: ${(props: IAvatarProps) =>
-    props.chatColor};
+    props.chatColor || '#eee'};
     `;
 
 const AvaImg = styled(Image)`
