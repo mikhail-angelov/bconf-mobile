@@ -61,6 +61,7 @@ class ChatMenu extends React.Component<IProps> {
                             })}>
                         <AvatarWrap>
                             <Avatar
+                                srcImg={auth.srcAvatar}
                                 size="middle"
                                 chatColor="#996699"
                                 name={auth.name} />

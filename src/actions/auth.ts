@@ -6,14 +6,16 @@ import {
   REMIND_PASSWORD,
   REMIND_PASSWORD_ERROR,
   CHANGE_PASSWORD,
-  SIGN_UP_ERROR
+  SIGN_UP_ERROR,
+  CHANGE_USER_SETTINGS
 } from "../constants/actions";
 import { setAuth, doJsonRequest, doJsonAuthRequest } from "./helper";
 import {
   AUTH_URL,
   SIGN_UP_URL,
   REMIND_PASSWORD_URL,
-  AUTH_CHECK_URL
+  AUTH_CHECK_URL,
+  CHANGE_USER_SETTINGS_URL
 } from "./endpoinds";
 import { AsyncStorage } from "react-native";
 import { AUTH } from "../constants/storage";
@@ -32,7 +34,7 @@ export const checkAuth = () => async dispatch => {
       goHome();
       dispatch({
         type: AUTH_USER,
-        payload: { token: user.token, name: userInfo.user.name, email: userInfo.user.email }
+        payload: { token: user.token, name: userInfo.user.name, email: userInfo.user.email, srcAvatar: userInfo.user.srcAvatar }
       });
     } catch (err) {
       goToAuth();
@@ -67,7 +69,7 @@ export const login = ({ email, password }) => async dispatch => {
     setAuth({ token: resp.token, userId: resp.user._id });
     return dispatch({
       type: AUTH_USER,
-      payload: { token: resp.token, name: resp.name, email }
+      payload: { token: resp.token, name: resp.user.name, email, srcAvatar: resp.user.srcAvatar }
     });
   } catch (e) {
     console.log(e);
@@ -120,3 +122,19 @@ export const changePassword = ({ password, oldPassword }) => ({
   type: CHANGE_PASSWORD,
   payload: { password, oldPassword }
 });
+
+export const saveProfileSettings = (name, email, srcAvatar) => async dispatch => {
+  try {
+    const resp = await doJsonAuthRequest({
+      url: CHANGE_USER_SETTINGS_URL,
+      method: "post",
+      data: { name, email, srcAvatar }
+    });
+    dispatch({
+      type: CHANGE_USER_SETTINGS,
+      payload: { name: resp.username, email: resp.email, srcAvatar: resp.srcAvatar }
+    });
+  } catch (e) {
+    console.log("Error: " + e);
+  }
+};

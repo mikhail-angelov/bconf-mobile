@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { View, Text, Image } from "react-native";
 
-export const Avatar = ({ size, srcImg, name, chatColor }: IAvatarProps) => {
+export const Avatar = ({ style, size, srcImg, name, chatColor }: IAvatarProps) => {
   return (
-    <AvatarWrapper chatColor={chatColor}>
+    <AvatarWrapper style={style} chatColor={chatColor}>
       {srcImg ? <AvaImg source={{ uri: srcImg }} /> :
         <AvaText size={size} >{name[0].toUpperCase()}</AvaText>}
     </AvatarWrapper>
@@ -12,25 +12,24 @@ export const Avatar = ({ size, srcImg, name, chatColor }: IAvatarProps) => {
 };
 
 interface IAvatarProps {
-  size: string;
+  size: string | undefined;
   source: () => void;
   name: string;
-  srcImg: string;
+  srcImg: string | undefined;
   chatColor: string;
+  style: object | undefined;
 }
 
 const AvatarWrapper = styled(View).attrs({})`
+      overflow:hidden;
       height: 65%;
       width: 65%;
-      borderRadius: 50;
+      borderRadius: 45;
       borderWidth: 3;
-      borderColor: #fff;
+      borderColor: #ddd;
       display: flex;
       alignItems: center;
-      shadowColor: #000;
       justifyContent: center;
-      shadowOpacity: 0.2;
-      shadowRadius: 5;
       backgroundColor: ${(props: IAvatarProps) =>
     props.chatColor || '#eee'};
     `;
