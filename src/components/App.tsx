@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import { ActivityIndicator, View } from "react-native";
 import { checkAuth } from "../actions/auth";
+import { BLACK_COLOR } from "../helpers/styleConstants";
 import styled from "styled-components";
 
 class App extends React.Component {
@@ -13,7 +14,7 @@ class App extends React.Component {
   public render() {
     return (
       <Wrap>
-        <ActivityIndicator size="large" color="#000" />
+        <ActivityIndicator size="large" color={BLACK_COLOR} />
       </Wrap>
     );
   }

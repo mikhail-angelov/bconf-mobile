@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { goHome } from "../../navigation/navigation";
 import { login } from "../../actions/auth";
+import { BLACK_COLOR } from "../../helpers/styleConstants";
 
 import Input from "../CommonUIElements/Input";
 import Button from "../CommonUIElements/Button";
@@ -83,7 +84,7 @@ class SignIn extends React.Component<IProps, IState> {
               Sign In
             </Button>
             <Link
-              color="#000"
+              color={BLACK_COLOR}
               onPress={() => {
                 Navigation.push("SignIn", {
                   component: {
@@ -94,7 +95,7 @@ class SignIn extends React.Component<IProps, IState> {
               title="Sign Up"
             />
             <Link
-              color="#000"
+              color={BLACK_COLOR}
               onPress={() => {
                 Navigation.push("SignIn", {
                   component: {

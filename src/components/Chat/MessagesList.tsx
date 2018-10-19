@@ -3,6 +3,7 @@ import _ from "lodash";
 import { ScrollView } from "react-native";
 import styled from "styled-components";
 import { Message } from "./Message";
+import { WHITE_COLOR } from "../../helpers/styleConstants";
 
 export const MessagesList = ({ messages, userEmail }) => (
   <MessagesListWrapper>
@@ -17,7 +18,8 @@ export const MessagesList = ({ messages, userEmail }) => (
 const MessagesListWrapper = styled(ScrollView)`
   flex: 1;
   padding: 0 20px;
+  margin: 5px;
   display: flex;
   flex-direction: column;
-  backgroundColor: #FFF;
+  backgroundColor: ${WHITE_COLOR};
 `;

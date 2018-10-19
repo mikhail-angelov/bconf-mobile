@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { TouchableOpacity, View, Text } from "react-native";
+import { TouchableOpacity, View, Text, Animated } from "react-native";
+import { Navigation } from "react-native-navigation";
+import { BLACK_COLOR, WHITE_COLOR } from "../../helpers/styleConstants";
 import styled from "styled-components";
 import _ from "lodash";
 import { Avatar } from "../Avatar";
@@ -11,39 +13,97 @@ interface IProps {
     size: string;
     chatColor: string;
     name: string;
+    width: string;
+    isMenuOpen: boolean;
     chatMenuItems: object
+    animated: object
+    auth: object
+    closeMenu: () => void
 }
+
 class ChatMenu extends React.Component<IProps> {
+
     public render() {
-        const { chatMenuItems } = this.props
+        const { auth, chatMenuItems, width, closeMenu, isMenuOpen, animated } = this.props
         return (
-            <ChatMenuView>
-                <ChatMenuHeader>
-                    <AvatarWrap>
-                        <Avatar size="middle" chatColor="#996699" name='Anton' />
-                    </AvatarWrap>
-                    <AvatarUsername>Anton</AvatarUsername>
-                </ChatMenuHeader>
-                <ChatMenuBody>
-                    {_.map(chatMenuItems, item => (
-                        <ChatMenuItem>
-                            <ChatMenuTitle onPress={() => item.handler()}>{item.title}</ChatMenuTitle>
-                        </ChatMenuItem>
-                    ))}
-                </ChatMenuBody>
-            </ChatMenuView>
+            <Animated.View
+                style={{
+                    width: width,
+                    height: '100%',
+                    position: 'absolute',
+                    zIndex: 20,
+                    bottom: 0,
+                    display: isMenuOpen ? 'flex' : 'none',
+                }}
+            >
+                <Overlay
+                    onPress={closeMenu} />
+                <ChatMenuView style={{
+                    transform: [{
+                        translateX: animated.interpolate(
+                            {
+                                inputRange: [0, 1],
+                                outputRange: [-width * 0.8, 0],
+                            }
+                        )
+                    }]
+                }}>
+                    <ChatMenuHeader
+                        onPress={() =>
+                            Navigation.push("ChatList", {
+                                component: {
+                                    name: 'ProfileSettings',
+                                    options: {
+                                        topBar: {
+                                            visible: false
+                                        },
+                                    }
+                                }
+                            })}>
+                        <AvatarWrap>
+                            <Avatar
+                                srcImg={auth.srcAvatar}
+                                size="middle"
+                                chatColor="#996699"
+                                name={auth.name} />
+                        </AvatarWrap>
+                        <AvatarUsername>{auth.name}</AvatarUsername>
+                    </ChatMenuHeader>
+                    <ChatMenuBody>
+                        {_.map(chatMenuItems, item => (
+                            <ChatMenuItem onPress={() => item.handler()}>
+                                <ChatMenuTitle>{item.title}</ChatMenuTitle>
+                            </ChatMenuItem>
+                        ))}
+                    </ChatMenuBody>
+                </ChatMenuView >
+            </Animated.View>
         );
     }
 }
 
-const ChatMenuView = styled(View)`
+const Overlay = styled(TouchableOpacity)`
+    top: 0;
+    right: 0;
+    backgroundColor: rgba(0,0,0,0.8);
+    width: 100%;
+    height: 100%;
+    display: flex;
+  `;
+
+const ChatMenuView = styled(Animated.View)`
   display: flex;
   flexDirection: column;
   height: 100%;
+  width: 70%;
   paddingTop: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  backgroundColor: ${WHITE_COLOR};
 `;
 
-const ChatMenuHeader = styled(View)`
+const ChatMenuHeader = styled(TouchableOpacity)`
   display: flex;
   justifyContent: flex-start;
   alignItems: center;
@@ -52,6 +112,7 @@ const ChatMenuHeader = styled(View)`
   borderColor: rgba(0,0,0,0.05);
   height: 70px;
   padding: 0 10px;
+  width: 100%;
 `;
 
 const AvatarWrap = styled(View)`
@@ -60,7 +121,7 @@ const AvatarWrap = styled(View)`
 
 const AvatarUsername = styled(Text)`
     fontSize: 18;
-    color: #000;
+    color: ${BLACK_COLOR};
     fontWeight: 500
 `;
 const ChatMenuBody = styled(View)`
@@ -72,7 +133,7 @@ const ChatMenuBody = styled(View)`
 `;
 
 const ChatMenuItem = styled(TouchableOpacity)`
-  backgroundColor: #fff;
+  backgroundColor: ${WHITE_COLOR};
   display: flex;
   justifyContent: center;
   paddingLeft: 20px;

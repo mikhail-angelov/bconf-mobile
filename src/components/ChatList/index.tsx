@@ -1,27 +1,25 @@
 import React from "react";
 import { ChatListItem } from "./ChatItem";
 import { connect } from "react-redux";
-import { ScrollView, Animated, Dimensions, View, StatusBar, TouchableOpacity } from "react-native";
-import SideMenu from 'react-native-side-menu';
+import { ScrollView, Animated, Dimensions, View } from "react-native";
 import styled from "styled-components";
-import { goHome } from "../../navigation/navigation";
 import { logout } from "../../actions/auth";
+import { WHITE_COLOR } from "../../helpers/styleConstants";
 import { getMessages, setActiveChat } from "../../actions/chat";
+import { Navigation } from "react-native-navigation";
 import ChatMenu from "../ChatMenu";
-import Chat from "../Chat";
 import Header from "../Header";
 
 const { width } = Dimensions.get('window')
 interface IProps {
   chat: [];
   getMessages: (_id) => void;
-  setActiveChat: (_id, name, chatColor) => void;
-  messageListView: boolean;
+  setActiveChat: ({ _id, name, chatColor, chatImage }) => void;
   _id: string;
   name: string;
   chatColor: string;
-  scroller: object;
   chats: object;
+  chatMenuItems: object;
   width: number;
   goHome: () => void;
   logout: () => void;
@@ -29,103 +27,109 @@ interface IProps {
 
 interface IState {
   isMenuOpen: boolean;
-  messageListView: boolean;
+  animated: any;
 }
 
 class ChatList extends React.Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
-      messageListView: false,
-      isMenuOpen: false
+      isMenuOpen: false,
+      animated: new Animated.Value(0),
     };
   }
-  public scrollX = new Animated.Value(0);
 
-  public scrollToChat = () => {
-    this.scroller.scrollTo({ x: width });
+  public showChatMenu = () => {
+    this.setState({ isMenuOpen: true })
+    Animated.timing(this.state.animated, {
+      toValue: 1,
+      duration: 500,
+    }).start();
   };
 
-  public scrollToChatList = () => {
-    this.scroller.scrollTo({ x: 0 });
+  public closeChatMenu = () => {
+    Animated.timing(this.state.animated, {
+      toValue: 0,
+      duration: 500,
+    }).start(() => this.setState({ isMenuOpen: false }));
   };
 
-  public setActiveChatAndGetMessages(chatId, chatName, chatColor) {
-    this.setState({ messageListView: true })
-    this.props.setActiveChat(chatId, chatName, chatColor)
-    this.props.getMessages(chatId)
-    this.scrollToChat()
+  public setActiveChatAndGetMessages(chatProperties) {
+    this.props.setActiveChat(chatProperties)
+    this.props.getMessages(chatProperties.chatId)
   }
 
-  public resetActiveChat = () => {
-    this.scrollToChatList()
-    this.props.setActiveChat(null, null, null)
-    this.setState({ messageListView: false })
-  }
-
-  public toggleMenu = (bool) => {
-    this.setState({ isMenuOpen: bool || !this.state.isMenuOpen })
-  }
+  // public resetActiveChat = () => {
+  //   this.props.setActiveChat(null, null, null)
+  // }
 
   public render() {
-    const position: any = Animated.divide(this.scrollX, width)
     return (
-      <SideMenu
-        menu={<ChatMenu
-          chatMenuItems={[{ title: "Chats", handler: goHome }, { title: "Logout", handler: this.props.logout }]} />}
-        isOpen={this.state.isMenuOpen}
-        onChange={this.toggleMenu}
-      >
-        <ChatListWrapper>
-          <ScrollView
-            style={{
-              height: '100%'
-            }}
-            ref={scroller => this.scroller = scroller}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            onScroll={Animated.event([
-              { nativeEvent: { contentOffset: { x: this.scrollX } } }
-            ])}
-            scrollEventThrottle={16}
-            onMomentumScrollEnd={() => {
-              if (position.__getValue() === 0) {
-                this.resetActiveChat()
-              }
-            }}
-          >
-            <View style={{ width }}>
-              <Header title="Chats" width={width} toggleMenu={() => this.toggleMenu(true)} />
-              <ScrollView
-                style={{ width }}>
-                {this.props.chat.chats.map(chat => (
-                  <ChatListItem
-                    name={chat.name}
-                    id={chat._id}
-                    chatColor={chat.chatColor}
-                    lastMessageText={chat.lastMessageText}
-                    lastMessageAuthor={chat.lastMessageAuthor}
-                    lastMessageTimestamp={chat.lastMessageTimestamp}
-                    setActiveChatAndGetMessages={() => this.setActiveChatAndGetMessages(chat._id, chat.name, chat.chatColor)}
-                  />
-                ))}
-              </ScrollView>
-            </View>
-            {this.state.messageListView ? <Chat width={width} backToChatList={() => this.scrollToChatList()} ></Chat> : null}
+      <View>
+        <ChatMenu
+          width={width}
+          closeMenu={this.closeChatMenu}
+          isMenuOpen={this.state.isMenuOpen}
+          animated={this.state.animated}
+          chatMenuItems={[{ title: "Chats", handler: this.closeChatMenu }, { title: "Logout", handler: this.props.logout }]}
+        />
+        <ChatListWrapper width={width}>
+          <Header
+            title="Chats"
+            leftIconFunction={this.showChatMenu}
+            rightIconFunction={() =>
+              Navigation.push("ChatList", {
+                component: {
+                  name: 'ProfileSettings',
+                  options: {
+                    topBar: {
+                      visible: false
+                    },
+                  }
+                }
+              })}
+            leftIconName="align-left"
+            rightIconName="user" />
+          <ScrollView>
+            {this.props.chat.chats.map(chat => (
+              <ChatListItem
+                navigateToChat={() =>
+                  Navigation.push("ChatList", {
+                    component: {
+                      name: 'Chat',
+                      options: {
+                        topBar: {
+                          visible: false
+                        },
+                      }
+                    }
+                  })}
+                name={chat.name}
+                id={chat._id}
+                srcImg={chat.chatImage}
+                chatColor={chat.chatColor}
+                lastMessageText={chat.lastMessageText}
+                lastMessageAuthor={chat.lastMessageAuthor}
+                lastMessageTimestamp={chat.lastMessageTimestamp}
+                setActiveChatAndGetMessages={() =>
+                  this.setActiveChatAndGetMessages({ chatId: chat._id, chatName: chat.name, chatColor: chat.chatColor, chatImage: chat.chatImage })}
+              />
+            ))}
           </ScrollView>
         </ChatListWrapper>
-      </SideMenu >
+      </View>
     );
   }
 }
 
 const ChatListWrapper = styled(View)`
-  display: flex;
-  flexDirection: column;
-  backgroundColor: #fff;
-  borderLeftWidth: 3;
-  borderColor: rgba(0,0,0,0.05);
-`;
+        display: flex;
+        flexDirection: column;
+        backgroundColor: ${WHITE_COLOR};
+        borderLeftWidth: 3;
+        borderColor: rgba(0,0,0,0.05);
+        height: 100%;
+      `;
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
 
