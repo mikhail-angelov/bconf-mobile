@@ -56,7 +56,7 @@ class SignUp extends React.Component<IProps, IState> {
       <SignUpView behavior="padding">
         <Header>
           <Title>SIGN UP</Title>
-          <Annotation>Company name</Annotation>
+          <Annotation>Secret chat</Annotation>
         </Header>
         <Body>
           <ValidatedInput

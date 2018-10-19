@@ -54,7 +54,7 @@ class SignIn extends React.Component<IProps, IState> {
         <KeyboardAvoidingView behavior="padding">
           <Header>
             <Title>SIGN IN</Title>
-            <Annotation>Company name</Annotation>
+            <Annotation>Secret chat</Annotation>
           </Header>
           <Body>
             <Input

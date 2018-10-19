@@ -19,7 +19,7 @@ class ChangePassword extends React.Component<IProps> {
       <View>
         <Header>
           <Title>CHANGE PASSWORD</Title>
-          <Annotation>Company name</Annotation>
+          <Annotation>Secret chat</Annotation>
         </Header>
         <Body>
           <Input
