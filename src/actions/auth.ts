@@ -22,19 +22,20 @@ import { AUTH } from "../constants/storage";
 import { goHome, goToAuth, goWelcome } from "../navigation/navigation";
 
 export const checkAuth = () => async dispatch => {
-  const auth = await AsyncStorage.getItem(AUTH);
-  const user = JSON.parse(auth);
-  if (user && user.token) {
+  const storage = await AsyncStorage.getItem(AUTH);
+  const auth = JSON.parse(storage);
+  if (auth && auth.token) {
     try {
-      const userInfo = await doJsonRequest({
+      const resp = await doJsonRequest({
         url: AUTH_CHECK_URL,
         method: "post",
-        headers: { authorization: user.token }
+        headers: { authorization: auth.token }
       });
+      const { token, user } = resp
       goHome();
       dispatch({
         type: AUTH_USER,
-        payload: { token: user.token, name: userInfo.user.name, email: userInfo.user.email, srcAvatar: userInfo.user.srcAvatar }
+        payload: { token, name: user.name, email: user.email, srcAvatar: user.srcAvatar }
       });
     } catch (err) {
       goToAuth();
@@ -123,7 +124,7 @@ export const changePassword = ({ password, oldPassword }) => ({
   payload: { password, oldPassword }
 });
 
-export const saveProfileSettings = (name, email, srcAvatar) => async dispatch => {
+export const saveProfileSettings = ({ name, email, srcAvatar }) => async dispatch => {
   try {
     const resp = await doJsonAuthRequest({
       url: CHANGE_USER_SETTINGS_URL,

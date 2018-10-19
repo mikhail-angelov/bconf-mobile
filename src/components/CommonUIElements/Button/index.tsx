@@ -1,5 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text } from "react-native";
+import { BLACK_COLOR } from "../../../helpers/styleConstants";
 
 import styled from "styled-components";
 
@@ -19,7 +20,7 @@ const CustomButton = styled(TouchableOpacity)`
   margin: 10px;
   width: 200px;
   height: 50px;
-  background-color: #000;
+  background-color: ${BLACK_COLOR};
   display: flex;
   align-items: center;
   justify-content: center;

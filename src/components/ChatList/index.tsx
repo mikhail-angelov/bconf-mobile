@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { ScrollView, Animated, Dimensions, View } from "react-native";
 import styled from "styled-components";
 import { logout } from "../../actions/auth";
+import { WHITE_COLOR } from "../../helpers/styleConstants";
 import { getMessages, setActiveChat } from "../../actions/chat";
 import { Navigation } from "react-native-navigation";
 import ChatMenu from "../ChatMenu";
@@ -13,7 +14,7 @@ const { width } = Dimensions.get('window')
 interface IProps {
   chat: [];
   getMessages: (_id) => void;
-  setActiveChat: (_id, name, chatColor, chatImage) => void;
+  setActiveChat: ({ _id, name, chatColor, chatImage }) => void;
   _id: string;
   name: string;
   chatColor: string;
@@ -53,9 +54,9 @@ class ChatList extends React.Component<IProps, IState> {
     }).start(() => this.setState({ isMenuOpen: false }));
   };
 
-  public setActiveChatAndGetMessages(chatId, chatName, chatColor, chatImage) {
-    this.props.setActiveChat(chatId, chatName, chatColor, chatImage)
-    this.props.getMessages(chatId)
+  public setActiveChatAndGetMessages(chatProperties) {
+    this.props.setActiveChat(chatProperties)
+    this.props.getMessages(chatProperties.chatId)
   }
 
   // public resetActiveChat = () => {
@@ -110,8 +111,8 @@ class ChatList extends React.Component<IProps, IState> {
                 lastMessageText={chat.lastMessageText}
                 lastMessageAuthor={chat.lastMessageAuthor}
                 lastMessageTimestamp={chat.lastMessageTimestamp}
-                setActiveChatAndGetMessages={() => 
-                  this.setActiveChatAndGetMessages(chat._id, chat.name, chat.chatColor, chat.chatImage)}
+                setActiveChatAndGetMessages={() =>
+                  this.setActiveChatAndGetMessages({ chatId: chat._id, chatName: chat.name, chatColor: chat.chatColor, chatImage: chat.chatImage })}
               />
             ))}
           </ScrollView>
@@ -124,7 +125,7 @@ class ChatList extends React.Component<IProps, IState> {
 const ChatListWrapper = styled(View)`
         display: flex;
         flexDirection: column;
-        backgroundColor: #fff;
+        backgroundColor: ${WHITE_COLOR};
         borderLeftWidth: 3;
         borderColor: rgba(0,0,0,0.05);
         height: 100%;

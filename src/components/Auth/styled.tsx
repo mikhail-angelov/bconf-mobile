@@ -1,17 +1,18 @@
 import React from "react";
+import { BLACK_COLOR } from "../../helpers/styleConstants";
 import styled from "styled-components";
 import { View, Text } from "react-native";
 
 export const Title = styled(Text)`
   font-size: 36px;
   text-align: center;
-  color: #000;
+  color: ${BLACK_COLOR};
   font-weight: 700;
 `;
 export const Annotation = styled(Text)`
   font-size: 12px;
   text-align: center;
-  color: #000;
+  color: ${BLACK_COLOR};
 `;
 export const Header = styled(View)`
   height: 30%;

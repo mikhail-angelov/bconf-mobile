@@ -20,7 +20,7 @@ interface IProps {
   activeProfileSettingsId: string;
   activeProfileSettingsName: string;
   chatColor: string;
-  saveProfileSettings: (name, email, avatarSrc) => void;
+  saveProfileSettings: ({ name, email, avatarSrc }) => void;
 }
 
 interface IState {
@@ -44,7 +44,8 @@ class ProfileSettings extends React.Component<IProps, IState> {
   }
 
   public saveProfileSettings() {
-    this.props.saveProfileSettings(this.state.name, this.state.email, this.state.avatarSrc)
+    const { name, email, avatarSrc } = this.state
+    this.props.saveProfileSettings({ name, email, avatarSrc })
     this.setState({ isProfileEdit: false })
   }
 

@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styled from "styled-components";
 import { Avatar } from "../Avatar";
-import { SOFT_BLUE_COLOR } from "../../helpers/styleConstants";
+import { SOFT_BLUE_COLOR, BLACK_COLOR, WHITE_COLOR } from "../../helpers/styleConstants";
 
 interface IProps {
     title: string;
@@ -34,7 +34,7 @@ export default class Header extends React.Component<IProps> {
                             size={16}
                             onPress={() => leftIconFunction()}
                             name={leftIconName}
-                            backgroundColor="#fff"
+                            backgroundColor={WHITE_COLOR}
                             color={SOFT_BLUE_COLOR} />
                     </TouchableOpacity>
                     <Title>
@@ -49,7 +49,7 @@ export default class Header extends React.Component<IProps> {
                         shadowRadius: 5,
                         shadowOpacity: 0.2,
                         shadowOffset: { width: 1, height: 1 },
-                        shadowColor: "#000"
+                        shadowColor: { BLACK_COLOR }
                     } : {
                             width: "15%",
                             display: 'flex',
@@ -74,7 +74,7 @@ const HeaderWrapper = styled(View)`
   borderBottomWidth: 3;
   borderColor: rgba(0,0,0,0.05);
   height: 90px;
-  backgroundColor: #fff;
+  backgroundColor: ${WHITE_COLOR};
 `;
 
 const Overlay = styled(View)`
@@ -92,7 +92,7 @@ const Head = styled(View)`
 `;
 
 const Title = styled(View)`
-  color: #000;
+  color: ${BLACK_COLOR};
   width: 70%;
   display: flex;
   flexDirection: column;

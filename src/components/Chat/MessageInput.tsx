@@ -1,45 +1,45 @@
 import React from "react";
 import { View, TextInput, Button } from "react-native";
-import { SOFT_BLUE_COLOR } from "../../helpers/styleConstants";
+import { SOFT_BLUE_COLOR, WHITE_COLOR } from "../../helpers/styleConstants";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styled from "styled-components";
 
 interface IProps {
-  handleSendMessage: (value) => void;
+  handleSendMessage: (textInput) => void;
   chatId: string;
 }
 interface IState {
-  value: string;
+  textInput: string;
 }
 export class MessageInput extends React.Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
-      value: ""
+      textInput: ""
     };
     this.handleSending = this.handleSending.bind(this);
   }
   public handleSending(message) {
     this.props.handleSendMessage(message);
-    this.setState({ value: "" });
+    this.setState({ textInput: "" });
   }
   public render() {
-    const { value } = this.state
+    const { textInput } = this.state
     return (
       <MessageInputView>
         <Icon
           style={{ marginLeft: 12, marginRight: 12 }}
           size={22}
           name="microphone"
-          backgroundColor="#fff"
+          backgroundColor={WHITE_COLOR}
           color="#f5775f" />
         <View style={{ flex: 4 }}>
           <TextInput
-            onSubmitEditing={() => this.handleSending(value)}
+            onSubmitEditing={() => this.handleSending(textInput)}
             onChangeText={text => {
-              this.setState({ value: text });
+              this.setState({ textInput: text });
             }}
-            value={value}
+            value={textInput}
             returnKeyType="send"
             returnKeyLabel="Send"
             placeholder="Your message"
@@ -49,7 +49,7 @@ export class MessageInput extends React.Component<IProps, IState> {
         <Icon
           size={22}
           name="grin"
-          backgroundColor="#fff"
+          backgroundColor={WHITE_COLOR}
           color={SOFT_BLUE_COLOR} />
         <Icon
           style={{ marginLeft: 12, marginRight: 12 }}
@@ -71,6 +71,6 @@ const MessageInputView = styled(View)`
   border-color: #888;
   background-color: #d6efef;
   borderRadius: 5px;
-  borderColor: #fff;
+  borderColor: ${WHITE_COLOR};
   min-height: 50px;
 `;

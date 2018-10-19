@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { Avatar } from "../Avatar";
+import { BLACK_COLOR, WHITE_COLOR } from "../../helpers/styleConstants";
 import styled from "styled-components";
 import moment from "moment";
 
@@ -61,9 +62,9 @@ const ChatListItemWrapper = styled(TouchableOpacity)`
   display: flex;
   flexDirection: row;
   padding: 0 10px 10px 0px;
-  backgroundColor: #fff;
+  backgroundColor: ${WHITE_COLOR};
   &:active {
-    backgroundColor: #fff;
+    backgroundColor: ${WHITE_COLOR};
   }
 `;
 
@@ -76,7 +77,7 @@ const AvatarSide = styled(View)`
   shadowRadius: 5; 
   shadowOpacity: 0.3; 
   shadowOffset: {width: 2, height: 2}; 
-  shadowColor: #000;
+  shadowColor: ${BLACK_COLOR};
 `;
 
 const LastMessageArea = styled(View)`

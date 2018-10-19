@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { WHITE_COLOR } from "../../helpers/styleConstants";
 import { View, Text, Image } from "react-native";
 
 export const Avatar = ({ style, size, srcImg, name, chatColor }: IAvatarProps) => {
@@ -26,7 +27,7 @@ const AvatarWrapper = styled(View).attrs({})`
       width: 70%;
       borderRadius: 45;
       borderWidth: 3;
-      borderColor: #fff;
+      borderColor: ${WHITE_COLOR};
       display: flex;
       alignItems: center;
       justifyContent: center;
@@ -43,5 +44,5 @@ const AvaText = styled(Text)`
     fontSize: ${(props: IAvatarProps) =>
     props.size === "small" ? "12px" : "24px"
   }};
-    color: #fff;
+    color: ${WHITE_COLOR};
   `;

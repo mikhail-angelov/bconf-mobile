@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { BLACK_COLOR } from "../../helpers/styleConstants";
 import { View, Text } from "react-native";
 import moment from "moment";
 
 import { MESSAGE_TIMESTAMP_FORMAT } from '../../helpers/constants'
 
 export const Message = ({ text, idx, isMyMessage, timestamp }) => {
-  
+
   return (
     <MessageWrapper isMyMessage={isMyMessage}>
       <MessageText isMyMessage={isMyMessage}>{text}</MessageText>
@@ -45,7 +46,7 @@ const MessageText = styled(Text)`
 
 const DateText = styled(Text)`
   font-size: 12px;
-  color: #000;
+  color: ${BLACK_COLOR};
   text-align: ${(props: IMessageProps) =>
     props.isMyMessage ? "right" : "left"};
 `;

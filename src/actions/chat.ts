@@ -55,7 +55,7 @@ export const getMessages = chatId => async dispatch => {
   }
 };
 
-export const setActiveChat = (chatId, chatName, chatColor, chatImage) => ({
+export const setActiveChat = ({ chatId, chatName, chatColor, chatImage }) => ({
   type: SET_ACTIVE_CHAT,
   payload: { chatId, chatName, chatColor, chatImage }
 });
