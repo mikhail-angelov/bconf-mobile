@@ -6,14 +6,13 @@ export const Avatar = ({ size, srcImg, name, chatColor }: IAvatarProps) => {
   return (
     <AvatarWrapper chatColor={chatColor}>
       {srcImg ? <AvaImg source={{ uri: srcImg }} /> :
-        <AvaText size={size} >{name[0].toUpperCase()}</AvaText>}
+        <AvaText size={size} >{name ? name[0].toUpperCase() : ""}</AvaText>}
     </AvatarWrapper>
   );
 };
 
 interface IAvatarProps {
-  size: string;
-  source: () => void;
+  size: string | undefined;
   name: string;
   srcImg: string;
   chatColor: string;

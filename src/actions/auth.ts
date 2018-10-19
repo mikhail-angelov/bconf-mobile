@@ -81,12 +81,12 @@ export const logout = () => dispatch => {
   goToAuth();
 };
 
-export const signUp = ({ username, email, password }) => async dispatch => {
+export const signUp = ({ name, email, password }) => async dispatch => {
   try {
     const resp = await doJsonRequest({
       url: SIGN_UP_URL,
-      method: "post",
-      data: { username, email, password }
+      method: "POST",
+      data: { name, email, password }
     });
     setAuth({ token: resp.token, userId: resp._id });
     dispatch({
