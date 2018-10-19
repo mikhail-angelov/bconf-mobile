@@ -42,10 +42,10 @@ export const ChatListItem = ({
       <LastMessageArea>
         <ChatName>{name}</ChatName>
         <LastMessage>
-          <LastMessageAuthor>
+          {/* <LastMessageAuthor>
             {lastMessageAuthor ? `${lastMessageAuthor}: ` : "Empty chat"}
-          </LastMessageAuthor>
-          <LastMessageText>{lastMessageText}</LastMessageText>
+          </LastMessageAuthor> */}
+          <LastMessageText>{lastMessageAuthor ? lastMessageText : "Empty chat"}</LastMessageText>
         </LastMessage>
       </LastMessageArea>
       <Timestamp>
@@ -56,7 +56,7 @@ export const ChatListItem = ({
 };
 
 const ChatListItemWrapper = styled(TouchableOpacity)`
-  height: 100px;
+  height: 110px;
   width: 100%;
   display: flex;
   flexDirection: row;
@@ -73,10 +73,14 @@ const AvatarSide = styled(View)`
   display: flex;
   alignItems: center;
   justifyContent: center;
+  shadowRadius: 5; 
+  shadowOpacity: 0.3; 
+  shadowOffset: {width: 2, height: 2}; 
+  shadowColor: #000;
 `;
 
 const LastMessageArea = styled(View)`
-  width: 55%;
+  width: 50%;
   height: 100%;
   paddingTop: 20px;
   paddingLeft:5px;
@@ -104,12 +108,13 @@ const LastMessage = styled(View)`
 `;
 
 const Timestamp = styled(Text)`
-  width: 20%;
+  width: 25%;
   height: 100%;
   fontSize: 12px;
   color: ${GRAY_COLOR};
   textAlign: right;
   paddingTop: 20px;
   paddingRight: 10px;
+  letter-spacing: 1px;
 `;
 

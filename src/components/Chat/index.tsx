@@ -30,8 +30,9 @@ class Chat extends React.PureComponent<IProps> {
     return (
       <ChatView style={{ width: width }}>
         <Header
+          chatImage={chat.activeChatImage}
           title={chat.activeChatName}
-          subTitle="last seen recently"
+          subTitle="Last seen recently"
           width={width}
           isAvatarVisible={true}
           leftIconFunction={() => Navigation.popToRoot("ChatList")}

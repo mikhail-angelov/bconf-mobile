@@ -13,7 +13,7 @@ const { width } = Dimensions.get('window')
 interface IProps {
   chat: [];
   getMessages: (_id) => void;
-  setActiveChat: (_id, name, chatColor) => void;
+  setActiveChat: (_id, name, chatColor, chatImage) => void;
   _id: string;
   name: string;
   chatColor: string;
@@ -53,8 +53,8 @@ class ChatList extends React.Component<IProps, IState> {
     }).start(() => this.setState({ isMenuOpen: false }));
   };
 
-  public setActiveChatAndGetMessages(chatId, chatName, chatColor) {
-    this.props.setActiveChat(chatId, chatName, chatColor)
+  public setActiveChatAndGetMessages(chatId, chatName, chatColor, chatImage) {
+    this.props.setActiveChat(chatId, chatName, chatColor, chatImage)
     this.props.getMessages(chatId)
   }
 
@@ -105,12 +105,13 @@ class ChatList extends React.Component<IProps, IState> {
                   })}
                 name={chat.name}
                 id={chat._id}
-                srcImg={"https://www.stickees.com/files/avatars/male-avatars/1697-andrew-sticker.png"}
+                srcImg={chat.chatImage}
                 chatColor={chat.chatColor}
                 lastMessageText={chat.lastMessageText}
                 lastMessageAuthor={chat.lastMessageAuthor}
                 lastMessageTimestamp={chat.lastMessageTimestamp}
-                setActiveChatAndGetMessages={() => this.setActiveChatAndGetMessages(chat._id, chat.name, chat.chatColor)}
+                setActiveChatAndGetMessages={() => 
+                  this.setActiveChatAndGetMessages(chat._id, chat.name, chat.chatColor, chat.chatImage)}
               />
             ))}
           </ScrollView>

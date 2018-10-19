@@ -10,10 +10,11 @@ interface IProps {
     subTitle: string | null;
     width: string;
     chatColor: string;
+    chatImage: string;
     leftIconName: string;
     rightIconName: string | null;
     isAvatarVisible: boolean | null;
-    rightIconFunction: () => void  | null;
+    rightIconFunction: () => void | null;
     leftIconFunction: () => void;
 }
 export default class Header extends React.Component<IProps> {
@@ -23,13 +24,14 @@ export default class Header extends React.Component<IProps> {
     public render() {
         const { title, width, chatColor, leftIconName,
             rightIconFunction, leftIconFunction, subTitle,
-            rightIconName, isAvatarVisible } = this.props
+            rightIconName, isAvatarVisible, chatImage } = this.props
         return (
             <HeaderWrapper style={{ width }}>
                 <Overlay />
                 <Head>
-                    <TouchableOpacity style={{ width: '15%' }}>
+                    <TouchableOpacity style={{ width: '15%', paddingLeft: 5 }}>
                         <Icon.Button
+                            size={16}
                             onPress={() => leftIconFunction()}
                             name={leftIconName}
                             backgroundColor="#fff"
@@ -37,12 +39,27 @@ export default class Header extends React.Component<IProps> {
                     </TouchableOpacity>
                     <Title>
                         <Text style={{ fontSize: 22, fontWeight: "500", }}>{title}</Text>
-                        {subTitle && <Text style={{ fontSize: 12, fontWeight: "300", }}>{subTitle}</Text>}
+                        {subTitle && <Text style={{ fontSize: 12, fontWeight: "700", color: "#aab6b7", marginTop: 3 }}>{subTitle}</Text>}
                     </Title>
-                    <TouchableOpacity style={{ width: "15%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {isAvatarVisible ? <Avatar name={title} size="small" chatColor={chatColor} /> :
+                    <TouchableOpacity style={isAvatarVisible ? {
+                        width: "15%",
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        shadowRadius: 5,
+                        shadowOpacity: 0.2,
+                        shadowOffset: { width: 1, height: 1 },
+                        shadowColor: "#000"
+                    } : {
+                            width: "15%",
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }
+                    }>
+                        {isAvatarVisible ? <Avatar srcImg={chatImage} name={title} size="small" chatColor={chatColor} /> :
                             <Icon.Button name={rightIconName} backgroundColor="transparent" color={SOFT_BLUE_COLOR} style={{ marginRight: 0 }}
-                                onPress={rightIconFunction} />}
+                                size={20} onPress={rightIconFunction} />}
                     </TouchableOpacity>
                 </Head>
             </HeaderWrapper>

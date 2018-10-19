@@ -9,7 +9,7 @@ import {
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
-import { doJsonAuthRequest, getToken, getRandomColor } from "./helper";
+import { doJsonAuthRequest, getToken, getRandomColor, getChatImage } from "./helper";
 import { BASE_URL, CHAT_URL, MESSAGE_URL } from "./endpoinds";
 
 export const sendMessage = (chatId, message) => {
@@ -25,7 +25,12 @@ export const getChats = () => async dispatch => {
       url: CHAT_URL,
       method: "get"
     });
-    chats = _.map(chats, chat => ({ ...chat, chatColor: getRandomColor(chat._id) }))
+    chats = _.map(chats, chat => (
+      {
+        ...chat, chatColor: getRandomColor(chat._id),
+        chatImage: getChatImage(chat._id)
+      }
+    ))
     dispatch({
       type: GET_CHATS,
       payload: chats
@@ -50,7 +55,7 @@ export const getMessages = chatId => async dispatch => {
   }
 };
 
-export const setActiveChat = (chatId, chatName, chatColor) => ({
+export const setActiveChat = (chatId, chatName, chatColor, chatImage) => ({
   type: SET_ACTIVE_CHAT,
-  payload: { chatId, chatName, chatColor }
+  payload: { chatId, chatName, chatColor, chatImage }
 });

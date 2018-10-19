@@ -22,11 +22,11 @@ interface IAvatarProps {
 
 const AvatarWrapper = styled(View).attrs({})`
       overflow:hidden;
-      height: 65%;
-      width: 65%;
+      height: 68%;
+      width: 70%;
       borderRadius: 45;
       borderWidth: 3;
-      borderColor: #ddd;
+      borderColor: #fff;
       display: flex;
       alignItems: center;
       justifyContent: center;
