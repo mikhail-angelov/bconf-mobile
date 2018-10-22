@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { BLACK_COLOR } from "../../helpers/styleConstants";
 import { View, Text } from "react-native";
 import moment from "moment";
 
@@ -25,23 +26,27 @@ const MessageWrapper = styled(View).attrs({})`
   padding: 10px;
   border-radius: 10px;
   background-color: ${(props: IMessageProps) =>
-    props.isMyMessage ? "#dfdfe5" : "rgb(0, 122, 255)"};
+    props.isMyMessage ? "#d6efef" : "#fef8e5"};
   margin-top: 10px;
   flex: none;
   align-self: ${(props: IMessageProps) =>
     props.isMyMessage ? "flex-end" : "flex-start"};
   max-width: 90%;
+  text-align: ${(props: IMessageProps) =>
+    props.isMyMessage ? "right" : "left"};
 `;
 
 const MessageText = styled(Text)`
-  color: ${(props: IMessageProps) =>
-    props.isMyMessage ? "black" : "white"};
+  marginBottom: 3px;
+  color: black;
+  letter-spacing: 0.7px;
   text-align: ${(props: IMessageProps) =>
     props.isMyMessage ? "right" : "left"};
 `;
 
 const DateText = styled(Text)`
   font-size: 12px;
-  color: ${(props: IMessageProps) =>
-    props.isMyMessage ? "grey" : "white"};
+  color: ${BLACK_COLOR};
+  text-align: ${(props: IMessageProps) =>
+    props.isMyMessage ? "right" : "left"};
 `;

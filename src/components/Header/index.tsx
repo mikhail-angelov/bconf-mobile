@@ -1,44 +1,65 @@
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
-import { Navigation } from "react-native-navigation";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styled from "styled-components";
-
 import { Avatar } from "../Avatar";
-import { GRAY_COLOR } from "../../helpers/styleConstants";
-import { SOFT_BLUE_COLOR } from "../../helpers/styleConstants";
+import { SOFT_BLUE_COLOR, BLACK_COLOR, WHITE_COLOR } from "../../helpers/styleConstants";
 
 interface IProps {
     title: string;
+    subTitle: string | null;
     width: string;
     chatColor: string;
-    backButton: () => void
-    toggleMenu: () => void
+    chatImage: string;
+    leftIconName: string;
+    rightIconName: string | null;
+    isAvatarVisible: boolean | null;
+    rightIconFunction: () => void | null;
+    leftIconFunction: () => void;
 }
 export default class Header extends React.Component<IProps> {
     constructor(props) {
         super(props);
     }
     public render() {
-        const { title, width, backButton, chatColor, toggleMenu } = this.props
+        const { title, width, chatColor, leftIconName,
+            rightIconFunction, leftIconFunction, subTitle,
+            rightIconName, isAvatarVisible, chatImage } = this.props
         return (
             <HeaderWrapper style={{ width }}>
                 <Overlay />
                 <Head>
-                    <TouchableOpacity style={{ width: '15%' }}>
+                    <TouchableOpacity style={{ width: '15%', paddingLeft: 5 }}>
                         <Icon.Button
-                            onPress={title === 'Chats' ? toggleMenu : backButton}
-                            name={title === 'Chats' ? "align-left" : "arrow-left"}
-                            backgroundColor="#fff"
+                            size={16}
+                            onPress={() => leftIconFunction()}
+                            name={leftIconName}
+                            backgroundColor={WHITE_COLOR}
                             color={SOFT_BLUE_COLOR} />
                     </TouchableOpacity>
                     <Title>
                         <Text style={{ fontSize: 22, fontWeight: "500", }}>{title}</Text>
-                        {title !== 'Chats' ? <Text style={{ fontSize: 12, fontWeight: "300", }}>Last seen recently</Text> : null}
+                        {subTitle && <Text style={{ fontSize: 12, fontWeight: "700", color: "#aab6b7", marginTop: 3 }}>{subTitle}</Text>}
                     </Title>
-                    <TouchableOpacity style={{ width: "15%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {title === 'Chats' ? <Icon.Button name="user" backgroundColor="transparent" color={SOFT_BLUE_COLOR} style={{ marginRight: 0 }} /> :
-                            <Avatar name={title} size="small" chatColor={chatColor}/>}
+                    <TouchableOpacity style={isAvatarVisible ? {
+                        width: "15%",
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        shadowRadius: 5,
+                        shadowOpacity: 0.2,
+                        shadowOffset: { width: 1, height: 1 },
+                        shadowColor: { BLACK_COLOR }
+                    } : {
+                            width: "15%",
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }
+                    }>
+                        {isAvatarVisible ? <Avatar srcImg={chatImage} name={title} size="small" chatColor={chatColor} /> :
+                            <Icon.Button name={rightIconName} backgroundColor="transparent" color={SOFT_BLUE_COLOR} style={{ marginRight: 0 }}
+                                size={20} onPress={rightIconFunction} />}
                     </TouchableOpacity>
                 </Head>
             </HeaderWrapper>
@@ -53,7 +74,7 @@ const HeaderWrapper = styled(View)`
   borderBottomWidth: 3;
   borderColor: rgba(0,0,0,0.05);
   height: 90px;
-  backgroundColor: #fff;
+  backgroundColor: ${WHITE_COLOR};
 `;
 
 const Overlay = styled(View)`
@@ -71,7 +92,7 @@ const Head = styled(View)`
 `;
 
 const Title = styled(View)`
-  color: #000;
+  color: ${BLACK_COLOR};
   width: 70%;
   display: flex;
   flexDirection: column;

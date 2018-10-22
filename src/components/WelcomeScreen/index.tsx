@@ -10,6 +10,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { goToAuth } from "../../navigation/navigation";
+import { BLACK_COLOR } from "../../helpers/styleConstants";
 import SignIn from "../Auth/SignIn";
 import styled from "styled-components";
 
@@ -85,7 +86,7 @@ export default class Welcome extends Component {
                 justifyContent: "center"
               }}
             >
-              <ActivityIndicator size="large" color="#000" />
+              <ActivityIndicator size="large" color={BLACK_COLOR} />
             </View>
           </ScrollView>
         </View>
