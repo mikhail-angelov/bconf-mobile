@@ -7,7 +7,8 @@ import {
   REMIND_PASSWORD_ERROR,
   CHANGE_PASSWORD,
   SIGN_UP_ERROR,
-  CHANGE_USER_SETTINGS
+  CHANGE_USER_SETTINGS,
+  CLEAR_AUTH_ERRORS,
 } from "../constants/actions";
 import { setAuth, doJsonRequest, doJsonAuthRequest } from "./helper";
 import {

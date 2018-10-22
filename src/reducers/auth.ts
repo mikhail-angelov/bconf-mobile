@@ -5,8 +5,10 @@ import {
   SIGN_UP_ERROR,
   REMIND_PASSWORD_ERROR,
   SIGN_UP_USER,
-  CHANGE_USER_SETTINGS
+  CHANGE_USER_SETTINGS,
+  CLEAR_AUTH_ERRORS
 } from "../constants/actions";
+import { BACKGROUND } from "../constants/appState";
 
 const initialState = {
   name: "",
@@ -18,6 +20,14 @@ const initialState = {
 
 const auth = (state = initialState, action) => {
   switch (action.type) {
+    case BACKGROUND: {
+      return {
+        ...state,
+        authError: "",
+        signUpError: "",
+        remindPasswordError: ""
+      }
+    };
     case AUTH_USER:
     case SIGN_UP_USER: {
       const { token, name, email, srcAvatar } = action.payload;
@@ -64,8 +74,8 @@ const auth = (state = initialState, action) => {
       const { name, email, srcAvatar } = action.payload;
       return {
         ...state,
-        name, 
-        email, 
+        name,
+        email,
         srcAvatar
       };
     }
