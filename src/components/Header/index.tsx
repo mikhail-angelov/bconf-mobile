@@ -1,11 +1,18 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Text, View, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styled from "styled-components";
+import Input from "../CommonUIElements/Input"
 import { Avatar } from "../Avatar";
 import { SOFT_BLUE_COLOR, BLACK_COLOR, WHITE_COLOR } from "../../helpers/styleConstants";
 
+interface IState {
+    isSearchBarActive: boolean;
+    inputValue: string;
+}
 interface IProps {
+    auth: object;
     title: string;
     subTitle: string | null;
     width: string;
@@ -15,16 +22,43 @@ interface IProps {
     rightIconName: string | null;
     isAvatarVisible: boolean | null;
     rightIconFunction: () => void | null;
+    inputHandler: (inputValue) => void | null;
     leftIconFunction: () => void;
 }
-export default class Header extends React.Component<IProps> {
+class Header extends React.Component<IProps, IState> {
+    private timer = Date.now()
     constructor(props) {
         super(props);
+        this.state = {
+            isSearchBarActive: false,
+            inputValue: '',
+        }
+        this.inputValueChange = this.inputValueChange.bind(this)
+        this.openSearchBar = this.openSearchBar.bind(this)
+        this.closeSearchBarAndCleanInput = this.closeSearchBarAndCleanInput.bind(this)
     }
+
+    public inputValueChange = (inputValue) => {
+        this.setState({ inputValue })
+        if (inputValue && Date.now() - this.timer > 300) {
+            this.props.inputHandler(inputValue)
+            this.timer = Date.now()
+        }
+    }
+
+    public closeSearchBarAndCleanInput() {
+        this.setState({ isSearchBarActive: false, inputValue: '' })
+    }
+
+    public openSearchBar() {
+        this.setState({ isSearchBarActive: true })
+    }
+
     public render() {
         const { title, width, chatColor, leftIconName,
             rightIconFunction, leftIconFunction, subTitle,
-            rightIconName, isAvatarVisible, chatImage } = this.props
+            rightIconName, isAvatarVisible, chatImage, auth } = this.props
+        const { inputValue, isSearchBarActive } = this.state
         return (
             <HeaderWrapper style={{ width }}>
                 <Overlay />
@@ -37,10 +71,17 @@ export default class Header extends React.Component<IProps> {
                             backgroundColor={WHITE_COLOR}
                             color={SOFT_BLUE_COLOR} />
                     </TouchableOpacity>
-                    <Title>
-                        <Text style={{ fontSize: 22, fontWeight: "500", }}>{title}</Text>
-                        {subTitle && <Text style={{ fontSize: 12, fontWeight: "700", color: "#aab6b7", marginTop: 3 }}>{subTitle}</Text>}
-                    </Title>
+                    {isSearchBarActive ?
+                        <Input
+                            placeholder="User name"
+                            onChangeText={(value) => this.inputValueChange(value)}
+                            value={inputValue}
+                            type="username"
+                            textContentType="username"
+                        /> : <Title>
+                            <Text style={{ fontSize: 22, fontWeight: "500", }}>{title}</Text>
+                            {subTitle && <Text style={{ fontSize: 12, fontWeight: "700", color: "#aab6b7", marginTop: 3 }}>{subTitle}</Text>}
+                        </Title>}
                     <TouchableOpacity style={isAvatarVisible ? {
                         width: "15%",
                         display: 'flex',
@@ -57,11 +98,14 @@ export default class Header extends React.Component<IProps> {
                             alignItems: 'center',
                         }
                     }>
-                        {isAvatarVisible ? <Avatar srcImg={chatImage} name={title} size="small" chatColor={chatColor} /> :
-                            <Icon.Button name={rightIconName} backgroundColor="transparent" color={SOFT_BLUE_COLOR} style={{ marginRight: 0 }}
-                                size={20} onPress={rightIconFunction} />}
+                        {isAvatarVisible ? <Avatar srcImg={chatImage} name={title} size="small" avatarColor={chatColor} /> :
+                            <Icon.Button name={isSearchBarActive ? 'window-close' : rightIconName} backgroundColor="transparent"
+                                color={SOFT_BLUE_COLOR} style={{ marginRight: 0 }} size={20}
+                                onPress={isSearchBarActive ? this.closeSearchBarAndCleanInput : rightIconFunction ? rightIconFunction : this.openSearchBar} />}
                     </TouchableOpacity>
                 </Head>
+                {isSearchBarActive && !!inputValue.length && auth.users.length < 1 &&
+                    <Text style={{ position: "absolute", top: 20, left: '25%' }}>User {inputValue} not found</Text>}
             </HeaderWrapper>
         );
     };
@@ -98,3 +142,10 @@ const Title = styled(View)`
   flexDirection: column;
   alignItems: center;
 `;
+
+const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
+
+export default connect(
+    mapStateToProps,
+    null
+)(Header);

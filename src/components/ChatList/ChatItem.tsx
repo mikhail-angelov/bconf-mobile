@@ -38,7 +38,7 @@ export const ChatListItem = ({
       }}
     >
       <AvatarSide>
-        <Avatar name={name} srcImg={srcImg} chatColor={chatColor} />
+        <Avatar name={name} srcImg={srcImg} avatarColor={chatColor} />
       </AvatarSide>
       <LastMessageArea>
         <ChatName>{name}</ChatName>

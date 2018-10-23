@@ -20,13 +20,13 @@ interface IProps {
   activeProfileSettingsId: string;
   activeProfileSettingsName: string;
   chatColor: string;
-  saveProfileSettings: ({ name, email, avatarSrc }) => void;
+  saveProfileSettings: ({ name, email, srcAvatar }) => void;
 }
 
 interface IState {
   isProfileEdit: boolean
   name: string;
-  avatarSrc: string;
+  srcAvatar: string;
   email: string;
   error: object;
 }
@@ -36,16 +36,16 @@ class ProfileSettings extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       name: props.auth.name,
-      avatarSrc: props.auth.srcAvatar,
+      srcAvatar: props.auth.srcAvatar,
       email: props.auth.email,
-      error: { name: "", avatarSrc: "", email: "" },
+      error: { name: "", srcAvatar: "", email: "" },
       isProfileEdit: false
     };
   }
 
   public saveProfileSettings() {
-    const { name, email, avatarSrc } = this.state
-    this.props.saveProfileSettings({ name, email, avatarSrc })
+    const { name, email, srcAvatar } = this.state
+    this.props.saveProfileSettings({ name, email, srcAvatar })
     this.setState({ isProfileEdit: false })
   }
 
@@ -61,7 +61,7 @@ class ProfileSettings extends React.Component<IProps, IState> {
     const profileSettingsItems = [
       { title: "Username", fieldName: 'name' },
       { title: "Email", fieldName: 'email' },
-      { title: "Avatar Source", fieldName: 'avatarSrc' },
+      { title: "Avatar Source", fieldName: 'srcAvatar' },
     ]
     return (
       <ProfileSettingsWrap>
@@ -70,7 +70,7 @@ class ProfileSettings extends React.Component<IProps, IState> {
           width={width}
           leftIconName="arrow-left"
           leftIconFunction={() => Navigation.popToRoot("ChatList")}
-          chatColor={chat.activeProfileSettingsColor} />
+           />
         <ProfileSettingsView>
           <AvatarSide>
             <Avatar
@@ -78,7 +78,7 @@ class ProfileSettings extends React.Component<IProps, IState> {
               style={{ width: 100, height: 100, borderRadius: 100 }}
               name={auth.name}
               size="big"
-              chatColor="#996699" />
+              avatarColor="#996699" />
           </AvatarSide>
           {_.map(profileSettingsItems, item => (<ProfileSettingsItem>
             {isProfileEdit ?

@@ -3,15 +3,15 @@ import { TextInput, Text, View } from "react-native";
 import styled from "styled-components";
 
 const UIInput = ({ error, ...otherProps }) => {
-  if (error.length < 1) {
-    return <CustomInput {...otherProps} />;
-  } else {
+  if (error && error.length > 1) {
     return (
       <View>
         <DangerCustomInput {...otherProps} />
         <ErrorNotification>{error}</ErrorNotification>
       </View>
     );
+  } else {
+    return <CustomInput {...otherProps} />;
   }
 };
 export default UIInput;

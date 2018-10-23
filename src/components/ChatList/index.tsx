@@ -149,23 +149,37 @@ class ChatList extends React.Component<IProps, IState> {
               />
             ))}
           </ScrollView>
-          <AddChatButton style={{
-            display: this.state.isAddChatButtonVisible ? "flex" : 'none',
-            transform: [{
-              translateY: this.state.addChatButtonAnimate.interpolate(
-                  {
+          <AddChatButtonWrap
+            onPress={() =>
+              Navigation.push("ChatList", {
+                component: {
+                  name: 'AddChat',
+                  options: {
+                    topBar: {
+                      visible: false
+                    },
+                  }
+                }
+              })}>
+            <AddChatButton
+              style={{
+                display: this.state.isAddChatButtonVisible ? "flex" : 'none',
+                transform: [{
+                  translateY: this.state.addChatButtonAnimate.interpolate(
+                    {
                       inputRange: [0, 1],
                       outputRange: [0, 100],
-                  }
-              )
-          }]
-          }}>
-            <Icon
-              size={22}
-              name="pen"
-              backgroundColor={WHITE_COLOR}
-              color={WHITE_COLOR} />
-          </AddChatButton>
+                    }
+                  )
+                }]
+              }}>
+              <Icon
+                size={22}
+                name="pen"
+                backgroundColor={WHITE_COLOR}
+                color={WHITE_COLOR} />
+            </AddChatButton>
+          </AddChatButtonWrap>
         </ChatListWrapper>
       </View >
     );
@@ -194,6 +208,8 @@ const AddChatButton = styled(Animated.View)`
         shadowOffset: {width: 1, height: 1}; 
         shadowColor: ${BLACK_COLOR};
       `;
+
+const AddChatButtonWrap = styled(TouchableOpacity)``;
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
 

@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { WHITE_COLOR } from "../../helpers/styleConstants";
 import { View, Text, Image } from "react-native";
 
-export const Avatar = ({ style, size, srcImg, name, chatColor }: IAvatarProps) => {
+export const Avatar = ({ style, size, srcImg, name, avatarColor }: IAvatarProps) => {
   return (
-    <AvatarWrapper style={style} chatColor={chatColor}>
+    <AvatarWrapper style={style} avatarColor={avatarColor}>
       {srcImg ? <AvaImg source={{ uri: srcImg }} /> :
         <AvaText size={size} >{name ? name[0].toUpperCase() : ""}</AvaText>}
     </AvatarWrapper>
@@ -16,7 +16,7 @@ interface IAvatarProps {
   size: string | undefined;
   name: string;
   srcImg: string | undefined;
-  chatColor: string;
+  avatarColor: string;
   style: object | undefined;
 }
 
@@ -31,7 +31,7 @@ const AvatarWrapper = styled(View).attrs({})`
       alignItems: center;
       justifyContent: center;
       backgroundColor: ${(props: IAvatarProps) =>
-    props.chatColor || '#eee'};
+    props.avatarColor || '#eee'};
     `;
 
 const AvaImg = styled(Image)`
