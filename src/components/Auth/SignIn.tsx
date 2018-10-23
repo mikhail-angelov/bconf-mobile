@@ -4,7 +4,10 @@ import {
   Dimensions,
   Animated,
   Easing,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  Linking,
+  Text
 } from "react-native";
 import { goHome } from "../../navigation/navigation";
 import { login } from "../../actions/auth";
@@ -45,6 +48,24 @@ class SignIn extends React.Component<IProps, IState> {
       email: "",
       error: { email: "", password: "" }
     };
+  }
+  _handleURL(event) {
+    console.log(event.url);
+    // Bit of a hack to get the token from this URL... 
+    // implement yours in a safer way
+    console.log(event.url.split('#')[1].split('=')[1].split('&')[0]);
+  }
+  _facebookLogin() {
+    Linking.openURL([
+      'https://graph.facebook.com/oauth/authorize',
+      '?response_type=token',
+      '&client_id='+'584162198681660',
+      '&redirect_uri=fb584162198681660://authorize',
+      '$scope=email' // Specify permissions
+    ].join(''));
+  }
+  componentDidMount() {
+    Linking.addEventListener('url', this._handleURL);
   }
 
   public render() {
@@ -105,6 +126,12 @@ class SignIn extends React.Component<IProps, IState> {
               }}
               title="Forgot Password"
             />
+            <TouchableOpacity onPress={this._facebookLogin}>
+          <Text >
+            Facebook Login!
+          </Text>
+        </TouchableOpacity>
+
           </Body>
         </KeyboardAvoidingView>
       </Animated.View>
