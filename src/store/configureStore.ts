@@ -5,9 +5,8 @@ import thunk from "redux-thunk";
 import logger from "redux-logger";
 import rootReducer from "../reducers/rootReducer";
 import socketEvents from "../middleware/socketEvents";
-import appStateMiddleware from "../middleware/appState"
 
-let middleware = [thunk, socketEvents, appStateMiddleware];
+let middleware = [thunk, socketEvents];
 
 if (true) {
   middleware = [...middleware, logger];
