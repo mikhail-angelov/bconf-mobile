@@ -27,6 +27,8 @@ class ChangePassword extends React.Component<IProps> {
             onChangeText={newPassword => this.setState({ newPassword })}
             value={this.state.newPassword}
             error=""
+            autoCapitalize={false}
+            secureTextEntry={true}
           />
           <Input
             placeholder="Repeat new password"
@@ -35,6 +37,8 @@ class ChangePassword extends React.Component<IProps> {
             }
             value={this.state.repeatNewPassword}
             error=""
+            autoCapitalize="none"
+            secureTextEntry={true}
           />
           <Button
             onPress={() => this.props.changePassword(this.state.newPassword)}
