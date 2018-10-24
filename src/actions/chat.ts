@@ -8,7 +8,8 @@ import {
   SEND_MESSAGE,
   ADD_USER_TO_CHAT_LOCALY,
   DELETE_USER_TO_CHAT_LOCALY,
-  FIND_USERS
+  FIND_USERS,
+  CREATE_NEW_CHAT
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
@@ -88,4 +89,39 @@ export const deleteUserToChatLocaly = (user) => ({
   type: DELETE_USER_TO_CHAT_LOCALY,
   payload: user
 });
+
+export const createNewChat = (users) => async (dispatch) => {
+  let newChatName = ''
+  for (let i = 0; i < 4; i++) {
+    if (users.length > i && users[i].name) {
+      newChatName += users[i].name + ' '
+    }
+  }
+  try {
+    const newChat = await doJsonAuthRequest({
+      url: CHAT_URL,
+      method: "post",
+      data: { users, name: newChatName }
+    });
+    dispatch({
+      type: SET_ACTIVE_CHAT,
+      payload: {
+        chatId: newChat._id,
+        chatName: newChat.name,
+        chatColor: getRandomColor(newChat._id),
+        chatImage: getChatImage(newChat._id)
+      }
+    })
+    dispatch({
+      type: CREATE_NEW_CHAT,
+      payload: {
+        ...newChat,
+        chatColor: getRandomColor(newChat._id),
+        chatImage: getChatImage(newChat._id)
+      },
+    });
+  } catch (e) {
+    console.log("Error :" + e)
+  }
+};
 

@@ -9,7 +9,8 @@ import {
   SET_ACTIVE_CHAT,
   ADD_USER_TO_CHAT_LOCALY,
   DELETE_USER_TO_CHAT_LOCALY,
-  FIND_USERS
+  FIND_USERS,
+  CREATE_NEW_CHAT
 } from "../constants/actions";
 import _ from 'lodash'
 
@@ -61,6 +62,10 @@ const chat = (state = initialState, action) => {
       const updateUsers = [...state.users, action.payload]
       const updateUsersInNewChat = _.filter(state.usersInNewChat, user => user._id !== action.payload._id)
       return { ...state, usersInNewChat: updateUsersInNewChat, users: updateUsers };
+    }
+    case CREATE_NEW_CHAT: {
+      const updateChats = [...state.chats, action.payload]
+      return { ...state, chats: updateChats };
     }
     default: {
       return state;

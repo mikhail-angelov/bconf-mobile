@@ -99,7 +99,7 @@ class Header extends React.Component<IProps, IState> {
                         }
                     }>
                         {isAvatarVisible ? <Avatar srcImg={chatImage} name={title} size="small" avatarColor={chatColor} /> :
-                            <Icon.Button name={isSearchBarActive ? 'window-close' : rightIconName} backgroundColor="transparent"
+                            <Icon.Button name={isSearchBarActive ? 'times' : rightIconName} backgroundColor="transparent"
                                 color={SOFT_BLUE_COLOR} style={{ marginRight: 0 }} size={20}
                                 onPress={isSearchBarActive ? this.closeSearchBarAndCleanInput : rightIconFunction ? rightIconFunction : this.openSearchBar} />}
                     </TouchableOpacity>

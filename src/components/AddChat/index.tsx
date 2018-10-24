@@ -5,7 +5,7 @@ import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styled from "styled-components";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR, GRAY_COLOR } from "../../helpers/styleConstants";
-import { addUserToChatLocaly, deleteUserToChatLocaly, findUsers } from "../../actions/chat";
+import { addUserToChatLocaly, deleteUserToChatLocaly, findUsers, setActiveChat, createNewChat } from "../../actions/chat";
 import { Avatar } from "../Avatar";
 import Header from "../Header";
 import { Navigation } from "react-native-navigation";
@@ -17,6 +17,7 @@ interface IProps {
     findUsers: (username) => void;
     addUserToChatLocaly: (user) => void;
     deleteUserToChatLocaly: (user) => void;
+    createNewChat: (users) => void;
     auth: any;
     chat: any;
     users: object;
@@ -31,25 +32,44 @@ class AddChat extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
         this.state = {
-            isCreateChatButtonVisible: true,
+            isCreateChatButtonVisible: false,
             createChatButtonAnimate: new Animated.Value(0),
+        }
+    }
+
+    public createNewChatAndSetActiveChat() {
+        const { chat } = this.props
+        this.props.createNewChat(chat.usersInNewChat)
+    }
+
+    public componentWillMount() {
+        if (this.props.chat.usersInNewChat.length > 0) {
+            this.showAddChatButton()
         }
     }
 
     public showAddChatButton = () => {
         this.setState({ isCreateChatButtonVisible: true })
         Animated.timing(this.state.createChatButtonAnimate, {
-            toValue: 0,
+            toValue: 1,
             duration: 500,
         }).start();
     };
 
     public closeAddChatButton = () => {
         Animated.timing(this.state.createChatButtonAnimate, {
-            toValue: 1,
+            toValue: 0,
             duration: 500,
         }).start(() => this.setState({ isCreateChatButtonVisible: false }));
     };
+
+    public componentDidUpdate(prevProps) {
+        if (prevProps.chat.usersInNewChat.length !== this.props.chat.usersInNewChat.length && this.props.chat.usersInNewChat.length > 0) {
+            this.showAddChatButton()
+        } else if (prevProps.chat.usersInNewChat.length !== this.props.chat.usersInNewChat.length && this.props.chat.usersInNewChat.length === 0) {
+            this.closeAddChatButton()
+        }
+    }
 
     public componentWillReceiveProps(nextProps) {
         if (!nextProps.auth.authenticated) {
@@ -96,8 +116,9 @@ class AddChat extends React.Component<IProps, IState> {
                     </UserList>
                 </AddChatView>
                 <CreateChatButtonWrap
-                    onPress={() =>
-                        Navigation.push("AddChat", {
+                    onPress={() => {
+                        this.createNewChatAndSetActiveChat();
+                        Navigation.push("ChatList", {
                             component: {
                                 name: 'Chat',
                                 options: {
@@ -106,7 +127,8 @@ class AddChat extends React.Component<IProps, IState> {
                                     },
                                 }
                             }
-                        })}>
+                        })
+                    }}>
                     <CreateChatButton
                         style={{
                             display: this.state.isCreateChatButtonVisible ? "flex" : 'none',
@@ -114,15 +136,16 @@ class AddChat extends React.Component<IProps, IState> {
                                 translateY: this.state.createChatButtonAnimate.interpolate(
                                     {
                                         inputRange: [0, 1],
-                                        outputRange: [0, 100],
+                                        outputRange: [100, 0],
                                     }
                                 )
                             }]
                         }}>
+                        <Text style={{ color: WHITE_COLOR, fontSize: 18 }}>Create chat  </Text>
                         <Icon
-                            size={22}
-                            name="pen"
-                            backgroundColor={WHITE_COLOR}
+                            size={20}
+                            name="plus"
+                            backgroundColor={SOFT_BLUE_COLOR}
                             color={WHITE_COLOR} />
                     </CreateChatButton>
                 </CreateChatButtonWrap>
@@ -156,19 +179,22 @@ const UserList = styled(ScrollView)`
     width: 100%
     `;
 
-const CreateChatButtonWrap = styled(TouchableOpacity)``;
-
-const CreateChatButton = styled(Animated.View)`
-    padding: 20px;
+const CreateChatButtonWrap = styled(TouchableOpacity)`
     position: absolute;
     right: 20;
     bottom: 20;
+    `;
+
+const CreateChatButton = styled(Animated.View)`
+    padding: 13px;
     backgroundColor: ${SOFT_BLUE_COLOR};
     border-radius: 50;
     shadowRadius: 3; 
     shadowOpacity: 0.2; 
     shadowOffset: {width: 1, height: 1}; 
     shadowColor: ${BLACK_COLOR};
+    flexDirection: row;
+    display: flex;
       `;
 
 const AvatarSide = styled(View)`
@@ -195,7 +221,8 @@ const UserItem = styled(TouchableOpacity)`
 const mapDispatchToProps = {
     findUsers,
     addUserToChatLocaly,
-    deleteUserToChatLocaly
+    deleteUserToChatLocaly,
+    createNewChat
 };
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
