@@ -8,7 +8,6 @@ import {
   CHANGE_PASSWORD,
   SIGN_UP_ERROR,
   CHANGE_USER_SETTINGS,
-  FIND_USERS
 } from "../constants/actions";
 import { setAuth, doJsonRequest, doJsonAuthRequest } from "./helper";
 import {
@@ -17,7 +16,6 @@ import {
   REMIND_PASSWORD_URL,
   AUTH_CHECK_URL,
   CHANGE_USER_SETTINGS_URL,
-  FIND_USERS_URL
 } from "./endpoinds";
 import { AsyncStorage } from "react-native";
 import { AUTH } from "../constants/storage";
@@ -118,22 +116,6 @@ export const remindPassword = email => async (dispatch, getStore) => {
     goToAuth();
   } catch (e) {
     dispatch(setRemindPasswordError("No such email registered, try again"));
-  }
-};
-
-export const findUsers = (value) => async (dispatch) => {
-  try {
-    const users = await doJsonAuthRequest({
-      url: FIND_USERS_URL + value,
-      method: "get",
-      data: { value }
-    });
-    dispatch({
-      type: FIND_USERS,
-      payload: users
-    });
-  } catch (e) {
-    console.log("Error :" + e)
   }
 };
 

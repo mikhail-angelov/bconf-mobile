@@ -5,12 +5,15 @@ import {
   GET_MESSAGES_ERROR,
   GET_MESSAGES,
   SET_ACTIVE_CHAT,
-  SEND_MESSAGE
+  SEND_MESSAGE,
+  ADD_USER_TO_CHAT_LOCALY,
+  DELETE_USER_TO_CHAT_LOCALY,
+  FIND_USERS
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
 import { doJsonAuthRequest, getToken, getRandomColor, getChatImage } from "./helper";
-import { BASE_URL, CHAT_URL, MESSAGE_URL } from "./endpoinds";
+import { BASE_URL, CHAT_URL, MESSAGE_URL, FIND_USERS_URL } from "./endpoinds";
 
 export const sendMessage = (chatId, message) => {
   return {
@@ -59,3 +62,30 @@ export const setActiveChat = ({ chatId, chatName, chatColor, chatImage }) => ({
   type: SET_ACTIVE_CHAT,
   payload: { chatId, chatName, chatColor, chatImage }
 });
+
+export const findUsers = (value) => async (dispatch) => {
+  try {
+    const users = await doJsonAuthRequest({
+      url: FIND_USERS_URL + value,
+      method: "get",
+      data: { value }
+    });
+    dispatch({
+      type: FIND_USERS,
+      payload: users
+    });
+  } catch (e) {
+    console.log("Error :" + e)
+  }
+};
+
+export const addUserToChatLocaly = (user) => ({
+  type: ADD_USER_TO_CHAT_LOCALY,
+  payload: user
+});
+
+export const deleteUserToChatLocaly = (user) => ({
+  type: DELETE_USER_TO_CHAT_LOCALY,
+  payload: user
+});
+

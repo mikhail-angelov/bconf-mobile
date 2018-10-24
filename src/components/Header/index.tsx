@@ -12,7 +12,7 @@ interface IState {
     inputValue: string;
 }
 interface IProps {
-    auth: object;
+    chat: object;
     title: string;
     subTitle: string | null;
     width: string;
@@ -57,7 +57,7 @@ class Header extends React.Component<IProps, IState> {
     public render() {
         const { title, width, chatColor, leftIconName,
             rightIconFunction, leftIconFunction, subTitle,
-            rightIconName, isAvatarVisible, chatImage, auth } = this.props
+            rightIconName, isAvatarVisible, chatImage, chat } = this.props
         const { inputValue, isSearchBarActive } = this.state
         return (
             <HeaderWrapper style={{ width }}>
@@ -104,7 +104,7 @@ class Header extends React.Component<IProps, IState> {
                                 onPress={isSearchBarActive ? this.closeSearchBarAndCleanInput : rightIconFunction ? rightIconFunction : this.openSearchBar} />}
                     </TouchableOpacity>
                 </Head>
-                {isSearchBarActive && !!inputValue.length && auth.users.length < 1 &&
+                {isSearchBarActive && !!inputValue.length && chat.users.length < 1 &&
                     <Text style={{ position: "absolute", top: 20, left: '25%' }}>User {inputValue} not found</Text>}
             </HeaderWrapper>
         );

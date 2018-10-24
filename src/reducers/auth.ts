@@ -6,7 +6,6 @@ import {
   REMIND_PASSWORD_ERROR,
   SIGN_UP_USER,
   CHANGE_USER_SETTINGS,
-  FIND_USERS
 } from "../constants/actions";
 
 const initialState = {
@@ -71,12 +70,6 @@ const auth = (state = initialState, action) => {
         srcAvatar
       };
     }
-    case FIND_USERS: {
-      return {
-        ...state,
-        users: action.payload
-      }
-    };
     default:
       return state;
   }
