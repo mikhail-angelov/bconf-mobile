@@ -1,0 +1,31 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '9.0'
+
+target 'mobileDemo' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for mobileDemo
+  pod 'Firebase/Core', '~> 5.9.0'
+  pod 'Firebase/Auth', '~> 5.9.0'
+
+
+  target 'mobileDemoTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+
+target 'mobileDemo-tvOS' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for mobileDemo-tvOS
+
+  target 'mobileDemo-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
