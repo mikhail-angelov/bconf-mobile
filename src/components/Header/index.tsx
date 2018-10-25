@@ -143,9 +143,8 @@ const Title = styled(View)`
   alignItems: center;
 `;
 
-const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
+const mapStateToProps = ({ auth, chat}) => ({ auth, chat});
 
 export default connect(
-    mapStateToProps,
-    null
+    mapStateToProps
 )(Header);

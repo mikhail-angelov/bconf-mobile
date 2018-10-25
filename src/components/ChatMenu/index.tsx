@@ -9,7 +9,6 @@ import { Avatar } from "../Avatar";
 
 interface IProps {
     chat: any;
-    activeChatColor: string;
     size: string;
     chatColor: string;
     name: string;

@@ -5,9 +5,10 @@ import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styled from "styled-components";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR, GRAY_COLOR } from "../../helpers/styleConstants";
-import { addUserToChatLocaly, deleteUserToChatLocaly, findUsers, setActiveChat, createNewChat } from "../../actions/chat";
+import { addUserToChatLocaly, deleteUserFromChatLocaly, findUsers, deleteAllUsersFromChatLocaly, createNewChat } from "../../actions/chat";
 import { Avatar } from "../Avatar";
 import Header from "../Header";
+import AppearedButton from "../CommonUIElements/AppearedButton";
 import { Navigation } from "react-native-navigation";
 import { goToAuth } from "../../navigation/navigation";
 
@@ -16,11 +17,12 @@ const { width } = Dimensions.get('window')
 interface IProps {
     findUsers: (username) => void;
     addUserToChatLocaly: (user) => void;
-    deleteUserToChatLocaly: (user) => void;
+    deleteUserFromChatLocaly: (user) => void;
     createNewChat: (users) => void;
     auth: any;
     chat: any;
     users: object;
+    deleteAllUsersFromChatLocaly: () => void
 }
 
 interface IState {
@@ -40,12 +42,6 @@ class AddChat extends React.Component<IProps, IState> {
     public createNewChatAndSetActiveChat() {
         const { chat } = this.props
         this.props.createNewChat(chat.usersInNewChat)
-    }
-
-    public componentWillMount() {
-        if (this.props.chat.usersInNewChat.length > 0) {
-            this.showAddChatButton()
-        }
     }
 
     public showAddChatButton = () => {
@@ -87,13 +83,16 @@ class AddChat extends React.Component<IProps, IState> {
                     title="Add Chat"
                     width={width}
                     leftIconName="arrow-left"
-                    leftIconFunction={() => Navigation.popToRoot("ChatList")} />
+                    leftIconFunction={() => {
+                        this.props.deleteAllUsersFromChatLocaly()
+                        Navigation.popToRoot("ChatList")
+                    }} />
                 <AddChatView>
                     <UserList>
                         {chat.usersInNewChat.length > 0 && <Text style={{ width: '100%', backgroundColor: SOFT_BLUE_COLOR, color: WHITE_COLOR, textAlign: 'center' }}>
                             Users in new conversation
                         </Text>}
-                        {_.map(chat.usersInNewChat, item => (<UserItem onPress={() => this.props.deleteUserToChatLocaly(item)}>
+                        {_.map(chat.usersInNewChat, item => (<UserItem onPress={() => this.props.deleteUserFromChatLocaly(item)}>
                             <AvatarSide>
                                 <Avatar name={item.name} srcImg={item.srcAvatar} avatarColor={item.userColor} />
                             </AvatarSide>
@@ -115,8 +114,10 @@ class AddChat extends React.Component<IProps, IState> {
                         </UserItem>))}
                     </UserList>
                 </AddChatView>
-                <CreateChatButtonWrap
-                    onPress={() => {
+                <AppearedButton
+                    isButtonVisible={this.state.isCreateChatButtonVisible}
+                    buttonAnimate={this.state.createChatButtonAnimate}
+                    buttonHandler={() => {
                         this.createNewChatAndSetActiveChat();
                         Navigation.push("ChatList", {
                             component: {
@@ -128,27 +129,11 @@ class AddChat extends React.Component<IProps, IState> {
                                 }
                             }
                         })
-                    }}>
-                    <CreateChatButton
-                        style={{
-                            display: this.state.isCreateChatButtonVisible ? "flex" : 'none',
-                            transform: [{
-                                translateY: this.state.createChatButtonAnimate.interpolate(
-                                    {
-                                        inputRange: [0, 1],
-                                        outputRange: [100, 0],
-                                    }
-                                )
-                            }]
-                        }}>
-                        <Text style={{ color: WHITE_COLOR, fontSize: 18 }}>Create chat  </Text>
-                        <Icon
-                            size={20}
-                            name="plus"
-                            backgroundColor={SOFT_BLUE_COLOR}
-                            color={WHITE_COLOR} />
-                    </CreateChatButton>
-                </CreateChatButtonWrap>
+                    }}
+                    iconName="plus"
+                    iconSize={20}
+                    buttonText="Create chat  "
+                />
             </AddChatWrap >
         );
     }
@@ -221,8 +206,9 @@ const UserItem = styled(TouchableOpacity)`
 const mapDispatchToProps = {
     findUsers,
     addUserToChatLocaly,
-    deleteUserToChatLocaly,
-    createNewChat
+    deleteUserFromChatLocaly,
+    createNewChat,
+    deleteAllUsersFromChatLocaly
 };
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });

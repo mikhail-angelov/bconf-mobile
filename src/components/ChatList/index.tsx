@@ -10,12 +10,13 @@ import { getMessages, setActiveChat } from "../../actions/chat";
 import { Navigation } from "react-native-navigation";
 import ChatMenu from "../ChatMenu";
 import Header from "../Header";
+import AppearedButton from "../CommonUIElements/AppearedButton";
 
 const { width } = Dimensions.get('window')
 interface IProps {
   chat: [];
   getMessages: (_id) => void;
-  setActiveChat: ({ _id, name, chatColor, chatImage }) => void;
+  setActiveChat: ({ chatId, name, chatColor, chatImage }) => void;
   _id: string;
   name: string;
   chatColor: string;
@@ -137,20 +138,22 @@ class ChatList extends React.Component<IProps, IState> {
                       }
                     }
                   })}
-                name={chat.name}
-                id={chat._id}
+                name={chat.chatName}
+                id={chat.chatId}
                 srcImg={chat.chatImage}
                 chatColor={chat.chatColor}
                 lastMessageText={chat.lastMessageText}
                 lastMessageAuthor={chat.lastMessageAuthor}
                 lastMessageTimestamp={chat.lastMessageTimestamp}
                 setActiveChatAndGetMessages={() =>
-                  this.setActiveChatAndGetMessages({ chatId: chat._id, chatName: chat.name, chatColor: chat.chatColor, chatImage: chat.chatImage })}
+                  this.setActiveChatAndGetMessages({ chatId: chat.chatId, chatName: chat.chatName, chatColor: chat.chatColor, chatImage: chat.chatImage })}
               />
             ))}
           </ScrollView>
-          <AddChatButtonWrap
-            onPress={() =>
+          <AppearedButton
+            isButtonVisible={this.state.isAddChatButtonVisible}
+            buttonAnimate={this.state.addChatButtonAnimate}
+            buttonHandler={() => {
               Navigation.push("ChatList", {
                 component: {
                   name: 'AddChat',
@@ -160,26 +163,12 @@ class ChatList extends React.Component<IProps, IState> {
                     },
                   }
                 }
-              })}>
-            <AddChatButton
-              style={{
-                display: this.state.isAddChatButtonVisible ? "flex" : 'none',
-                transform: [{
-                  translateY: this.state.addChatButtonAnimate.interpolate(
-                    {
-                      inputRange: [0, 1],
-                      outputRange: [0, 100],
-                    }
-                  )
-                }]
-              }}>
-              <Icon
-                size={22}
-                name="pen"
-                backgroundColor={WHITE_COLOR}
-                color={WHITE_COLOR} />
-            </AddChatButton>
-          </AddChatButtonWrap>
+              })
+            }}
+            iconName="pen"
+            iconSize={22}
+            reverseAppear={true}
+          />
         </ChatListWrapper>
       </View >
     );
@@ -195,21 +184,6 @@ const ChatListWrapper = styled(View)`
         height: 100%;
         position: relative;
       `;
-
-const AddChatButton = styled(Animated.View)`
-        padding: 20px;
-        position: absolute;
-        right: 20;
-        bottom: 20;
-        backgroundColor: ${SOFT_BLUE_COLOR};
-        border-radius: 50;
-        shadowRadius: 3; 
-        shadowOpacity: 0.2; 
-        shadowOffset: {width: 1, height: 1}; 
-        shadowColor: ${BLACK_COLOR};
-      `;
-
-const AddChatButtonWrap = styled(TouchableOpacity)``;
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
 

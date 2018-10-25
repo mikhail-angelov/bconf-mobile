@@ -133,7 +133,7 @@ export const saveProfileSettings = ({ name, email, srcAvatar }) => async dispatc
     });
     dispatch({
       type: CHANGE_USER_SETTINGS,
-      payload: { name: resp.username, email: resp.email, srcAvatar: resp.srcAvatar }
+      payload: { name: resp.name, email: resp.email, srcAvatar: resp.srcAvatar }
     });
   } catch (e) {
     console.log("Error: " + e);
