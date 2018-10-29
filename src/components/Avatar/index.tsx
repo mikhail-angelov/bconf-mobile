@@ -41,7 +41,7 @@ const AvaImg = styled(Image)`
 
 const AvaText = styled(Text)`
     fontSize: ${(props: IAvatarProps) =>
-    props.size === "small" ? "12px" : "24px"
+    props.size === "small" ? "12px" : "30px"
   }};
     color: ${WHITE_COLOR};
   `;

@@ -1,12 +1,13 @@
 import React from "react";
 import { ChatListItem } from "./ChatItem";
 import { connect } from "react-redux";
+import _ from "lodash"
 import { ScrollView, Animated, Dimensions, View, TouchableOpacity, Text } from "react-native";
 import styled from "styled-components";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { logout } from "../../actions/auth";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR } from "../../helpers/styleConstants";
-import { getMessages, setActiveChat } from "../../actions/chat";
+import { getMessages, setActiveChat, getChats } from "../../actions/chat";
 import { Navigation } from "react-native-navigation";
 import ChatMenu from "../ChatMenu";
 import Header from "../Header";
@@ -25,6 +26,7 @@ interface IProps {
   width: number;
   goHome: () => void;
   logout: () => void;
+  getChats: () => void;
 }
 
 interface IState {
@@ -45,6 +47,12 @@ class ChatList extends React.Component<IProps, IState> {
       addChatButtonAnimate: new Animated.Value(0),
       currentChatMenuScrollPosition: 0,
     };
+  }
+
+  public componentDidUpdate(prevProps) {
+    if (!_.isEqual(prevProps.chat.activeChat, this.props.chat.activeChat)) {
+      this.props.getChats()
+    }
   }
 
   public showChatMenu = () => {
@@ -141,7 +149,7 @@ class ChatList extends React.Component<IProps, IState> {
                   })}
                 name={chat.chatName}
                 id={chat.chatId}
-                srcImg={chat.chatImage}
+                chatImage={chat.chatImage}
                 chatColor={chat.chatColor}
                 lastMessageText={chat.lastMessageText}
                 lastMessageAuthor={chat.lastMessageAuthor}
@@ -191,7 +199,8 @@ const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
 const mapDispatchToProps = {
   getMessages,
   setActiveChat,
-  logout
+  logout,
+  getChats
 };
 
 export default connect(

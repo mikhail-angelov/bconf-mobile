@@ -56,9 +56,10 @@ class ChatSettings extends React.Component<IProps, IState> {
     const { chat } = this.props
     const { isChatEdit } = this.state
     const chatSettingsItems = [
-      { title: "Chatname", fieldName: 'chatName' },
-      { title: "Avatar Source", fieldName: 'chatImage' },
+      { fieldName: 'chatName' },
+      { fieldName: 'chatImage' },
     ]
+    const maxStringLength = 40
     return (
       <ChatSettingsWrap>
         <Header
@@ -66,32 +67,35 @@ class ChatSettings extends React.Component<IProps, IState> {
           width={width}
           leftIconName="arrow-left"
           leftIconFunction={() => Navigation.pop("ChatSettings")}
+          rightIconFunction={isChatEdit ? () => this.saveChatSettings() : () => this.setState({ isChatEdit: true })}
+          rightIconName={isChatEdit ? "check" : "pencil"}
         />
         <ChatSettingsView>
           <AvatarSide>
             <Avatar
               srcImg={chat.activeChat.chatImage}
               style={{ width: 100, height: 100, borderRadius: 100 }}
-              chatName={chat.activeChat.chatName}
+              name={chat.activeChat.chatName}
               size="big"
-              avatarColor="#996699" />
+              avatarColor={chat.activeChat.chatColor} />
           </AvatarSide>
-          {_.map(chatSettingsItems, item => (<ChatSettingsItem>
-            {isChatEdit ?
-              <Input
-                placeholder={item.title}
-                onChangeText={text => this.setState({ [item.fieldName]: text })}
-                value={this.state[item.fieldName]}
-                error={this.state.error[item.fieldName]}
-                textContentType={item.fieldName}
-              /> :
-              <Text style={{ fontSize: 24, marginTop: 16, marginBottom: 16 }}>{item.title}: {this.state[item.fieldName] || 'Empty'}</Text>
-            }
-          </ChatSettingsItem>))}
-          <Button
-            onPress={isChatEdit ? () => this.saveChatSettings() : () => this.setState({ isChatEdit: true })}>
-            {isChatEdit ? 'Save' : 'Edit'}
-          </Button>
+          <ChatSettingsItemsWrap>
+            {_.map(chatSettingsItems, item => (<ChatSettingsItem>
+              {isChatEdit ?
+                <Input
+                  placeholder={item.title}
+                  onChangeText={text => this.setState({ [item.fieldName]: text })}
+                  value={this.state[item.fieldName]}
+                  error={this.state.error[item.fieldName]}
+                  textContentType={item.fieldName}
+                /> :
+                <Text style={{ fontSize: 24, marginTop: 6, marginBottom: 6, maxHeight: 60}}>{(this.state[item.fieldName] && 
+                  this.state[item.fieldName].length > maxStringLength) ?
+                  (((this.state[item.fieldName]).substring(0, maxStringLength - 3)) + '...') :
+                  this.state[item.fieldName] || 'Empty'}</Text>
+              }
+            </ChatSettingsItem>))}
+          </ChatSettingsItemsWrap>
         </ChatSettingsView>
       </ChatSettingsWrap>
     );
@@ -104,26 +108,30 @@ const ChatSettingsWrap = styled(View)`
         height: 100%;
       `;
 
-const ChatSettingsItem = styled(View)`
+const ChatSettingsItemsWrap = styled(View)`
         display: flex;
         flexDirection: column;
-        alignItems: center;
-        justifyContent: center;
+        width: 70%;
+        justify-content: center;
       `;
+
+const ChatSettingsItem = styled(View)`
+`;
 
 const ChatSettingsView = styled(View)`
         display: flex;
-        flexDirection: column;
-        height: 100%;
+        flexDirection: row;
+        height: 20%;
         alignItems: center;
       `;
 
 const AvatarSide = styled(View)`
-        width: 100%;
         display: flex;
-        alignItems: center;
-        justifyContent: center;
-        margin: 15px 0;
+        margin: 15px;
+        shadowRadius: 5;
+        shadowOpacity: 0.2;
+        shadowOffset: { width: 1, height: 1 };
+        shadowColor: #000
       `;
 
 const mapDispatchToProps = {

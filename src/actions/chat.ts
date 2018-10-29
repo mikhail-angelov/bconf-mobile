@@ -15,7 +15,7 @@ import {
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
-import { doJsonAuthRequest, getToken, getRandomColor, getChatImage } from "./helper";
+import { doJsonAuthRequest, getToken, getRandomColor } from "./helper";
 import { BASE_URL, CHAT_URL, MESSAGE_URL, FIND_USERS_URL, } from "./endpoinds";
 
 export const sendMessage = (chatId, message) => {
@@ -33,8 +33,7 @@ export const getChats = () => async dispatch => {
     });
     chats = _.map(chats, chat => (
       {
-        ...chat, chatColor: getRandomColor(chat.chatId),
-        chatImage: getChatImage(chat.chatId)
+        ...chat, chatColor: getRandomColor(chat.chatId)
       }
     ))
     dispatch({
@@ -109,9 +108,8 @@ export const createNewChat = (users) => async (dispatch) => {
       data: { users, chatName: newChatName }
     });
     const chatColor = getRandomColor(newChat.chatId)
-    const chatImage = getChatImage(newChat.chatId)
     const newChatWithColorAndImage = {
-      ...newChat, chatColor, chatImage
+      ...newChat, chatColor
     }
     dispatch(setActiveChat(newChatWithColorAndImage))
     dispatch({
