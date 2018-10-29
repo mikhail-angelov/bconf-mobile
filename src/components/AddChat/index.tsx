@@ -42,6 +42,7 @@ class AddChat extends React.Component<IProps, IState> {
     public createNewChatAndSetActiveChat() {
         const { chat } = this.props
         this.props.createNewChat(chat.usersInNewChat)
+        this.props.deleteAllUsersFromChatLocaly()
     }
 
     public showAddChatButton = () => {

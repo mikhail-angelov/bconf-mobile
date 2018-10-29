@@ -10,12 +10,13 @@ import {
   DELETE_USER_FROM_CHAT_LOCALY,
   FIND_USERS,
   CREATE_NEW_CHAT,
-  DELETE_ALL_USERS_FROM_CHAT_LOCALY
+  DELETE_ALL_USERS_FROM_CHAT_LOCALY,
+  UPDATE_CHAT
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
 import { doJsonAuthRequest, getToken, getRandomColor, getChatImage } from "./helper";
-import { BASE_URL, CHAT_URL, MESSAGE_URL, FIND_USERS_URL } from "./endpoinds";
+import { BASE_URL, CHAT_URL, MESSAGE_URL, FIND_USERS_URL, } from "./endpoinds";
 
 export const sendMessage = (chatId, message) => {
   return {
@@ -41,6 +42,7 @@ export const getChats = () => async dispatch => {
       payload: chats
     });
   } catch (e) {
+    console.log(e)
     dispatch({ type: GET_CHATS_ERROR });
   }
 };
@@ -115,6 +117,25 @@ export const createNewChat = (users) => async (dispatch) => {
     dispatch({
       type: CREATE_NEW_CHAT,
       payload: newChatWithColorAndImage
+    });
+  } catch (e) {
+    console.log("Error :" + e)
+  }
+};
+
+export const saveChatSettings = (chat) => async (dispatch) => {
+  const newChatName = chat.chatName
+  const newChatImage = chat.chatImage
+  try {
+    const newChat = await doJsonAuthRequest({
+      url: CHAT_URL,
+      method: "put",
+      data: { chatId: chat.chatId, chatName: newChatName, chatImage: newChatImage }
+    });
+    dispatch(setActiveChat(newChat))
+    dispatch({
+      type: UPDATE_CHAT,
+      payload: newChat
     });
   } catch (e) {
     console.log("Error :" + e)

@@ -31,12 +31,24 @@ class Chat extends React.PureComponent<IProps> {
     return (
       <ChatView style={{ width: width }}>
         <Header
+          rightIconFunction={() =>
+            Navigation.push("ChatList", {
+              component: {
+                id: 'ChatSettings',
+                name: 'ChatSettings',
+                options: {
+                  topBar: {
+                    visible: false
+                  },
+                }
+              }
+            })}
           chatImage={chat.activeChat.chatImage}
           title={chat.activeChat.chatName}
           subTitle="Last seen recently"
           width={width}
           isAvatarVisible={true}
-          leftIconFunction={() => Navigation.popToRoot("ChatList")}
+          leftIconFunction={() => Navigation.pop("Chat")}
           chatColor={chat.activeChat.chatColor}
           leftIconName="arrow-left" />
         <MessagesList messages={chat.messages} userEmail={auth.email} />

@@ -130,6 +130,7 @@ class ChatList extends React.Component<IProps, IState> {
                 navigateToChat={() =>
                   Navigation.push("ChatList", {
                     component: {
+                      id: 'Chat',
                       name: 'Chat',
                       options: {
                         topBar: {

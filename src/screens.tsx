@@ -10,6 +10,7 @@ import Chat from "./components/Chat";
 import ChatList from "./components/ChatList";
 import ProfileSettings from "./components/ProfileSettings";
 import AddChat from "./components/AddChat";
+import ChatSettings from "./components/ChatSettings";
 
 const store = configureStore({});
 
@@ -57,6 +58,11 @@ export function registerScreens(Navigation) {
   Navigation.registerComponent("AddChat", () => () => (
     <Provider store={store}>
       <AddChat />
+    </Provider>
+  ));
+  Navigation.registerComponent("ChatSettings", () => () => (
+    <Provider store={store}>
+      <ChatSettings />
     </Provider>
   ));
 }

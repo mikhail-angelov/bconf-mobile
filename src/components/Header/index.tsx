@@ -82,22 +82,24 @@ class Header extends React.Component<IProps, IState> {
                             <Text style={{ fontSize: 22, fontWeight: "500", }}>{title}</Text>
                             {subTitle && <Text style={{ fontSize: 12, fontWeight: "700", color: "#aab6b7", marginTop: 3 }}>{subTitle}</Text>}
                         </Title>}
-                    <TouchableOpacity style={isAvatarVisible ? {
-                        width: "15%",
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        shadowRadius: 5,
-                        shadowOpacity: 0.2,
-                        shadowOffset: { width: 1, height: 1 },
-                        shadowColor: { BLACK_COLOR }
-                    } : {
+                    <TouchableOpacity
+                        onPress={isAvatarVisible ? rightIconFunction : null}
+                        style={isAvatarVisible ? {
                             width: "15%",
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                        }
-                    }>
+                            shadowRadius: 5,
+                            shadowOpacity: 0.2,
+                            shadowOffset: { width: 1, height: 1 },
+                            shadowColor: { BLACK_COLOR }
+                        } : {
+                                width: "15%",
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }
+                        }>
                         {isAvatarVisible ? <Avatar srcImg={chatImage} name={title} size="small" avatarColor={chatColor} /> :
                             <Icon.Button name={isSearchBarActive ? 'times' : rightIconName} backgroundColor="transparent"
                                 color={SOFT_BLUE_COLOR} style={{ marginRight: 0 }} size={20}
@@ -143,7 +145,7 @@ const Title = styled(View)`
   alignItems: center;
 `;
 
-const mapStateToProps = ({ auth, chat}) => ({ auth, chat});
+const mapStateToProps = ({ auth, chat }) => ({ auth, chat });
 
 export default connect(
     mapStateToProps
