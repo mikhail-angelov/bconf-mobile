@@ -39,6 +39,7 @@ class ValidatedInput extends React.Component<IProps, IState> {
           value={value}
           onChangeText={this.handleTextChange}
           valid={this.state.valid}
+          autoCapitalize="none"
           {...otherProps}
         />
         {this.state.error.length > 1 && (

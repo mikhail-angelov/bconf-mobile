@@ -76,6 +76,7 @@ class SignUp extends React.Component<IProps, IState> {
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
             rule={validate.password}
+            secureTextEntry={true}
           />
           <Button disabled={!this.isFormValid()} onPress={this.handleSignUp}>
             Sign Up
