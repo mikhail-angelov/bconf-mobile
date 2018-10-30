@@ -39,7 +39,7 @@ class SignUp extends React.Component<IProps, IState> {
   public handleSignUp() {
     if (this.isFormValid()) {
       this.props.signUp({
-        username: this.state.username,
+        name: this.state.username,
         email: this.state.email,
         password: this.state.password
       });
@@ -76,6 +76,7 @@ class SignUp extends React.Component<IProps, IState> {
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
             rule={validate.password}
+            secureTextEntry={true}
           />
           <Button disabled={!this.isFormValid()} onPress={this.handleSignUp}>
             Sign Up

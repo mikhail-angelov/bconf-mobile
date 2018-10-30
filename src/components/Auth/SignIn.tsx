@@ -63,7 +63,8 @@ class SignIn extends React.Component<IProps, IState> {
               onChangeText={email => this.setState({ email })}
               value={this.state.email}
               error={this.state.error.email}
-              textContentType="email"
+              textContentType="emailAddress"
+              autoCapitalize="none"
             />
             <Input
               placeholder="Password"
@@ -73,6 +74,7 @@ class SignIn extends React.Component<IProps, IState> {
               type="password"
               textContentType="password"
               secureTextEntry={true}
+              autoCapitalize="none"
             />
             <LoginErrorNotification>
               {this.props.auth.authError}
