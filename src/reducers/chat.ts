@@ -11,7 +11,9 @@ import {
   DELETE_USER_FROM_CHAT_LOCALY,
   FIND_USERS,
   CREATE_NEW_CHAT,
-  DELETE_ALL_USERS_FROM_CHAT_LOCALY
+  DELETE_ALL_USERS_FROM_CHAT_LOCALY,
+  REFRESH_CHATLIST_START,
+  REFRESH_CHATLIST_END
 } from "../constants/actions";
 import _ from 'lodash'
 
@@ -26,7 +28,8 @@ export const initialState = {
     chatName: '',
     chatColor: '',
     chatId: '',
-  }
+  },
+  refreshingChatList: false
 };
 
 const chat = (state = initialState, action) => {
@@ -75,6 +78,12 @@ const chat = (state = initialState, action) => {
     case CREATE_NEW_CHAT: {
       const updateChats = [...state.chats, action.payload]
       return { ...state, chats: updateChats };
+    }
+    case REFRESH_CHATLIST_START: {
+      return { ...state, refreshingChatList: true };
+    }
+    case REFRESH_CHATLIST_END: {
+      return { ...state, refreshingChatList: false };
     }
     default: {
       return state;

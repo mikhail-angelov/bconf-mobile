@@ -1,8 +1,10 @@
 import React from "react";
-import { View, TextInput, Button } from "react-native";
+import { View, TextInput, Button, Dimensions } from "react-native";
 import { SOFT_BLUE_COLOR, WHITE_COLOR } from "../../helpers/styleConstants";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styled from "styled-components";
+
+const { height } = Dimensions.get('window') // it's for IphoneX
 
 interface IProps {
   handleSendMessage: (textInput) => void;
@@ -65,6 +67,7 @@ const MessageInputView = styled(View)`
   flex-direction: row
   padding: 4px;
   margin: 10px;
+  marginBottom: ${height > 800 ? "30px" : "10px"}
   align-items: center;
   justify-content: center;
   border-width: 1;
