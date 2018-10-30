@@ -9,6 +9,7 @@
     "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug"
   },
   "dependencies": {
+    "@redux-offline/redux-offline": "^2.4.0",
     "@types/jest": "^23.3.2",
     "@types/react-test-renderer": "^16.0.2",
     "@types/styled-components": "^3.0.1",

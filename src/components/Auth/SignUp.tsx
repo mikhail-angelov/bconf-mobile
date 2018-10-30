@@ -39,7 +39,7 @@ class SignUp extends React.Component<IProps, IState> {
   public handleSignUp() {
     if (this.isFormValid()) {
       this.props.signUp({
-        username: this.state.username,
+        name: this.state.username,
         email: this.state.email,
         password: this.state.password
       });

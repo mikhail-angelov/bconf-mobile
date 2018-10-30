@@ -1,5 +1,6 @@
 import React from "react";
 import { Provider } from "react-redux";
+import { AppState } from 'react-native';
 import App from "./components/App";
 import Welcome from "./components/WelcomeScreen";
 import SignIn from "./components/Auth/SignIn";
@@ -9,8 +10,27 @@ import ForgotPassword from "./components/Auth/ForgotPassword";
 import Chat from "./components/Chat";
 import ChatList from "./components/ChatList";
 import ProfileSettings from "./components/ProfileSettings";
+import { FOREGROUND, BACKGROUND, INACTIVE } from "./constants/appState";
 
 const store = configureStore({});
+
+const handleAppStateChange = (nextAppState) => {
+  switch (nextAppState) {
+    case 'active':
+      store.dispatch({ type: FOREGROUND })
+      break;
+    case 'background':
+      store.dispatch({ type: BACKGROUND })
+      break;
+    case 'inactive':
+      store.dispatch({ type: INACTIVE });
+      break;
+    default:
+      return;
+  }
+};
+
+AppState.addEventListener('change', handleAppStateChange);
 
 export function registerScreens(Navigation) {
   Navigation.registerComponent("MobileDemo", () => () => (
