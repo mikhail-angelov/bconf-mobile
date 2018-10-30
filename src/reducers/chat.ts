@@ -6,13 +6,27 @@ import {
   GET_CHATS_ERROR,
   GET_MESSAGES,
   GET_MESSAGES_ERROR,
-  SET_ACTIVE_CHAT
+  SET_ACTIVE_CHAT,
+  ADD_USER_TO_CHAT_LOCALY,
+  DELETE_USER_FROM_CHAT_LOCALY,
+  FIND_USERS,
+  CREATE_NEW_CHAT,
+  DELETE_ALL_USERS_FROM_CHAT_LOCALY
 } from "../constants/actions";
+import _ from 'lodash'
 
 export const initialState = {
   messages: [],
   chats: [],
-  getChatsError: false
+  usersInNewChat: [],
+  getChatsError: false,
+  users: [],
+  activeChat: {
+    chatImage: '',
+    chatName: '',
+    chatColor: '',
+    chatId: '',
+  }
 };
 
 const chat = (state = initialState, action) => {
@@ -37,8 +51,30 @@ const chat = (state = initialState, action) => {
       return { ...state, getChatsError: true };
     }
     case SET_ACTIVE_CHAT: {
-      const { chatId, chatName, chatColor, chatImage } = action.payload;
-      return { ...state, activeChatId: chatId, activeChatName: chatName, activeChatColor: chatColor, activeChatImage: chatImage };
+      return { ...state, activeChat: { ...action.payload } };
+    }
+    case DELETE_ALL_USERS_FROM_CHAT_LOCALY: {
+      return { ...state, usersInNewChat: [] };
+    }
+    case FIND_USERS: {
+      return {
+        ...state,
+        users: action.payload
+      }
+    };
+    case ADD_USER_TO_CHAT_LOCALY: {
+      const updateUsersInNewChat = [...state.usersInNewChat, action.payload]
+      const updateUsers = _.filter(state.users, user => user._id !== action.payload._id)
+      return { ...state, usersInNewChat: updateUsersInNewChat, users: updateUsers };
+    }
+    case DELETE_USER_FROM_CHAT_LOCALY: {
+      const updateUsers = [...state.users, action.payload]
+      const updateUsersInNewChat = _.filter(state.usersInNewChat, user => user._id !== action.payload._id)
+      return { ...state, usersInNewChat: updateUsersInNewChat, users: updateUsers };
+    }
+    case CREATE_NEW_CHAT: {
+      const updateChats = [...state.chats, action.payload]
+      return { ...state, chats: updateChats };
     }
     default: {
       return state;

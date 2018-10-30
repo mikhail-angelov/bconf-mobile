@@ -15,7 +15,7 @@ import {
   SIGN_UP_URL,
   REMIND_PASSWORD_URL,
   AUTH_CHECK_URL,
-  CHANGE_USER_SETTINGS_URL
+  CHANGE_USER_SETTINGS_URL,
 } from "./endpoinds";
 import { AsyncStorage } from "react-native";
 import { AUTH } from "../constants/storage";
@@ -133,7 +133,7 @@ export const saveProfileSettings = ({ name, email, srcAvatar }) => async dispatc
     });
     dispatch({
       type: CHANGE_USER_SETTINGS,
-      payload: { name: resp.username, email: resp.email, srcAvatar: resp.srcAvatar }
+      payload: { name: resp.name, email: resp.email, srcAvatar: resp.srcAvatar }
     });
   } catch (e) {
     console.log("Error: " + e);

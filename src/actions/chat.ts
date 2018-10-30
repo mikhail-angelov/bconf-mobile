@@ -5,12 +5,18 @@ import {
   GET_MESSAGES_ERROR,
   GET_MESSAGES,
   SET_ACTIVE_CHAT,
-  SEND_MESSAGE
+  SEND_MESSAGE,
+  ADD_USER_TO_CHAT_LOCALY,
+  DELETE_USER_FROM_CHAT_LOCALY,
+  FIND_USERS,
+  CREATE_NEW_CHAT,
+  DELETE_ALL_USERS_FROM_CHAT_LOCALY,
+  UPDATE_CHAT
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
-import { doJsonAuthRequest, getToken, getRandomColor, getChatImage } from "./helper";
-import { BASE_URL, CHAT_URL, MESSAGE_URL } from "./endpoinds";
+import { doJsonAuthRequest, getToken, getRandomColor } from "./helper";
+import { BASE_URL, CHAT_URL, MESSAGE_URL, FIND_USERS_URL, } from "./endpoinds";
 
 export const sendMessage = (chatId, message) => {
   return {
@@ -27,8 +33,7 @@ export const getChats = () => async dispatch => {
     });
     chats = _.map(chats, chat => (
       {
-        ...chat, chatColor: getRandomColor(chat._id),
-        chatImage: getChatImage(chat._id)
+        ...chat, chatColor: getRandomColor(chat.chatId)
       }
     ))
     dispatch({
@@ -36,6 +41,7 @@ export const getChats = () => async dispatch => {
       payload: chats
     });
   } catch (e) {
+    console.log(e)
     dispatch({ type: GET_CHATS_ERROR });
   }
 };
@@ -55,7 +61,82 @@ export const getMessages = chatId => async dispatch => {
   }
 };
 
-export const setActiveChat = ({ chatId, chatName, chatColor, chatImage }) => ({
-  type: SET_ACTIVE_CHAT,
-  payload: { chatId, chatName, chatColor, chatImage }
+export const setActiveChat = (chat) => dispatch => {
+  dispatch({ type: SET_ACTIVE_CHAT, payload: chat })
+};
+
+export const findUsers = (username) => async (dispatch) => {
+  try {
+    const users = await doJsonAuthRequest({
+      url: FIND_USERS_URL + username,
+      method: "get",
+      data: { username }
+    });
+    dispatch({
+      type: FIND_USERS,
+      payload: users
+    });
+  } catch (e) {
+    console.log("Error :" + e)
+  }
+};
+
+export const addUserToChatLocaly = (user) => ({
+  type: ADD_USER_TO_CHAT_LOCALY,
+  payload: user
 });
+
+export const deleteUserFromChatLocaly = (user) => ({
+  type: DELETE_USER_FROM_CHAT_LOCALY,
+  payload: user
+});
+
+export const deleteAllUsersFromChatLocaly = () => ({
+  type: DELETE_ALL_USERS_FROM_CHAT_LOCALY,
+});
+
+export const createNewChat = (users) => async (dispatch) => {
+  let newChatName = ""
+  const fistFourUsers = _.take(users, 4)
+  _.map(fistFourUsers, user => {
+    newChatName += user.name + " "
+  })
+  try {
+    const newChat = await doJsonAuthRequest({
+      url: CHAT_URL,
+      method: "post",
+      data: { users, chatName: newChatName }
+    });
+    const chatColor = getRandomColor(newChat.chatId)
+    const newChatWithColorAndImage = {
+      ...newChat, chatColor
+    }
+    dispatch(setActiveChat(newChatWithColorAndImage))
+    dispatch({
+      type: CREATE_NEW_CHAT,
+      payload: newChatWithColorAndImage
+    });
+  } catch (e) {
+    console.log("Error :" + e)
+  }
+};
+
+export const saveChatSettings = (chat) => async (dispatch) => {
+  const newChatName = chat.chatName
+  const newChatImage = chat.chatImage
+  try {
+    const newChat = await doJsonAuthRequest({
+      url: CHAT_URL,
+      method: "put",
+      data: { chatId: chat.chatId, chatName: newChatName, chatImage: newChatImage }
+    });
+    dispatch(setActiveChat(newChat))
+    dispatch({
+      type: UPDATE_CHAT,
+      payload: newChat
+    });
+  } catch (e) {
+    console.log("Error :" + e)
+  }
+};
+

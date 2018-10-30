@@ -15,7 +15,8 @@ const initialState = {
   authError: "",
   signUpError: "",
   authenticated: false,
-  remindPasswordError: ""
+  remindPasswordError: "",
+  users: []
 };
 
 const auth = (state = initialState, action) => {

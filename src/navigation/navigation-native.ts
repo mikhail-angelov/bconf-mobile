@@ -20,10 +20,10 @@ on(NAVIGATE_CHAT_LIST, () => {
   Navigation.setRoot({
     root: {
       stack: {
-        id: "ChatList",
         children: [
           {
             component: {
+              id: "ChatList",
               name: "ChatList",
               options: {
                 topBar: {
@@ -31,9 +31,9 @@ on(NAVIGATE_CHAT_LIST, () => {
                 }
               },
             }
-          }
+          },
         ],
-      }
+      },
     }
   });
 });

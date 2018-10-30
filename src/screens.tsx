@@ -10,6 +10,8 @@ import ForgotPassword from "./components/Auth/ForgotPassword";
 import Chat from "./components/Chat";
 import ChatList from "./components/ChatList";
 import ProfileSettings from "./components/ProfileSettings";
+import AddChat from "./components/AddChat";
+import ChatSettings from "./components/ChatSettings";
 import { FOREGROUND, BACKGROUND, INACTIVE } from "./constants/appState";
 
 const store = configureStore({});
@@ -71,6 +73,16 @@ export function registerScreens(Navigation) {
   Navigation.registerComponent("ProfileSettings", () => () => (
     <Provider store={store}>
       <ProfileSettings />
+    </Provider>
+  ));
+  Navigation.registerComponent("AddChat", () => () => (
+    <Provider store={store}>
+      <AddChat />
+    </Provider>
+  ));
+  Navigation.registerComponent("ChatSettings", () => () => (
+    <Provider store={store}>
+      <ChatSettings />
     </Provider>
   ));
 }
