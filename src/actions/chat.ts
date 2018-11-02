@@ -15,8 +15,9 @@ import {
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
+import RNFetchBlob from 'rn-fetch-blob'
 import { doJsonAuthRequest, getToken, getRandomColor } from "./helper";
-import { BASE_URL, CHAT_URL, MESSAGE_URL, FIND_USERS_URL, } from "./endpoinds";
+import { BASE_URL, CHAT_URL, MESSAGE_URL, FIND_USERS_URL, UPLOAD_URL } from "./endpoinds";
 
 export const sendMessage = (chatId, message) => {
   return {
@@ -121,7 +122,7 @@ export const createNewChat = (users) => async (dispatch) => {
   }
 };
 
-export const saveChatSettings = (chat) => async (dispatch) => {
+export const updateChatSettings = (chat) => async (dispatch) => {
   const newChatName = chat.chatName
   const newChatImage = chat.chatImage
   try {
@@ -139,4 +140,34 @@ export const saveChatSettings = (chat) => async (dispatch) => {
     console.log("Error :" + e)
   }
 };
+
+export const changeChatPicture = (image, chat) => async (dispatch) => {
+  const token = await getToken()
+  RNFetchBlob.fetch('POST', UPLOAD_URL, {
+    Authorization: token,
+    // this is required, otherwise it won't be process as a multipart/form-data request
+    'Content-Type': 'multipart/form-data',
+  }, [
+      {
+        name: image.filename,
+        filename: image.filename,
+        data: RNFetchBlob.wrap(image.path)
+      },
+    ]).then(async (resp) => {
+      const newUrl = await JSON.parse(resp.data)
+      const newChat = await doJsonAuthRequest({
+        url: CHAT_URL,
+        method: "put",
+        data: { ...chat, chatImage: newUrl[image.filename].url }
+      });
+      dispatch(setActiveChat(newChat))
+      dispatch({
+        type: UPDATE_CHAT,
+        payload: newChat
+      });
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
 

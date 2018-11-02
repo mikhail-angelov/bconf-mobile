@@ -155,7 +155,7 @@ class ChatList extends React.Component<IProps, IState> {
                 lastMessageAuthor={chat.lastMessageAuthor}
                 lastMessageTimestamp={chat.lastMessageTimestamp}
                 setActiveChatAndGetMessages={() =>
-                  this.setActiveChatAndGetMessages(chat)}
+                  this.setActiveChatAndGetMessages({ chatId: chat.chatId, chatName: chat.chatName, chatColor: chat.chatColor, chatImage: chat.chatImage })}
               />
             ))}
           </ScrollView>
