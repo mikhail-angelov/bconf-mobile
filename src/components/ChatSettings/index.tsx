@@ -10,6 +10,8 @@ import { updateChatSettings, changeChatPicture } from '../../actions/chat'
 import { Avatar } from "../Avatar";
 import ImagePicker from 'react-native-image-crop-picker';
 import { Navigation } from "react-native-navigation";
+import * as Progress from 'react-native-progress';
+import { SOFT_BLUE_COLOR } from '../../helpers/styleConstants';
 import { goToAuth } from "../../navigation/navigation";
 
 const { width } = Dimensions.get('window')
@@ -26,7 +28,6 @@ interface IProps {
 interface IState {
   isChatEdit: boolean;
   isUploadPhotoButtonVisible: boolean;
-  isModalUploadPhotoVisible: boolean;
   chatName: string;
   chatImage: string;
   error: object;
@@ -42,7 +43,6 @@ class ChatSettings extends React.Component<IProps, IState> {
       error: { chatName: "", chatImage: "", email: "" },
       isChatEdit: false,
       isUploadPhotoButtonVisible: false,
-      isModalUploadPhotoVisible: false,
       photos: [],
     };
   }
@@ -74,7 +74,7 @@ class ChatSettings extends React.Component<IProps, IState> {
 
   public render() {
     const { chat } = this.props
-    const { isChatEdit, isUploadPhotoButtonVisible, isModalUploadPhotoVisible } = this.state
+    const { isChatEdit, isUploadPhotoButtonVisible } = this.state
     const chatSettingsItems = [
       { fieldName: 'chatName' },
       { fieldName: 'chatImage' },
@@ -139,20 +139,27 @@ class ChatSettings extends React.Component<IProps, IState> {
               <Button style={{ width: '100%' }} onPress={() => this.setState({ isUploadPhotoButtonVisible: false })}>Cancel</Button>
             </View>
           </Modal>
-          {/* pictures */}
-          <Modal
-            animationType="slide"
-            transparent={false}
-            visible={isModalUploadPhotoVisible}
-            onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
-            }}>
-          </Modal>
         </View>
+        {chat.uploadingPhoto && <UploadSection>
+          {chat.uploadingPhoto && chat.uploadingPhotoProgress === 0 && <Progress.Circle color={SOFT_BLUE_COLOR} size={100} indeterminate={true} />}
+          {chat.uploadingPhoto && <Progress.Pie color={SOFT_BLUE_COLOR} progress={chat.uploadingPhotoProgress} size={100} />}
+        </UploadSection>}
       </ChatSettingsWrap>
     );
   }
 }
+
+const UploadSection = styled(View)`
+          display: flex; 
+          justifyContent: center;
+          alignItems: center; 
+          backgroundColor: rgba(255, 255, 255, 0.7); 
+          position: absolute; 
+          top: 0; 
+          left: 0; 
+          right: 0;
+          bottom: 0;
+          `;
 
 const ChatSettingsWrap = styled(View)`
             display: flex;
@@ -164,7 +171,7 @@ const ChatSettingsItemsWrap = styled(View)`
             display: flex;
             flexDirection: column;
             width: 70%;
-            justify-content: center;
+            justifyContent: center;
           `;
 
 const ChatSettingsItem = styled(View)`

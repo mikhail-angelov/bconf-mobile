@@ -11,7 +11,10 @@ import {
   FIND_USERS,
   CREATE_NEW_CHAT,
   DELETE_ALL_USERS_FROM_CHAT_LOCALY,
-  UPDATE_CHAT
+  UPDATE_CHAT,
+  UPLOAD_START,
+  UPLOAD_PROGRESS,
+  UPLOAD_END
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
@@ -153,7 +156,26 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
         filename: image.filename,
         data: RNFetchBlob.wrap(image.path)
       },
-    ]).then(async (resp) => {
+    ]).uploadProgress((written, total) => {
+      dispatch({
+        type: UPLOAD_START,
+      });
+      let progress
+      do {
+        dispatch({
+          type: UPLOAD_PROGRESS,
+          payload: written / total
+        });
+        progress = written
+      } while (progress < total)
+    })
+    // listen to download progress event
+    .progress((received, total) => {
+      dispatch({
+        type: UPLOAD_END
+      });
+    })
+    .then(async (resp) => {
       const newUrl = await JSON.parse(resp.data)
       const newChat = await doJsonAuthRequest({
         url: CHAT_URL,

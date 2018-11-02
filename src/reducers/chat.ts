@@ -11,7 +11,10 @@ import {
   DELETE_USER_FROM_CHAT_LOCALY,
   FIND_USERS,
   CREATE_NEW_CHAT,
-  DELETE_ALL_USERS_FROM_CHAT_LOCALY
+  DELETE_ALL_USERS_FROM_CHAT_LOCALY,
+  UPLOAD_START,
+  UPLOAD_END,
+  UPLOAD_PROGRESS
 } from "../constants/actions";
 import _ from 'lodash'
 
@@ -26,7 +29,9 @@ export const initialState = {
     chatName: '',
     chatColor: '',
     chatId: '',
-  }
+  },
+  uploadingPhotoProgress: 0,
+  uploadingPhoto: false
 };
 
 const chat = (state = initialState, action) => {
@@ -75,6 +80,15 @@ const chat = (state = initialState, action) => {
     case CREATE_NEW_CHAT: {
       const updateChats = [...state.chats, action.payload]
       return { ...state, chats: updateChats };
+    }
+    case UPLOAD_START: {
+      return { ...state, uploadingPhoto: true };
+    }
+    case UPLOAD_END: {
+      return { ...state, uploadingPhoto: false, uploadingPhotoProgress: 0 };
+    }
+    case UPLOAD_PROGRESS: {
+      return { ...state, uploadingPhotoProgress: action.payload };
     }
     default: {
       return state;
