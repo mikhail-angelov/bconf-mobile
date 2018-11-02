@@ -22,6 +22,7 @@
     "react-dom": "^16.6.0",
     "react-native": "0.57.4",
     "react-native-config": "^0.11.5",
+    "react-native-fbsdk": "^0.8.0",
     "react-native-firebase": "^5.0.0",
     "react-native-navigation": "^2.0.2630",
     "react-native-typescript-transformer": "^1.2.10",
