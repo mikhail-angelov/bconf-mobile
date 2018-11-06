@@ -142,7 +142,7 @@ class ChatSettings extends React.Component<IProps, IState> {
         </View>
         {chat.uploadingPhoto && <UploadSection>
           {chat.uploadingPhoto && chat.uploadingPhotoProgress === 0 && <Progress.Circle color={SOFT_BLUE_COLOR} size={100} indeterminate={true} />}
-          {chat.uploadingPhoto && <Progress.Pie color={SOFT_BLUE_COLOR} progress={chat.uploadingPhotoProgress} size={100} />}
+          {chat.uploadingPhotoProgress !== 0 && <Progress.Pie color={SOFT_BLUE_COLOR} progress={chat.uploadingPhotoProgress} size={100} />}
         </UploadSection>}
       </ChatSettingsWrap>
     );

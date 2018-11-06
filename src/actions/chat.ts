@@ -145,7 +145,11 @@ export const updateChatSettings = (chat) => async (dispatch) => {
 };
 
 export const changeChatPicture = (image, chat) => async (dispatch) => {
+  console.log(image)
   const token = await getToken()
+  dispatch({
+    type: UPLOAD_START,
+  })
   RNFetchBlob.fetch('POST', UPLOAD_URL, {
     Authorization: token,
     // this is required, otherwise it won't be process as a multipart/form-data request
@@ -154,25 +158,22 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
       {
         name: image.filename,
         filename: image.filename,
-        data: RNFetchBlob.wrap(image.path)
+        data: RNFetchBlob.wrap(image.path),
+        type: image.mime 
       },
-    ]).uploadProgress((written, total) => {
+    ]).uploadProgress({ interval: 50 }, (written, total) => {
       dispatch({
-        type: UPLOAD_START,
+        type: UPLOAD_PROGRESS,
+        payload: written / total
       });
-      let progress
-      do {
-        dispatch({
-          type: UPLOAD_PROGRESS,
-          payload: written / total
-        });
-        progress = written
-      } while (progress < total)
     })
-    // listen to download progress event
     .progress((received, total) => {
       dispatch({
         type: UPLOAD_END
+      });
+      dispatch({
+        type: UPLOAD_PROGRESS,
+        payload: 0
       });
     })
     .then(async (resp) => {
