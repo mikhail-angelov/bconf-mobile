@@ -54,11 +54,12 @@
 		84D57DAF26D94B8EACF43382 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 97D0D73648F044328EF29C01 /* Entypo.ttf */; };
 		857308455B8B4A5E971437EF /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4C230FCD8D14D62BABA31EE /* FontAwesome5_Brands.ttf */; };
 		8CAAA144DD8C4C1082C3D9EB /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 509BD458637C49D09A0DEF8D /* libRNFirebase.a */; };
+		9A001E6021916EEE00CABAD8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A001E5F21916EEE00CABAD8 /* GoogleService-Info.plist */; };
+		9A001E6121916EEE00CABAD8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A001E5F21916EEE00CABAD8 /* GoogleService-Info.plist */; };
 		9A102194218B51E6008B81C4 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A102190218B51D7008B81C4 /* FBSDKLoginKit.framework */; };
 		9A102195218B51E6008B81C4 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A102191218B51DC008B81C4 /* FBSDKShareKit.framework */; };
 		9A102196218B51E6008B81C4 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A102192218B51DE008B81C4 /* Bolts.framework */; };
 		9A102197218B51E6008B81C4 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A102193218B51E6008B81C4 /* FBSDKCoreKit.framework */; };
-		9A977A44218C4A4800C0DFA6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A977A17218C4A4800C0DFA6 /* GoogleService-Info.plist */; };
 		9AFE95B5218356CB00C20A51 /* ios in Resources */ = {isa = PBXBuildFile; fileRef = 9AFE958B218356CA00C20A51 /* ios */; };
 		9F4E4615C7D2442EA4A734D5 /* libRNVectorIcons-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BFA0440A802440F92A2D76B /* libRNVectorIcons-tvOS.a */; };
 		A3B0CB50127B2BE14596610F /* libPods-mobileDemoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2675137FDD07B68178FB9D94 /* libPods-mobileDemoTests.a */; };
@@ -445,11 +446,11 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8E67FEB259A349BFB24FE336 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		97D0D73648F044328EF29C01 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
+		9A001E5F21916EEE00CABAD8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9A102190218B51D7008B81C4 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		9A102191218B51DC008B81C4 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		9A102192218B51DE008B81C4 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		9A102193218B51E6008B81C4 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
-		9A977A17218C4A4800C0DFA6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9AFE958B218356CA00C20A51 /* ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ios; path = "../node_modules/react-native-navigation/lib/ios"; sourceTree = "<group>"; };
 		A568FA12075461314000FD86 /* Pods-mobileDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobileDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-mobileDemo/Pods-mobileDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		ADB2B2D421BB401497A8EE2C /* libReactNativeConfig.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativeConfig.a; sourceTree = "<group>"; };
@@ -624,9 +625,9 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				9A977A17218C4A4800C0DFA6 /* GoogleService-Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				9A001E5F21916EEE00CABAD8 /* GoogleService-Info.plist */,
 			);
 			name = mobileDemo;
 			sourceTree = "<group>";
@@ -945,6 +946,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 7J6PBG2L6P;
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1365,6 +1367,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A001E6121916EEE00CABAD8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1383,12 +1386,12 @@
 				857308455B8B4A5E971437EF /* FontAwesome5_Brands.ttf in Resources */,
 				04E55E797B2C43DD9E7873CB /* FontAwesome5_Regular.ttf in Resources */,
 				3D3A2DE6B2D645CC88C26DA4 /* FontAwesome5_Solid.ttf in Resources */,
+				9A001E6021916EEE00CABAD8 /* GoogleService-Info.plist in Resources */,
 				A8DFCA08E4D74196B35D652A /* Foundation.ttf in Resources */,
 				836CC88CADA2479D98D6EF72 /* Ionicons.ttf in Resources */,
 				B3D972DA18DD4E2282CAADE4 /* MaterialCommunityIcons.ttf in Resources */,
 				22AD5AD89B7645D49CE70D69 /* MaterialIcons.ttf in Resources */,
 				08577908A8F74DD8A05FF120 /* Octicons.ttf in Resources */,
-				9A977A44218C4A4800C0DFA6 /* GoogleService-Info.plist in Resources */,
 				367BA59EF54342B38C7BF570 /* SimpleLineIcons.ttf in Resources */,
 				7B026861237A4F2A9A3A0834 /* Zocial.ttf in Resources */,
 			);
@@ -1655,6 +1658,8 @@
 			baseConfigurationReference = A568FA12075461314000FD86 /* Pods-mobileDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 7J6PBG2L6P;
@@ -1682,6 +1687,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = mobileDemoYatt;
 				PRODUCT_NAME = mobileDemo;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1691,6 +1697,8 @@
 			baseConfigurationReference = 447BC3DD564EF55DC009C169 /* Pods-mobileDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7J6PBG2L6P;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1717,6 +1725,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = mobileDemoYatt;
 				PRODUCT_NAME = mobileDemo;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
