@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 import { goHome } from "../../navigation/navigation";
-import { login } from "../../actions/auth";
+import { login, loginFacebook } from "../../actions/auth";
 import { BLACK_COLOR } from "../../helpers/styleConstants";
 
 import Input from "../CommonUIElements/Input";
@@ -31,6 +31,7 @@ interface IProps {
   login: ({ email, password }) => void;
   auth: { authError: any };
   componentId: string;
+  loginFacebook: (facebookData) => void;
 }
 
 interface IState {
@@ -71,7 +72,7 @@ class SignIn extends React.Component<IProps, IState> {
 
       // login with credential
       const currentUser = await firebase.auth().signInWithCredential(credential);
-
+      this.props.loginFacebook(currentUser.user);
       console.info(JSON.stringify(currentUser.user.toJSON()))
     } catch (e) {
       console.error(e);
@@ -180,7 +181,8 @@ class SignIn extends React.Component<IProps, IState> {
 }
 
 const mapDispatchToProps = {
-  login
+  login,
+  loginFacebook
 };
 
 const mapStateToProps = state => ({ auth: state.auth });

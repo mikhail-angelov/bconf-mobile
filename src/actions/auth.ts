@@ -12,6 +12,7 @@ import {
 import { setAuth, doJsonRequest, doJsonAuthRequest } from "./helper";
 import {
   AUTH_URL,
+  AUTH_FACEBOOK_URL,
   SIGN_UP_URL,
   REMIND_PASSWORD_URL,
   AUTH_CHECK_URL,
@@ -77,6 +78,24 @@ export const login = ({ email, password }) => async dispatch => {
     dispatch(setAuthError("Incorrect username or password"));
   }
 };
+
+export const loginFacebook = (facebookData) => async dispatch => {
+  try {
+    const resp = await doJsonRequest({
+      url: AUTH_FACEBOOK_URL,
+      method: "post",
+      data: facebookData
+    });
+    setAuth({ token: resp.token, userId: resp.user._id });
+    return dispatch({
+      type: AUTH_USER,
+      payload: { token: resp.token, name: resp.user.name, email: resp.user.email, srcAvatar: resp.user.srcAvatar }
+    });
+  } catch (e) {
+    console.log(e);
+    dispatch(setAuthError("Facebook login failure."));
+  }
+}
 
 export const logout = () => dispatch => {
   setAuth({ token: "", userId: "" });
