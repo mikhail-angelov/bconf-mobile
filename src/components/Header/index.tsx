@@ -63,14 +63,14 @@ class Header extends React.Component<IProps, IState> {
             <HeaderWrapper style={{ width }}>
                 <Overlay />
                 <Head>
-                    <TouchableOpacity style={{ width: '15%', paddingLeft: 5 }}>
+                    <LeftSide>
                         <Icon.Button
                             size={16}
                             onPress={() => leftIconFunction()}
                             name={leftIconName}
                             backgroundColor={WHITE_COLOR}
                             color={SOFT_BLUE_COLOR} />
-                    </TouchableOpacity>
+                    </LeftSide>
                     {isSearchBarActive ?
                         <Input
                             placeholder="User name"
@@ -126,6 +126,11 @@ const HeaderWrapper = styled(View)`
 const Overlay = styled(View)`
   height: 20px;
   width: 100%;
+`;
+
+const LeftSide = styled(TouchableOpacity)`
+    width: 15%;
+    paddingLeft: 5;
 `;
 
 const Head = styled(View)`

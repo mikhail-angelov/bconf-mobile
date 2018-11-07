@@ -48,7 +48,7 @@ class Chat extends React.PureComponent<IProps> {
           subTitle="Last seen recently"
           width={width}
           isAvatarVisible={true}
-          leftIconFunction={() => Navigation.pop("Chat")}
+          leftIconFunction={() => Navigation.popToRoot("ChatList")}
           chatColor={chat.activeChat.chatColor}
           leftIconName="arrow-left" />
         <MessagesList messages={chat.messages} userEmail={auth.email} />
