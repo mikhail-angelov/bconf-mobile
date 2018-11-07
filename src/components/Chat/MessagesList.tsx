@@ -18,7 +18,6 @@ export const MessagesList = ({ messages, userEmail }) => (
 const MessagesListWrapper = styled(ScrollView)`
   flex: 1;
   padding: 0 20px;
-  margin: 5px;
   display: flex;
   flex-direction: column;
   backgroundColor: ${WHITE_COLOR};

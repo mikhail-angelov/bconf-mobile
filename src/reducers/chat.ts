@@ -14,7 +14,9 @@ import {
   DELETE_ALL_USERS_FROM_CHAT_LOCALY,
   UPLOAD_START,
   UPLOAD_END,
-  UPLOAD_PROGRESS
+  UPLOAD_PROGRESS,
+  REFRESH_CHATLIST_START,
+  REFRESH_CHATLIST_END
 } from "../constants/actions";
 import _ from 'lodash'
 
@@ -31,7 +33,8 @@ export const initialState = {
     chatId: '',
   },
   uploadingPhotoProgress: 0,
-  uploadingPhoto: false
+  uploadingPhoto: false,
+  refreshingChatList: false
 };
 
 const chat = (state = initialState, action) => {
@@ -89,6 +92,12 @@ const chat = (state = initialState, action) => {
     }
     case UPLOAD_PROGRESS: {
       return { ...state, uploadingPhotoProgress: action.payload };
+    }
+    case REFRESH_CHATLIST_START: {
+      return { ...state, refreshingChatList: true };
+    }
+    case REFRESH_CHATLIST_END: {
+      return { ...state, refreshingChatList: false };
     }
     default: {
       return state;

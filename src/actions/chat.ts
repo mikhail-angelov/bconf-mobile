@@ -14,7 +14,9 @@ import {
   UPDATE_CHAT,
   UPLOAD_START,
   UPLOAD_PROGRESS,
-  UPLOAD_END
+  UPLOAD_END,
+  REFRESH_CHATLIST_END,
+  REFRESH_CHATLIST_START
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
@@ -44,6 +46,7 @@ export const getChats = () => async dispatch => {
       type: GET_CHATS,
       payload: chats
     });
+    dispatch({ type: REFRESH_CHATLIST_END })
   } catch (e) {
     console.log(e)
     dispatch({ type: GET_CHATS_ERROR });
@@ -194,3 +197,7 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
     })
 }
 
+export const refreshChatList = () => async (dispatch) => {
+  dispatch({ type: REFRESH_CHATLIST_START })
+  dispatch(getChats())
+}

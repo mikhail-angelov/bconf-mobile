@@ -1,11 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Dimensions } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styled from "styled-components";
 import Input from "../CommonUIElements/Input"
 import { Avatar } from "../Avatar";
 import { SOFT_BLUE_COLOR, BLACK_COLOR, WHITE_COLOR } from "../../helpers/styleConstants";
+
+const { height } = Dimensions.get('window') // it's for IphoneX
 
 interface IState {
     isSearchBarActive: boolean;
@@ -63,7 +65,7 @@ class Header extends React.Component<IProps, IState> {
             <HeaderWrapper style={{ width }}>
                 <Overlay />
                 <Head>
-                    <LeftSide>
+                    <LeftSide style={{ width: '15%', paddingLeft: 5, display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <Icon.Button
                             size={16}
                             onPress={() => leftIconFunction()}
@@ -119,12 +121,12 @@ const HeaderWrapper = styled(View)`
   flexDirection: column;
   borderBottomWidth: 3;
   borderColor: rgba(0,0,0,0.05);
-  height: 90px;
+  height: ${height > 800 ? "100px" : "90px"};
   backgroundColor: ${WHITE_COLOR};
 `;
 
 const Overlay = styled(View)`
-  height: 20px;
+  height: ${height > 800 ? "35px" : "20px"};
   width: 100%;
 `;
 

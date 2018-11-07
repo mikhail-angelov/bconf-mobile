@@ -2,12 +2,12 @@ import React from "react";
 import { ChatListItem } from "./ChatItem";
 import { connect } from "react-redux";
 import _ from "lodash"
-import { ScrollView, Animated, Dimensions, View, TouchableOpacity, Text } from "react-native";
+import { ScrollView, Animated, Dimensions, View, RefreshControl, Text } from "react-native";
 import styled from "styled-components";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { logout } from "../../actions/auth";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR } from "../../helpers/styleConstants";
-import { getMessages, setActiveChat, getChats } from "../../actions/chat";
+import { getMessages, setActiveChat, getChats, refreshChatList } from "../../actions/chat";
 import { Navigation } from "react-native-navigation";
 import ChatMenu from "../ChatMenu";
 import Header from "../Header";
@@ -27,11 +27,14 @@ interface IProps {
   goHome: () => void;
   logout: () => void;
   getChats: () => void;
+  refreshChatList: () => void;
+  refreshingChatList: boolean;
 }
 
 interface IState {
   isMenuOpen: boolean;
   isAddChatButtonVisible: boolean;
+  refreshing: boolean;
   animated: any;
   addChatButtonAnimate: any;
   currentChatMenuScrollPosition: number;
@@ -46,6 +49,7 @@ class ChatList extends React.Component<IProps, IState> {
       isAddChatButtonVisible: true,
       addChatButtonAnimate: new Animated.Value(0),
       currentChatMenuScrollPosition: 0,
+      refreshing: false,
     };
   }
 
@@ -132,6 +136,12 @@ class ChatList extends React.Component<IProps, IState> {
             leftIconName="align-left"
             rightIconName="user" />
           <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.props.chat.refreshingChatList}
+                onRefresh={() => this.props.refreshChatList()}
+              />
+            }
             onScrollBeginDrag={(event) => this.toggleAddChatButton(event)}>
             {this.props.chat.chats.map(chat => (
               <ChatListItem
@@ -200,7 +210,8 @@ const mapDispatchToProps = {
   getMessages,
   setActiveChat,
   logout,
-  getChats
+  getChats,
+  refreshChatList
 };
 
 export default connect(
