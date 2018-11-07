@@ -123,10 +123,7 @@ class ChatSettings extends React.Component<IProps, IState> {
           <Modal
             animationType="slide"
             transparent={true}
-            visible={isUploadPhotoButtonVisible}
-            onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
-            }}>
+            visible={isUploadPhotoButtonVisible}>
             <View
               style={{ bottom: 0, position: "absolute", width: '95%', marginRight: 10 }}>
               <Button
