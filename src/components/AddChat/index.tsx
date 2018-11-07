@@ -122,6 +122,7 @@ class AddChat extends React.Component<IProps, IState> {
                         this.createNewChatAndSetActiveChat();
                         Navigation.push("ChatList", {
                             component: {
+                                id: 'Chat',
                                 name: 'Chat',
                                 options: {
                                     topBar: {
