@@ -21,6 +21,8 @@ import {
 import { AsyncStorage } from "react-native";
 import { AUTH } from "../constants/storage";
 import { goHome, goToAuth, goWelcome } from "../navigation/navigation";
+import { AccessToken, LoginManager } from 'react-native-fbsdk';
+import firebase from 'react-native-firebase'
 
 export const checkAuth = () => async dispatch => {
   const storage = await AsyncStorage.getItem(AUTH);
@@ -79,23 +81,42 @@ export const login = ({ email, password }) => async dispatch => {
   }
 };
 
-export const loginFacebook = (facebookData) => async dispatch => {
+export const loginFacebook = () => async dispatch => {
   try {
+    const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email']);
+
+    if (result.isCancelled) {
+      throw new Error('User cancelled request');
+    }
+
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (!data) {
+      throw new Error('Something went wrong obtaining the users access token'); 
+    }
+
+    const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+
+    const currentUser = await firebase.auth().signInWithCredential(credential);
+
     const resp = await doJsonRequest({
       url: AUTH_FACEBOOK_URL,
       method: "post",
-      data: facebookData
+      data: currentUser.user
     });
+
     setAuth({ token: resp.token, userId: resp.user._id });
+    
     return dispatch({
       type: AUTH_USER,
       payload: { token: resp.token, name: resp.user.name, email: resp.user.email, srcAvatar: resp.user.srcAvatar }
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     dispatch(setAuthError("Facebook login failure."));
   }
 }
+
 
 export const logout = () => dispatch => {
   setAuth({ token: "", userId: "" });
