@@ -54,7 +54,8 @@ class ChatList extends React.Component<IProps, IState> {
   }
 
   public componentDidUpdate(prevProps) {
-    if (!_.isEqual(prevProps.chat.activeChat, this.props.chat.activeChat)) {
+    if (!_.isEqual(prevProps.chat.activeChat, this.props.chat.activeChat) && !this.props.chat.activeChat.chatId ||
+      !_.isEqual(prevProps.chat.messages, this.props.chat.messages)) {
       this.props.getChats()
     }
   }
@@ -109,6 +110,7 @@ class ChatList extends React.Component<IProps, IState> {
   // }
 
   public render() {
+    const sortedChats = _.sortBy(this.props.chat.chats, chat => (Date.now() - chat.lastMessageTimestamp))
     return (
       <View>
         <ChatMenu
@@ -143,7 +145,7 @@ class ChatList extends React.Component<IProps, IState> {
               />
             }
             onScrollBeginDrag={(event) => this.toggleAddChatButton(event)}>
-            {this.props.chat.chats.map(chat => (
+            {_.map(sortedChats, chat => (
               <ChatListItem
                 navigateToChat={() =>
                   Navigation.push("ChatList", {

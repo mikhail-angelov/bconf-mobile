@@ -7,12 +7,13 @@ import { Navigation } from "react-native-navigation";
 import { MessageInput } from "./MessageInput";
 import { MessagesList } from "./MessagesList";
 import { goToAuth, goHome } from "../../navigation/navigation";
-import { sendMessage } from "../../actions/chat";
+import { sendMessage, setActiveChat } from "../../actions/chat";
 
 interface IProps {
   chat: any;
   auth: any;
   sendMessage: (chatId, text) => void;
+  setActiveChat: () => void;
   chatId: string;
   chatName: string;
   chatImage: string | undefined;
@@ -48,7 +49,11 @@ class Chat extends React.PureComponent<IProps> {
           subTitle="Last seen recently"
           width={width}
           isAvatarVisible={true}
-          leftIconFunction={() => Navigation.popToRoot("ChatList")}
+          leftIconFunction={() => {
+            this.props.setActiveChat()
+            Navigation.popToRoot("ChatList")
+          }
+          }
           chatColor={chat.activeChat.chatColor}
           leftIconName="arrow-left" />
         <MessagesList messages={chat.messages} userEmail={auth.email} />
@@ -69,7 +74,8 @@ const ChatView = styled(KeyboardAvoidingView).attrs({
 `;
 
 const mapDispatchToProps = {
-  sendMessage
+  sendMessage,
+  setActiveChat
 };
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
