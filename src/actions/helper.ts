@@ -1,6 +1,6 @@
 import axios from "axios";
 import _ from "lodash";
-import storage from "./storage";
+import { saveAuth } from "./storage";
 import { AsyncStorage } from "react-native";
 import { AUTH } from "../constants/storage";
 
@@ -9,7 +9,7 @@ export const auth = { token: "", userId: "" };
 export const setAuth = ({ token, userId }) => {
   auth.token = token;
   auth.userId = userId;
-  storage.save(AUTH, auth);
+  saveAuth(AUTH, auth);
 };
 
 export const doJsonRequest = opts => {

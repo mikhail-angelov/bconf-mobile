@@ -31,7 +31,7 @@ const auth = (state = initialState, action) => {
     };
     case AUTH_USER:
     case SIGN_UP_USER: {
-      const { token, name, email, srcAvatar } = action.payload;
+      const { token, name, email, srcAvatar, id } = action.payload;
       return {
         ...state,
         authenticated: true,
@@ -39,7 +39,8 @@ const auth = (state = initialState, action) => {
         token,
         name,
         email,
-        srcAvatar
+        srcAvatar,
+        id
       };
     }
     case AUTH_ERROR: {

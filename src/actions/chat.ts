@@ -16,13 +16,16 @@ import {
   UPLOAD_PROGRESS,
   UPLOAD_END,
   REFRESH_CHATLIST_END,
-  REFRESH_CHATLIST_START
+  REFRESH_CHATLIST_START,
+  GET_CHATLIST_TIMESTAMP
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
 import RNFetchBlob from 'rn-fetch-blob'
+import { AsyncStorage } from "react-native";
 import { doJsonAuthRequest, getToken, getRandomColor } from "./helper";
 import { BASE_URL, CHAT_URL, MESSAGE_URL, FIND_USERS_URL, UPLOAD_URL } from "./endpoinds";
+import { CHAT_LIST_TIMESTAMP } from "../constants/storage";
 
 export const sendMessage = (chatId, message) => {
   return {
@@ -31,7 +34,18 @@ export const sendMessage = (chatId, message) => {
   }
 };
 
+export const getChatlistTimestamp = () => async dispatch => {
+  try {
+    const storage = await AsyncStorage.getItem(CHAT_LIST_TIMESTAMP);
+    const chatlistTimestamp = JSON.parse(storage);
+    dispatch({ type: GET_CHATLIST_TIMESTAMP, payload: chatlistTimestamp })
+  } catch (e) {
+    console.log(e)
+  }
+};
+
 export const getChats = () => async dispatch => {
+  dispatch(getChatlistTimestamp())
   try {
     let chats = await doJsonAuthRequest({
       url: CHAT_URL,
@@ -162,7 +176,7 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
         name: image.filename,
         filename: image.filename,
         data: RNFetchBlob.wrap(image.path),
-        type: image.mime 
+        type: image.mime
       },
     ]).uploadProgress({ interval: 50 }, (written, total) => {
       dispatch({

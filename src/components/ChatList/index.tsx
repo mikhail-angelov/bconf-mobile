@@ -4,9 +4,10 @@ import { connect } from "react-redux";
 import _ from "lodash"
 import { ScrollView, Animated, Dimensions, View, RefreshControl, Text } from "react-native";
 import styled from "styled-components";
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { logout } from "../../actions/auth";
+import { saveChatlistTimestamp } from "../../actions/storage";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR } from "../../helpers/styleConstants";
+import { CHAT_LIST_TIMESTAMP } from "../../constants/storage";
 import { getMessages, setActiveChat, getChats, refreshChatList } from "../../actions/chat";
 import { Navigation } from "react-native-navigation";
 import ChatMenu from "../ChatMenu";
@@ -23,11 +24,14 @@ interface IProps {
   chatColor: string;
   chats: object;
   chatMenuItems: object;
+  auth: object;
+  lastChatsTimestamp: object;
   width: number;
   goHome: () => void;
   logout: () => void;
   getChats: () => void;
   refreshChatList: () => void;
+  saveChatlistTimestamp: (key, data) => void;
   refreshingChatList: boolean;
 }
 
@@ -159,6 +163,7 @@ class ChatList extends React.Component<IProps, IState> {
                       }
                     }
                   })}
+                saveChatlistTimestamp={() => saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...this.props.chat.lastChatsTimestamp, [chat.chatId]: Date.now() })}
                 name={chat.chatName}
                 id={chat.chatId}
                 chatImage={chat.chatImage}
@@ -166,6 +171,9 @@ class ChatList extends React.Component<IProps, IState> {
                 lastMessageText={chat.lastMessageText}
                 lastMessageAuthor={chat.lastMessageAuthor}
                 lastMessageTimestamp={chat.lastMessageTimestamp}
+                haveNewMessages={(this.props.chat.lastChatsTimestamp[chat.chatId] && 
+                  chat.lastMessageTimestamp - this.props.chat.lastChatsTimestamp[chat.chatId] > 0 &&
+                  chat.lastMessageAuthorId !== this.props.auth.id) ? true : false}
                 setActiveChatAndGetMessages={() =>
                   this.setActiveChatAndGetMessages({ chatId: chat.chatId, chatName: chat.chatName, chatColor: chat.chatColor, chatImage: chat.chatImage })}
               />

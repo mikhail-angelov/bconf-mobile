@@ -16,7 +16,8 @@ import {
   UPLOAD_END,
   UPLOAD_PROGRESS,
   REFRESH_CHATLIST_START,
-  REFRESH_CHATLIST_END
+  REFRESH_CHATLIST_END,
+  GET_CHATLIST_TIMESTAMP
 } from "../constants/actions";
 import _ from 'lodash'
 
@@ -92,6 +93,9 @@ const chat = (state = initialState, action) => {
     }
     case UPLOAD_PROGRESS: {
       return { ...state, uploadingPhotoProgress: action.payload };
+    }
+    case GET_CHATLIST_TIMESTAMP: {
+      return { ...state, lastChatsTimestamp: action.payload };
     }
     case REFRESH_CHATLIST_START: {
       return { ...state, refreshingChatList: true };
