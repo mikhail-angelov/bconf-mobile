@@ -43,22 +43,19 @@ const chat = (state = initialState, action) => {
   switch (action.type) {
     case RECEIVE_MESSAGE:
     case NEW_MESSAGE: {
+      let newMessageAttached = state.messages
       if (action.payload.chatId === state.activeChat.chatId) {
-        const newMessageAttached = [...state.messages, action.payload];
-        return { ...state, messages: newMessageAttached };
-      } else if (!state.activeChat.chatId) {
-        const indexChat = _.findIndex(state.chats, (o) => {
-          return o.chatId === action.payload.chatId;
-        })
-        const updChat = {
-          ...state.chats[indexChat], lastMessageTimestamp: action.payload.timestamp, lastMessageText: action.payload.text,
-          lastMessageAuthorId: action.payload.author._id, lastMessageAuthor: action.payload.author.name
-        }
-        const filteredChats = _.filter(state.chats, el => el.chatId !== updChat.chatId)
-        return { ...state, chats: [...filteredChats, updChat] }
-      } else {
-        return state
+        newMessageAttached = [...state.messages, action.payload];
       }
+      const indexChat = _.findIndex(state.chats, (o) => {
+        return o.chatId === action.payload.chatId;
+      })
+      const updChat = {
+        ...state.chats[indexChat], lastMessageTimestamp: action.payload.timestamp, lastMessageText: action.payload.text,
+        lastMessageAuthorId: action.payload.author._id, lastMessageAuthor: action.payload.author.name
+      }
+      const filteredChats = _.filter(state.chats, el => el.chatId !== updChat.chatId)
+      return { ...state, chats: [...filteredChats, updChat], messages: newMessageAttached }
     }
     case GET_CHATS: {
       const chats = action.payload;

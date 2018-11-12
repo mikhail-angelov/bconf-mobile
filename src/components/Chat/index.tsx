@@ -8,15 +8,16 @@ import { MessageInput } from "./MessageInput";
 import { MessagesList } from "./MessagesList";
 import { CHAT_LIST_TIMESTAMP } from "../../constants/storage";
 
-import { goToAuth, goHome } from "../../navigation/navigation";
+import { goToAuth } from "../../navigation/navigation";
 import { saveChatlistTimestamp } from "../../actions/storage";
-import { sendMessage, setActiveChat } from "../../actions/chat";
+import { sendMessage, setActiveChat, getChatlistTimestamp } from "../../actions/chat";
 
 interface IProps {
   chat: any;
   auth: any;
   sendMessage: (chatId, text) => void;
   setActiveChat: () => void;
+  getChatlistTimestamp: () => void;
   chatId: string;
   chatName: string;
   chatImage: string | undefined;
@@ -59,6 +60,7 @@ class Chat extends React.PureComponent<IProps> {
           width={width}
           isAvatarVisible={true}
           leftIconFunction={() => {
+            this.props.getChatlistTimestamp()
             this.props.setActiveChat()
             Navigation.popToRoot("ChatList")
           }
@@ -84,7 +86,8 @@ const ChatView = styled(KeyboardAvoidingView).attrs({
 
 const mapDispatchToProps = {
   sendMessage,
-  setActiveChat
+  setActiveChat,
+  getChatlistTimestamp
 };
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });

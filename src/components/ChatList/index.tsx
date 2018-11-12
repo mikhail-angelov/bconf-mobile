@@ -57,12 +57,6 @@ class ChatList extends React.Component<IProps, IState> {
     };
   }
 
-  public componentDidUpdate(prevProps) {
-    if (!_.isEqual(prevProps.chat.activeChat, this.props.chat.activeChat) && !this.props.chat.activeChat.chatId) {
-      this.props.getChats()
-    }
-  }
-
   public showChatMenu = () => {
     this.setState({ isMenuOpen: true })
     Animated.timing(this.state.animated, {
