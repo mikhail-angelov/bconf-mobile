@@ -58,8 +58,7 @@ class ChatList extends React.Component<IProps, IState> {
   }
 
   public componentDidUpdate(prevProps) {
-    if (!_.isEqual(prevProps.chat.activeChat, this.props.chat.activeChat) && !this.props.chat.activeChat.chatId ||
-      !_.isEqual(prevProps.chat.messages, this.props.chat.messages)) {
+    if (!_.isEqual(prevProps.chat.activeChat, this.props.chat.activeChat) && !this.props.chat.activeChat.chatId) {
       this.props.getChats()
     }
   }
@@ -171,9 +170,9 @@ class ChatList extends React.Component<IProps, IState> {
                 lastMessageText={chat.lastMessageText}
                 lastMessageAuthor={chat.lastMessageAuthor}
                 lastMessageTimestamp={chat.lastMessageTimestamp}
-                haveNewMessages={(this.props.chat.lastChatsTimestamp[chat.chatId] && 
+                haveNewMessages={!!(this.props.chat.lastChatsTimestamp &&
                   chat.lastMessageTimestamp - this.props.chat.lastChatsTimestamp[chat.chatId] > 0 &&
-                  chat.lastMessageAuthorId !== this.props.auth.id) ? true : false}
+                  chat.lastMessageAuthorId !== this.props.auth.id)}
                 setActiveChatAndGetMessages={() =>
                   this.setActiveChatAndGetMessages({ chatId: chat.chatId, chatName: chat.chatName, chatColor: chat.chatColor, chatImage: chat.chatImage })}
               />
