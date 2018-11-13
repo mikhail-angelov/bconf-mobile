@@ -5,7 +5,7 @@ import {
   Animated,
   Easing,
   KeyboardAvoidingView,
-  View, TouchableOpacity, Text, WebView
+  View, TouchableOpacity, Text, WebView, Modal, StyleSheet
 } from "react-native";
 import { goHome } from "../../navigation/navigation";
 import { login, loginGithub, loginFacebook } from "../../actions/auth";
@@ -16,7 +16,6 @@ import Button from "../CommonUIElements/Button";
 import Link from "../CommonUIElements/Link";
 import { Navigation } from "react-native-navigation";
 import Config from 'react-native-config';
-
 
 import {
   Header,
@@ -41,7 +40,7 @@ interface IState {
   password: string;
   email: string;
   error: { email: string; password: string };
-  showWeb: boolean;
+  showGithubWebview: boolean;
 }
 class SignIn extends React.Component<IProps, IState> {
   constructor(props) {
@@ -51,38 +50,38 @@ class SignIn extends React.Component<IProps, IState> {
       password: "",
       email: "",
       error: { email: "", password: "" },
-      showWeb: false
+      showGithubWebview: false,
     };
   }
   onLoad = async (state) => {
-    console.log('load: ', state);
     if (state.url.indexOf('code') >= 0) {
-      console.log('response: ', state);
-      const code = state.url.split('=')[1];
-      console.log('github code: ', code);
-      const res = await this.props.loginGithub(code);
-      console.log('res', res
-      )
-      this.setState({ showWeb: false });
+      const githubCode = state.url.split('=')[1];
+      await this.props.loginGithub(githubCode);
+      this.setState({ showGithubWebview: false });
     }
   }
 
   hide = () => {
-    this.setState({ showWeb: false });
+    this.setState({ showGithubWebview: false });
   }
 
   public render() {
-    return this.state.showWeb ? (
-      <View>
-        <TouchableOpacity onPress={this.hide.bind(this)} style={{ height: 40 }}>
-          <Text>close</Text>
-        </TouchableOpacity>
+    return this.state.showGithubWebview ? (
+      <View style={styles.container}>
+        <View style={styles.topbar}>
+          <TouchableOpacity
+            onPress={this.hide.bind(this)}
+          >
+            <Text>Go Back</Text>
+          </TouchableOpacity>
+        </View>
         <WebView
           originWhitelist={['*']}
           onNavigationStateChange={this.onLoad.bind(this)}
           source={{ uri: `https://github.com/login/oauth/authorize?client_id=${Config.GITHUB_CLIENT_ID}&scope=user` }}
         />
-      </View>) :
+      </View>
+    ) :
       (<Animated.View
         style={{ width, transform: [{ translateX: this.state.xPosition }] }}
       >
@@ -125,7 +124,7 @@ class SignIn extends React.Component<IProps, IState> {
               Facebook Login
             </Button>
             <Button
-              onPress={() => this.setState({ showWeb: true })}
+              onPress={() => this.setState({ showGithubWebview: true })}
             >
               Github Login
             </Button>
@@ -185,6 +184,22 @@ class SignIn extends React.Component<IProps, IState> {
     }
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 15,
+    backgroundColor: '#F5FCFF',
+  },
+  topbar: {
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  topbarTextDisabled: {
+    color: 'gray'
+  }
+});
 
 const mapDispatchToProps = {
   login,
