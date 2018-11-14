@@ -16,7 +16,8 @@ import {
   UPLOAD_END,
   UPLOAD_PROGRESS,
   REFRESH_CHATLIST_START,
-  REFRESH_CHATLIST_END
+  REFRESH_CHATLIST_END,
+  GET_CHATLIST_TIMESTAMP
 } from "../constants/actions";
 import _ from 'lodash'
 
@@ -34,15 +35,27 @@ export const initialState = {
   },
   uploadingPhotoProgress: 0,
   uploadingPhoto: false,
-  refreshingChatList: false
+  refreshingChatList: false,
+  lastChatsTimestamp: {}
 };
 
 const chat = (state = initialState, action) => {
   switch (action.type) {
     case RECEIVE_MESSAGE:
     case NEW_MESSAGE: {
-      const newMessageAttached = [...state.messages, action.payload];
-      return { ...state, messages: newMessageAttached };
+      let newMessageAttached = state.messages
+      if (action.payload.chatId === state.activeChat.chatId) {
+        newMessageAttached = [...state.messages, action.payload];
+      }
+      const indexChat = _.findIndex(state.chats, (o) => {
+        return o.chatId === action.payload.chatId;
+      })
+      const updChat = {
+        ...state.chats[indexChat], lastMessageTimestamp: action.payload.timestamp, lastMessageText: action.payload.text,
+        lastMessageAuthorId: action.payload.author._id, lastMessageAuthor: action.payload.author.name
+      }
+      const filteredChats = _.filter(state.chats, el => el.chatId !== updChat.chatId)
+      return { ...state, chats: [...filteredChats, updChat], messages: newMessageAttached }
     }
     case GET_CHATS: {
       const chats = action.payload;
@@ -92,6 +105,9 @@ const chat = (state = initialState, action) => {
     }
     case UPLOAD_PROGRESS: {
       return { ...state, uploadingPhotoProgress: action.payload };
+    }
+    case GET_CHATLIST_TIMESTAMP: {
+      return { ...state, lastChatsTimestamp: action.payload };
     }
     case REFRESH_CHATLIST_START: {
       return { ...state, refreshingChatList: true };

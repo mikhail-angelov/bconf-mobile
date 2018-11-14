@@ -41,7 +41,7 @@ export const checkAuth = () => async dispatch => {
       goHome();
       dispatch({
         type: AUTH_USER,
-        payload: { token, name: user.name, email: user.email, srcAvatar: user.srcAvatar }
+        payload: { token, name: user.name, email: user.email, srcAvatar: user.srcAvatar, id: user._id }
       });
       dispatch({
         type: UPLOAD_PROGRESS,

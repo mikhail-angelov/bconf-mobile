@@ -24,48 +24,15 @@ interface IProps {
     users: object;
     deleteAllUsersFromChatLocaly: () => void
 }
-
-interface IState {
-    isCreateChatButtonVisible: boolean;
-    createChatButtonAnimate: any;
-}
-
-class AddChat extends React.Component<IProps, IState> {
+class AddChat extends React.Component<IProps> {
     constructor(props) {
         super(props);
-        this.state = {
-            isCreateChatButtonVisible: false,
-            createChatButtonAnimate: new Animated.Value(0),
-        }
     }
 
     public createNewChatAndSetActiveChat() {
         const { chat } = this.props
         this.props.createNewChat(chat.usersInNewChat)
         this.props.deleteAllUsersFromChatLocaly()
-    }
-
-    public showAddChatButton = () => {
-        this.setState({ isCreateChatButtonVisible: true })
-        Animated.timing(this.state.createChatButtonAnimate, {
-            toValue: 1,
-            duration: 500,
-        }).start();
-    };
-
-    public closeAddChatButton = () => {
-        Animated.timing(this.state.createChatButtonAnimate, {
-            toValue: 0,
-            duration: 500,
-        }).start(() => this.setState({ isCreateChatButtonVisible: false }));
-    };
-
-    public componentDidUpdate(prevProps) {
-        if (prevProps.chat.usersInNewChat.length !== this.props.chat.usersInNewChat.length && this.props.chat.usersInNewChat.length > 0) {
-            this.showAddChatButton()
-        } else if (prevProps.chat.usersInNewChat.length !== this.props.chat.usersInNewChat.length && this.props.chat.usersInNewChat.length === 0) {
-            this.closeAddChatButton()
-        }
     }
 
     public componentWillReceiveProps(nextProps) {
@@ -116,8 +83,7 @@ class AddChat extends React.Component<IProps, IState> {
                     </UserList>
                 </AddChatView>
                 <AppearedButton
-                    isButtonVisible={this.state.isCreateChatButtonVisible}
-                    buttonAnimate={this.state.createChatButtonAnimate}
+                    isButtonVisible={this.props.chat.usersInNewChat.length > 0}
                     buttonHandler={() => {
                         this.createNewChatAndSetActiveChat();
                         Navigation.push("ChatList", {

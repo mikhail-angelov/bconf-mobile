@@ -15,18 +15,38 @@ interface IProps {
   reverseAppear: boolean;
 }
 
-class UIAppearedButton extends React.PureComponent<IProps> {
+class UIAppearedButton extends React.Component<IProps> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      buttonAnimate: new Animated.Value(0),
+    }
+  }
+
+  public componentDidUpdate(prevProps) {
+    if (prevProps.isButtonVisible !== this.props.isButtonVisible && this.props.isButtonVisible) {
+      Animated.timing(this.state.buttonAnimate, {
+        toValue: 1,
+        duration: 500,
+      }).start();
+    } else if (prevProps.isButtonVisible !== this.props.isButtonVisible && !this.props.isButtonVisible) {
+      Animated.timing(this.state.buttonAnimate, {
+        toValue: 0,
+        duration: 500,
+      }).start();
+    }
+  }
+
   public render() {
-    const { isButtonVisible, buttonAnimate, buttonHandler, iconName, iconSize, buttonText, reverseAppear } = this.props
+    const { buttonHandler, iconName, iconSize, buttonText, reverseAppear } = this.props
     return (
       <AppearedButtonWrap
         onPress={() => buttonHandler()}>
         <AppearedButton
           buttonText={buttonText}
           style={{
-            display: isButtonVisible ? "flex" : 'none',
             transform: [{
-              translateY: buttonAnimate.interpolate(
+              translateY: this.state.buttonAnimate.interpolate(
                 {
                   inputRange: [0, 1],
                   outputRange: reverseAppear ? [0, 100] : [100, 0],

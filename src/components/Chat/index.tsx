@@ -6,13 +6,18 @@ import Header from "../Header";
 import { Navigation } from "react-native-navigation";
 import { MessageInput } from "./MessageInput";
 import { MessagesList } from "./MessagesList";
-import { goToAuth, goHome } from "../../navigation/navigation";
-import { sendMessage } from "../../actions/chat";
+import { CHAT_LIST_TIMESTAMP } from "../../constants/storage";
+
+import { goToAuth } from "../../navigation/navigation";
+import { saveChatlistTimestamp } from "../../actions/storage";
+import { sendMessage, setActiveChat, getChatlistTimestamp } from "../../actions/chat";
 
 interface IProps {
   chat: any;
   auth: any;
   sendMessage: (chatId, text) => void;
+  setActiveChat: () => void;
+  getChatlistTimestamp: () => void;
   chatId: string;
   chatName: string;
   chatImage: string | undefined;
@@ -26,8 +31,14 @@ class Chat extends React.PureComponent<IProps> {
     }
   }
 
+  public componentDidUpdate(prevProps) {
+    if (prevProps.chat.messages.length !== this.props.chat.messages.length && this.props.chat.messages[this.props.chat.messages.length - 1].chatId === this.props.chat.activeChat.chatId) {
+      saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...this.props.chat.lastChatsTimestamp, [this.props.chat.activeChat.chatId]: Date.now() })
+    }
+  }
+
   public render() {
-    const { chat, width, auth } = this.props
+    const { chat, width, auth } = this.props;
     return (
       <ChatView style={{ width: width }}>
         <Header
@@ -48,7 +59,12 @@ class Chat extends React.PureComponent<IProps> {
           subTitle="Last seen recently"
           width={width}
           isAvatarVisible={true}
-          leftIconFunction={() => Navigation.popToRoot("ChatList")}
+          leftIconFunction={() => {
+            this.props.getChatlistTimestamp()
+            this.props.setActiveChat()
+            Navigation.popToRoot("ChatList")
+          }
+          }
           chatColor={chat.activeChat.chatColor}
           leftIconName="arrow-left" />
         <MessagesList messages={chat.messages} userEmail={auth.email} />
@@ -69,7 +85,9 @@ const ChatView = styled(KeyboardAvoidingView).attrs({
 `;
 
 const mapDispatchToProps = {
-  sendMessage
+  sendMessage,
+  setActiveChat,
+  getChatlistTimestamp
 };
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });

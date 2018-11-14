@@ -1,9 +1,9 @@
 import { AsyncStorage } from "react-native";
 
-const save = (key, data) => {
+export const saveAuth = (key, data) => {
   AsyncStorage.setItem(key, JSON.stringify(data));
 };
 
-export default {
-  save
+export const saveChatlistTimestamp = (key, data) => {
+  AsyncStorage.setItem(key, JSON.stringify(data));
 };

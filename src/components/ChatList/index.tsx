@@ -4,14 +4,16 @@ import { connect } from "react-redux";
 import _ from "lodash"
 import { ScrollView, Animated, Dimensions, View, RefreshControl, Text } from "react-native";
 import styled from "styled-components";
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { logout } from "../../actions/auth";
+import { saveChatlistTimestamp } from "../../actions/storage";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR } from "../../helpers/styleConstants";
+import { CHAT_LIST_TIMESTAMP } from "../../constants/storage";
 import { getMessages, setActiveChat, getChats, refreshChatList } from "../../actions/chat";
 import { Navigation } from "react-native-navigation";
 import ChatMenu from "../ChatMenu";
 import Header from "../Header";
 import AppearedButton from "../CommonUIElements/AppearedButton";
+import selector from "./selector";
 
 const { width } = Dimensions.get('window')
 interface IProps {
@@ -23,11 +25,14 @@ interface IProps {
   chatColor: string;
   chats: object;
   chatMenuItems: object;
+  auth: object;
+  lastChatsTimestamp: object;
   width: number;
   goHome: () => void;
   logout: () => void;
   getChats: () => void;
   refreshChatList: () => void;
+  saveChatlistTimestamp: (key, data) => void;
   refreshingChatList: boolean;
 }
 
@@ -36,7 +41,6 @@ interface IState {
   isAddChatButtonVisible: boolean;
   refreshing: boolean;
   animated: any;
-  addChatButtonAnimate: any;
   currentChatMenuScrollPosition: number;
 }
 
@@ -47,16 +51,9 @@ class ChatList extends React.Component<IProps, IState> {
       isMenuOpen: false,
       animated: new Animated.Value(0),
       isAddChatButtonVisible: true,
-      addChatButtonAnimate: new Animated.Value(0),
       currentChatMenuScrollPosition: 0,
       refreshing: false,
     };
-  }
-
-  public componentDidUpdate(prevProps) {
-    if (!_.isEqual(prevProps.chat.activeChat, this.props.chat.activeChat)) {
-      this.props.getChats()
-    }
   }
 
   public showChatMenu = () => {
@@ -67,27 +64,12 @@ class ChatList extends React.Component<IProps, IState> {
     }).start();
   };
 
-  public showAddChatButton = () => {
-    this.setState({ isAddChatButtonVisible: true })
-    Animated.timing(this.state.addChatButtonAnimate, {
-      toValue: 0,
-      duration: 500,
-    }).start();
-  };
-
-  public closeAddChatButton = () => {
-    Animated.timing(this.state.addChatButtonAnimate, {
-      toValue: 1,
-      duration: 500,
-    }).start(() => this.setState({ isAddChatButtonVisible: false }));
-  };
-
   public toggleAddChatButton = (event) => {
-    const { currentChatMenuScrollPosition } = this.state
-    if (currentChatMenuScrollPosition < event.nativeEvent.contentOffset.y) {
-      this.closeAddChatButton()
+    const { currentChatMenuScrollPosition, isAddChatButtonVisible } = this.state
+    if (event.nativeEvent.contentOffset.y - currentChatMenuScrollPosition > 10) {
+      this.setState({ isAddChatButtonVisible: false })
     } else {
-      this.showAddChatButton()
+      this.setState({ isAddChatButtonVisible: true })
     }
     this.setState({ currentChatMenuScrollPosition: event.nativeEvent.contentOffset.y })
   }
@@ -143,7 +125,7 @@ class ChatList extends React.Component<IProps, IState> {
               />
             }
             onScrollBeginDrag={(event) => this.toggleAddChatButton(event)}>
-            {this.props.chat.chats.map(chat => (
+            {_.map(this.props.sortedChats, chat => (
               <ChatListItem
                 navigateToChat={() =>
                   Navigation.push("ChatList", {
@@ -157,6 +139,7 @@ class ChatList extends React.Component<IProps, IState> {
                       }
                     }
                   })}
+                saveChatlistTimestamp={() => saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...this.props.chat.lastChatsTimestamp, [chat.chatId]: Date.now() })}
                 name={chat.chatName}
                 id={chat.chatId}
                 chatImage={chat.chatImage}
@@ -164,14 +147,16 @@ class ChatList extends React.Component<IProps, IState> {
                 lastMessageText={chat.lastMessageText}
                 lastMessageAuthor={chat.lastMessageAuthor}
                 lastMessageTimestamp={chat.lastMessageTimestamp}
+                haveNewMessages={!!(this.props.chat.lastChatsTimestamp &&
+                  chat.lastMessageTimestamp - this.props.chat.lastChatsTimestamp[chat.chatId] > 0 &&
+                  chat.lastMessageAuthorId !== this.props.auth.id)}
                 setActiveChatAndGetMessages={() =>
                   this.setActiveChatAndGetMessages({ chatId: chat.chatId, chatName: chat.chatName, chatColor: chat.chatColor, chatImage: chat.chatImage })}
               />
             ))}
           </ScrollView>
           <AppearedButton
-            isButtonVisible={this.state.isAddChatButtonVisible}
-            buttonAnimate={this.state.addChatButtonAnimate}
+            isButtonVisible={this.state.isAddChatButtonVisible}            
             buttonHandler={() => {
               Navigation.push("ChatList", {
                 component: {
@@ -204,7 +189,7 @@ const ChatListWrapper = styled(View)`
         position: relative;
       `;
 
-const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
+const mapStateToProps = state => selector(state)
 
 const mapDispatchToProps = {
   getMessages,
