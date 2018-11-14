@@ -3,13 +3,12 @@
 MobileDemo is a simple chat mobile application built using React Native (0.57). 
 
 *Note: for now it's adapted to work on iOS only. Android version will be ready soon.*
-|   |  |  |
+
+|  |  |  |
 | ------------- | ------------- | ------------- |
 | <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot1.png" width="300"/>  | <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot2.png" width="300"/>  | <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot3.png" width="300"/>  |
-| <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot4.png" width="300"/> | <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot5.png" width="300"/> | <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot6.png" width="300"/> |
-| <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot7.png" width="300"/>  | <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot8.png" width="300"/>  |  <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot9.png" width="300"/>  |
-| <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot10.png" width="300"/>  |
-
+| <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot4.png" width="300"/>  | <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot10.png" width="300"/>  | <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot5.png" width="300"/>  |
+| <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot6.png" width="300"/>  | <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot8.png" width="300"/>  | <img src="https://github.com/mikhail-angelov/mobile-demo/blob/master/screenshots/screenshot9.png" width="300"/>  |
 ### Tech
 
 MobileDemo uses a number of open source projects to work properly:
