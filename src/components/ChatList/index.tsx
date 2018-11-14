@@ -13,6 +13,7 @@ import { Navigation } from "react-native-navigation";
 import ChatMenu from "../ChatMenu";
 import Header from "../Header";
 import AppearedButton from "../CommonUIElements/AppearedButton";
+import selector from "./selector";
 
 const { width } = Dimensions.get('window')
 interface IProps {
@@ -40,7 +41,6 @@ interface IState {
   isAddChatButtonVisible: boolean;
   refreshing: boolean;
   animated: any;
-  addChatButtonAnimate: any;
   currentChatMenuScrollPosition: number;
 }
 
@@ -51,7 +51,6 @@ class ChatList extends React.Component<IProps, IState> {
       isMenuOpen: false,
       animated: new Animated.Value(0),
       isAddChatButtonVisible: true,
-      addChatButtonAnimate: new Animated.Value(0),
       currentChatMenuScrollPosition: 0,
       refreshing: false,
     };
@@ -65,27 +64,12 @@ class ChatList extends React.Component<IProps, IState> {
     }).start();
   };
 
-  public showAddChatButton = () => {
-    this.setState({ isAddChatButtonVisible: true })
-    Animated.timing(this.state.addChatButtonAnimate, {
-      toValue: 0,
-      duration: 500,
-    }).start();
-  };
-
-  public closeAddChatButton = () => {
-    Animated.timing(this.state.addChatButtonAnimate, {
-      toValue: 1,
-      duration: 500,
-    }).start(() => this.setState({ isAddChatButtonVisible: false }));
-  };
-
   public toggleAddChatButton = (event) => {
-    const { currentChatMenuScrollPosition } = this.state
-    if (currentChatMenuScrollPosition < event.nativeEvent.contentOffset.y) {
-      this.closeAddChatButton()
+    const { currentChatMenuScrollPosition, isAddChatButtonVisible } = this.state
+    if (event.nativeEvent.contentOffset.y - currentChatMenuScrollPosition > 10) {
+      this.setState({ isAddChatButtonVisible: false })
     } else {
-      this.showAddChatButton()
+      this.setState({ isAddChatButtonVisible: true })
     }
     this.setState({ currentChatMenuScrollPosition: event.nativeEvent.contentOffset.y })
   }
@@ -107,7 +91,6 @@ class ChatList extends React.Component<IProps, IState> {
   // }
 
   public render() {
-    const sortedChats = _.sortBy(this.props.chat.chats, chat => (Date.now() - chat.lastMessageTimestamp))
     return (
       <View>
         <ChatMenu
@@ -142,7 +125,7 @@ class ChatList extends React.Component<IProps, IState> {
               />
             }
             onScrollBeginDrag={(event) => this.toggleAddChatButton(event)}>
-            {_.map(sortedChats, chat => (
+            {_.map(this.props.sortedChats, chat => (
               <ChatListItem
                 navigateToChat={() =>
                   Navigation.push("ChatList", {
@@ -173,8 +156,7 @@ class ChatList extends React.Component<IProps, IState> {
             ))}
           </ScrollView>
           <AppearedButton
-            isButtonVisible={this.state.isAddChatButtonVisible}
-            buttonAnimate={this.state.addChatButtonAnimate}
+            isButtonVisible={this.state.isAddChatButtonVisible}            
             buttonHandler={() => {
               Navigation.push("ChatList", {
                 component: {
@@ -207,7 +189,7 @@ const ChatListWrapper = styled(View)`
         position: relative;
       `;
 
-const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
+const mapStateToProps = state => selector(state)
 
 const mapDispatchToProps = {
   getMessages,
