@@ -4,17 +4,18 @@ import {
   Dimensions,
   Animated,
   Easing,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  View, TouchableOpacity, Text, WebView, Modal, StyleSheet
 } from "react-native";
 import { goHome } from "../../navigation/navigation";
-import { login, loginFacebook } from "../../actions/auth";
+import { login, loginGithub, loginFacebook } from "../../actions/auth";
 import { BLACK_COLOR } from "../../helpers/styleConstants";
 
 import Input from "../CommonUIElements/Input";
 import Button from "../CommonUIElements/Button";
 import Link from "../CommonUIElements/Link";
 import { Navigation } from "react-native-navigation";
-
+import Config from 'react-native-config';
 
 import {
   Header,
@@ -31,6 +32,7 @@ interface IProps {
   auth: { authError: any };
   componentId: string;
   loginFacebook: () => void;
+  loginGithub: (code) => void;
 }
 
 interface IState {
@@ -38,6 +40,7 @@ interface IState {
   password: string;
   email: string;
   error: { email: string; password: string };
+  showGithubWebview: boolean;
 }
 class SignIn extends React.Component<IProps, IState> {
   constructor(props) {
@@ -46,13 +49,40 @@ class SignIn extends React.Component<IProps, IState> {
       xPosition: new Animated.Value(300),
       password: "",
       email: "",
-      error: { email: "", password: "" }
+      error: { email: "", password: "" },
+      showGithubWebview: false,
     };
+  }
+  onLoad = async (state) => {
+    if (state.url.indexOf('code') >= 0) {
+      const githubCode = state.url.split('=')[1];
+      await this.props.loginGithub(githubCode);
+      this.setState({ showGithubWebview: false });
+    }
+  }
+
+  hide = () => {
+    this.setState({ showGithubWebview: false });
   }
 
   public render() {
-    return (
-      <Animated.View
+    return this.state.showGithubWebview ? (
+      <View style={styles.container}>
+        <View style={styles.topbar}>
+          <TouchableOpacity
+            onPress={this.hide.bind(this)}
+          >
+            <Text>Go Back</Text>
+          </TouchableOpacity>
+        </View>
+        <WebView
+          originWhitelist={['*']}
+          onNavigationStateChange={this.onLoad.bind(this)}
+          source={{ uri: `https://github.com/login/oauth/authorize?client_id=${Config.GITHUB_CLIENT_ID}&scope=user` }}
+        />
+      </View>
+    ) :
+      (<Animated.View
         style={{ width, transform: [{ translateX: this.state.xPosition }] }}
       >
         <KeyboardAvoidingView behavior="padding">
@@ -93,6 +123,11 @@ class SignIn extends React.Component<IProps, IState> {
             >
               Facebook Login
             </Button>
+            <Button
+              onPress={() => this.setState({ showGithubWebview: true })}
+            >
+              Github Login
+            </Button>
             <Link
               color={BLACK_COLOR}
               onPress={() => {
@@ -117,8 +152,7 @@ class SignIn extends React.Component<IProps, IState> {
             />
           </Body>
         </KeyboardAvoidingView>
-      </Animated.View>
-    );
+      </Animated.View>)
   }
 
   public componentDidMount() {
@@ -151,9 +185,26 @@ class SignIn extends React.Component<IProps, IState> {
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 15,
+    backgroundColor: '#F5FCFF',
+  },
+  topbar: {
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  topbarTextDisabled: {
+    color: 'gray'
+  }
+});
+
 const mapDispatchToProps = {
   login,
-  loginFacebook
+  loginGithub,
+  loginFacebook,
 };
 
 const mapStateToProps = state => ({ auth: state.auth });

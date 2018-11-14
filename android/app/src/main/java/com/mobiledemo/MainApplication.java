@@ -3,8 +3,8 @@ package com.mobiledemo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -34,8 +34,8 @@ public class MainApplication extends Application implements NavigationApplicatio
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new FBSDKPackage(),
             new ReactNativeConfigPackage(),
+            new FBSDKPackage(),
             new RNFirebasePackage(),
             new RNFetchBlobPackage(),
             new PickerPackage(),

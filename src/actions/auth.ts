@@ -14,7 +14,7 @@ import {
 import { setAuth, doJsonRequest, doJsonAuthRequest } from "./helper";
 import {
   AUTH_URL,
-  AUTH_FACEBOOK_URL,
+  AUTH_SOCIAL_URL,
   SIGN_UP_URL,
   REMIND_PASSWORD_URL,
   AUTH_CHECK_URL,
@@ -24,7 +24,8 @@ import { AsyncStorage } from "react-native";
 import { AUTH } from "../constants/storage";
 import { goHome, goToAuth, goWelcome } from "../navigation/navigation";
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
-import firebase from 'react-native-firebase'
+import firebase from 'react-native-firebase';
+import Config from 'react-native-config'
 
 export const checkAuth = () => async dispatch => {
   const storage = await AsyncStorage.getItem(AUTH);
@@ -101,7 +102,7 @@ export const loginFacebook = () => async dispatch => {
     const data = await AccessToken.getCurrentAccessToken();
 
     if (!data) {
-      throw new Error('Something went wrong obtaining the users access token'); 
+      throw new Error('Something went wrong obtaining the users access token');
     }
 
     const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
@@ -115,7 +116,7 @@ export const loginFacebook = () => async dispatch => {
     });
 
     setAuth({ token: resp.token, userId: resp.user._id });
-    
+
     return dispatch({
       type: AUTH_USER,
       payload: { token: resp.token, name: resp.user.name, email: resp.user.email, srcAvatar: resp.user.srcAvatar }
@@ -126,6 +127,51 @@ export const loginFacebook = () => async dispatch => {
   }
 }
 
+export const loginGithub = (code) => async dispatch => {
+  try {
+
+    fetch("https://github.com/login/oauth/access_token?",
+      {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "client_id": Config.GITHUB_CLIENT_ID,
+          "client_secret": Config.GITHUB_SECRET,
+          "code": code
+        })
+      })
+      .then((response) => response.json())
+      .then(async (responseData) => {
+        console.log(responseData)
+        const credential = firebase.auth.GithubAuthProvider.credential(
+          responseData.access_token
+        );
+
+        const currentUser = await firebase.auth().signInWithCredential(credential);
+
+        const resp = await doJsonRequest({
+          url: AUTH_SOCIAL_URL,
+          method: "post",
+          data: currentUser.user
+        });
+
+        setAuth({ token: resp.token, userId: resp.user._id });
+
+        return dispatch({
+          type: AUTH_USER,
+          payload: { token: resp.token, name: resp.user.name, email: resp.user.email, srcAvatar: resp.user.srcAvatar }
+        });
+ 
+      })
+
+  } catch (e) {
+    console.error(e);
+    dispatch(setAuthError("Github login failure."));
+  }
+}
 
 export const logout = () => dispatch => {
   setAuth({ token: "", userId: "" });
