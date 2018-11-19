@@ -17,8 +17,8 @@ const socketEvents = store => next => action => {
     socket.on("message", message => {
       console.log("message", message);
       const currentStore = store.getState()
-      if (action.payload.chatId === currentStore.chat.activeChat.chatId) {
-        store.dispatch(saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...currentStore.chat.lastChatsTimestamp, [action.payload.chatId]: Date.now() }))
+      if (message.chatId === currentStore.chat.activeChat.chatId) {
+        saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...currentStore.chat.lastChatsTimestamp, [message.chatId]: Date.now() })
       }
       store.dispatch({ type: NEW_MESSAGE, payload: message });
     });

@@ -6,10 +6,7 @@ import Header from "../Header";
 import { Navigation } from "react-native-navigation";
 import MessageInput from "./MessageInput";
 import { MessagesList } from "./MessagesList";
-import { CHAT_LIST_TIMESTAMP } from "../../constants/storage";
-
 import { goToAuth } from "../../navigation/navigation";
-import { saveChatlistTimestamp } from "../../actions/storage";
 import { sendMessage, setActiveChat, getChatlistTimestamp } from "../../actions/chat";
 
 interface IProps {
@@ -28,13 +25,6 @@ class Chat extends React.PureComponent<IProps> {
   public componentWillReceiveProps(nextProps) {
     if (!nextProps.auth.authenticated) {
       goToAuth();
-    }
-  }
-
-  public componentDidUpdate(prevProps) {
-    if (prevProps.chat.messages.length !== this.props.chat.messages.length && !!this.props.chat.messages.length &&
-      this.props.chat.messages[this.props.chat.messages.length - 1].chatId === this.props.chat.activeChat.chatId) {
-      saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...this.props.chat.lastChatsTimestamp, [this.props.chat.activeChat.chatId]: Date.now() })
     }
   }
 

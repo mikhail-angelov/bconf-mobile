@@ -87,35 +87,26 @@ class MessageInput extends React.Component<IProps, IState> {
           color={SOFT_BLUE_COLOR} />
         <UploadPhotoWrap horizontal={true}>
           {_.map(chat.imagesInCurrentMessage, imageUrl => (
-            <View>
-              <Image
-                style={{
-                  overflow: "hidden", width: 130, height: 80, borderWidth: 0.5, borderRadius: 10,
-                  marginBottom: 5, marginTop: 10, marginRight: 10, backgroundColor: `${WHITE_COLOR}`, borderColor: `${SOFT_BLUE_COLOR}`
-                }}
+            <MessageImageWrap>
+              <MessageImage
                 source={{ uri: imageUrl }}
               />
-              <Icon
+              <CloseIcon
                 onPress={() => {
                   this.props.deletePhotoInMessage(imageUrl)
                 }}
                 solid
-                style={{ overflow: "hidden", backgroundColor: `${WHITE_COLOR}`, borderRadius: 11, top: 0, right: 0, position: 'absolute' }}
                 size={22}
                 name="times-circle"
                 backgroundColor={WHITE_COLOR}
                 color={SOFT_BLUE_COLOR} />
-            </View>
+            </MessageImageWrap>
           ))
           }
-          {chat.uploadingPhoto && <View
-            style={{
-              overflow: "hidden", width: 130, height: 80, borderWidth: 0.5, borderRadius: 10, display: "flex", alignItems: 'center', justifyContent: 'center',
-              marginBottom: 5, marginTop: 10, marginRight: 10, backgroundColor: `${WHITE_COLOR}`, borderColor: `${SOFT_BLUE_COLOR}`
-            }}>
+          {chat.uploadingPhoto && <MessageImageProgress>
             {chat.uploadingPhotoProgress === 0 && <Progress.Circle color={SOFT_BLUE_COLOR} size={50} indeterminate={true} />}
             {chat.uploadingPhotoProgress !== 0 && <Progress.Pie color={SOFT_BLUE_COLOR} progress={chat.uploadingPhotoProgress} size={50} />}
-          </View>}
+          </MessageImageProgress>}
         </UploadPhotoWrap>
       </MessageInputView>
     );
@@ -137,9 +128,9 @@ export default connect(
 
 
 const MessageInputView = styled(View)`
-    flex-direction: row
-    padding: 4px;
-    margin: 10px;
+flex-direction: row
+padding: 4px;
+margin: 10px;
     marginBottom: ${height > 800 ? "30px" : "10px"}
     align-items: center;
     justify-content: center;
@@ -149,12 +140,52 @@ const MessageInputView = styled(View)`
     borderRadius: 5px;
     borderColor: ${WHITE_COLOR};
     min-height: 50px;
-        `;
+    `;
+
+const MessageImage = styled(Image)`
+    overflow: hidden; 
+    width: 130; 
+    height: 80; 
+    borderWidth: 0.5; 
+    borderRadius: 10;
+    marginBottom: 5; 
+    marginTop: 10; 
+    marginRight: 10; 
+    backgroundColor: ${WHITE_COLOR}; 
+    borderColor: ${SOFT_BLUE_COLOR};
+    `;
 
 const UploadPhotoWrap = styled(ScrollView)`
-          flex-direction: row;
-          position: absolute; 
-          bottom: 50; 
-          right: 0;
-          width: 100%;
-  `;
+    flex-direction: row;
+    position: absolute; 
+    bottom: 50; 
+    right: 0;
+    width: 100%;
+    `;
+
+const MessageImageProgress = styled(View)`
+      overflow: hidden; 
+      width: 130; 
+      height: 80;
+      borderWidth: 0.5;
+      borderRadius: 10;
+      display: "flex";
+      alignItems: 'center';
+      justifyContent: 'center';
+      marginBottom: 5; 
+      marginTop: 10;
+      marginRight: 10; 
+      backgroundColor: ${WHITE_COLOR};
+      borderColor: ${SOFT_BLUE_COLOR}
+      `;
+
+const MessageImageWrap = styled(View)``;
+
+const CloseIcon = styled(Icon)`
+      overflow: hidden;
+      backgroundColor: ${WHITE_COLOR};
+      borderRadius: 11; 
+      top: 0; 
+      right: 0; 
+      position: absolute
+      `;

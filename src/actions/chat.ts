@@ -187,16 +187,10 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
         payload: written / total
       });
     })
-    .progress((received, total) => {
+    .then(async (resp) => {
       dispatch({
         type: UPLOAD_END
       });
-      dispatch({
-        type: UPLOAD_PROGRESS,
-        payload: 0
-      });
-    })
-    .then(async (resp) => {
       const newUrl = await JSON.parse(resp.data)
       const newChat = await doJsonAuthRequest({
         url: CHAT_URL,
@@ -240,21 +234,17 @@ export const uploadPhotoInMessage = (image) => async (dispatch) => {
         type: UPLOAD_PROGRESS,
         payload: written / total
       });
-    })
-    .progress((received, total) => {
+    }).then(async (resp) => {
       dispatch({
         type: UPLOAD_END
       });
-      dispatch({
-        type: UPLOAD_PROGRESS,
-        payload: 0
-      });
-    }).then(async (resp) => {
       const newPicUrl = await JSON.parse(resp.data)
       dispatch({
         type: ADD_PICTURE_IN_MESSAGE_LOCALY,
         payload: newPicUrl[image.filename].url
       })
+    }).catch((err) => {
+      console.log(err)
     })
 }
 
