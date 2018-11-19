@@ -31,6 +31,7 @@ export class MessagesList extends React.Component<IProps> {
         }}>
         {_.map(messages, message => (
           <Message key={message._id} idx={message._id}
+            files={message.links}
             text={message.text} isMyMessage={message.author.email === userEmail}
             timestamp={message.timestamp} />
         ))

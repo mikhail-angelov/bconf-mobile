@@ -27,7 +27,7 @@ const socketEvents = store => next => action => {
     console.log(socket)
     socket.emit("message", JSON.stringify({
       chatId: action.payload.chatId,
-      text: action.payload.message
+      message: action.payload.message
     }))
   }
   return next(action);
