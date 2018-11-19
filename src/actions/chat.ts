@@ -165,12 +165,11 @@ export const updateChatSettings = (chat) => async (dispatch) => {
 };
 
 export const changeChatPicture = (image, chat) => async (dispatch) => {
-  console.log(image)
   const token = await getToken()
   dispatch({
     type: UPLOAD_START,
   })
-  RNFetchBlob.fetch('POST', UPLOAD_URL, {
+  const resp = await RNFetchBlob.fetch('POST', UPLOAD_URL, {
     Authorization: token,
     // this is required, otherwise it won't be process as a multipart/form-data request
     'Content-Type': 'multipart/form-data',
@@ -187,25 +186,20 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
         payload: written / total
       });
     })
-    .then(async (resp) => {
-      dispatch({
-        type: UPLOAD_END
-      });
-      const newUrl = await JSON.parse(resp.data)
-      const newChat = await doJsonAuthRequest({
-        url: CHAT_URL,
-        method: "put",
-        data: { ...chat, chatImage: newUrl[image.filename].url }
-      });
-      dispatch(setActiveChat(newChat))
-      dispatch({
-        type: UPDATE_CHAT,
-        payload: newChat
-      });
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+  dispatch({
+    type: UPLOAD_END
+  });
+  const newUrl = await JSON.parse(resp.data)
+  const newChat = await doJsonAuthRequest({
+    url: CHAT_URL,
+    method: "put",
+    data: { ...chat, chatImage: newUrl[image.filename].url }
+  });
+  dispatch(setActiveChat(newChat))
+  dispatch({
+    type: UPDATE_CHAT,
+    payload: newChat
+  });
 }
 
 export const refreshChatList = () => async (dispatch) => {
@@ -218,7 +212,7 @@ export const uploadPhotoInMessage = (image) => async (dispatch) => {
   dispatch({
     type: UPLOAD_START,
   })
-  RNFetchBlob.fetch('POST', UPLOAD_URL, {
+  const resp = await RNFetchBlob.fetch('POST', UPLOAD_URL, {
     Authorization: token,
     // this is required, otherwise it won't be process as a multipart/form-data request
     'Content-Type': 'multipart/form-data',
@@ -234,18 +228,15 @@ export const uploadPhotoInMessage = (image) => async (dispatch) => {
         type: UPLOAD_PROGRESS,
         payload: written / total
       });
-    }).then(async (resp) => {
-      dispatch({
-        type: UPLOAD_END
-      });
-      const newPicUrl = await JSON.parse(resp.data)
-      dispatch({
-        type: ADD_PICTURE_IN_MESSAGE_LOCALY,
-        payload: newPicUrl[image.filename].url
-      })
-    }).catch((err) => {
-      console.log(err)
     })
+  dispatch({
+    type: UPLOAD_END
+  });
+  const newPicUrl = await JSON.parse(resp.data)
+  dispatch({
+    type: ADD_PICTURE_IN_MESSAGE_LOCALY,
+    payload: newPicUrl[image.filename].url
+  })
 }
 
 export const deletePhotoInMessage = (imageUrl) => (dispatch) => {

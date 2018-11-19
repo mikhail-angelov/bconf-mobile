@@ -169,9 +169,9 @@ const MessageImageProgress = styled(View)`
       height: 80;
       borderWidth: 0.5;
       borderRadius: 10;
-      display: "flex";
-      alignItems: 'center';
-      justifyContent: 'center';
+      display: flex;
+      alignItems: center;
+      justifyContent: center;
       marginBottom: 5; 
       marginTop: 10;
       marginRight: 10; 
