@@ -76,6 +76,7 @@ const CustomInput = styled(TextInput)`
   width: 200px;
   height: 35px;
   text-align: center;
+  padding: 0px;
 `;
 
 const ErrorNotification = styled(Text)`

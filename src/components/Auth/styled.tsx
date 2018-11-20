@@ -1,7 +1,7 @@
 import React from "react";
 import { BLACK_COLOR } from "../../helpers/styleConstants";
 import styled from "styled-components";
-import { View, Text } from "react-native";
+import { View, Text, Platform } from "react-native";
 
 export const Title = styled(Text)`
   font-size: 36px;
@@ -14,15 +14,21 @@ export const Annotation = styled(Text)`
   text-align: center;
   color: ${BLACK_COLOR};
 `;
+const headerMargin = Platform.OS === 'ios' ? 50 : 0;
+
 export const Header = styled(View)`
-  height: 30%;
   justify-content: center;
   align-items: center;
+  margin-top: ${headerMargin};
+  height: 30%;
 `;
 export const Body = styled(View)`
-  height: 70%;
+  flex: 1;
+  padding-top: 30;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 70%;
 `;
 export const LoginErrorNotification = styled(Text)`
   font-size: 12px;
