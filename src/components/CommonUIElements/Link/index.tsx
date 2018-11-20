@@ -1,18 +1,19 @@
 import React from "react";
-import { Button, Text } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import styled from "styled-components";
 
-const CustomButton = styled(Button)`
-  border: 1px solid #bbb;
-  border-radius: 5px;
-  margin: 10px;
-  width: 200px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const Link = styled(TouchableOpacity)`
+    align-items: center;
+    padding-top: 10;
+    padding-bottom: 10;
 `;
 
-const UILink = (otherProps) => (<CustomButton {...otherProps} />);
+const LinkText = styled(Text)`
+  color: black;
+`
+
+const UILink = (otherProps) => (<Link {...otherProps}>
+  <LinkText>{otherProps.title}</LinkText>
+</Link>);
 
 export default UILink;

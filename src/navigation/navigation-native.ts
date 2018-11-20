@@ -46,7 +46,12 @@ on(NAVIGATE_SIGNIN, () =>
         children: [
           {
             component: {
-              name: "SignIn"
+              name: "SignIn",
+              options: {
+                topBar: {
+                  visible: false,
+                }
+              },
             }
           }
         ]

@@ -1,7 +1,6 @@
 import React from "react";
-import { KeyboardAvoidingView } from "react-native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from "react-redux";
-import styled from "styled-components";
 
 import { Header, Title, Annotation, Body, ErrorText } from "./styled";
 import ValidatedInput from "./ValidatedInput";
@@ -32,7 +31,7 @@ class ForgotPassword extends React.Component<IProps, IState> {
   public render() {
     const { auth } = this.props;
     return (
-      <ForgotPasswordView behavior="padding">
+      <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
         <Header>
           <Title>FORGOT PASSWORD</Title>
           <Annotation>Secret chat</Annotation>
@@ -54,7 +53,7 @@ class ForgotPassword extends React.Component<IProps, IState> {
             <ErrorText>{auth.remindPasswordError}</ErrorText>
           )}
         </Body>
-      </ForgotPasswordView>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -70,8 +69,3 @@ export default connect(
   mapDispatchToProps
 )(ForgotPassword);
 
-const ForgotPasswordView = styled(KeyboardAvoidingView)`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
