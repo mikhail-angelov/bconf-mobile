@@ -17,7 +17,10 @@ import {
   UPLOAD_END,
   REFRESH_CHATLIST_END,
   REFRESH_CHATLIST_START,
-  GET_CHATLIST_TIMESTAMP
+  GET_CHATLIST_TIMESTAMP,
+  ADD_PICTURE_IN_MESSAGE_LOCALY,
+  DELETE_PICTURE_IN_MESSAGE_LOCALY,
+  CLEAN_PICTURE_IN_MESSAGE_LOCALY
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
@@ -162,12 +165,11 @@ export const updateChatSettings = (chat) => async (dispatch) => {
 };
 
 export const changeChatPicture = (image, chat) => async (dispatch) => {
-  console.log(image)
   const token = await getToken()
   dispatch({
     type: UPLOAD_START,
   })
-  RNFetchBlob.fetch('POST', UPLOAD_URL, {
+  const resp = await RNFetchBlob.fetch('POST', UPLOAD_URL, {
     Authorization: token,
     // this is required, otherwise it won't be process as a multipart/form-data request
     'Content-Type': 'multipart/form-data',
@@ -184,34 +186,66 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
         payload: written / total
       });
     })
-    .progress((received, total) => {
-      dispatch({
-        type: UPLOAD_END
-      });
-      dispatch({
-        type: UPLOAD_PROGRESS,
-        payload: 0
-      });
-    })
-    .then(async (resp) => {
-      const newUrl = await JSON.parse(resp.data)
-      const newChat = await doJsonAuthRequest({
-        url: CHAT_URL,
-        method: "put",
-        data: { ...chat, chatImage: newUrl[image.filename].url }
-      });
-      dispatch(setActiveChat(newChat))
-      dispatch({
-        type: UPDATE_CHAT,
-        payload: newChat
-      });
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+  dispatch({
+    type: UPLOAD_END
+  });
+  const newUrl = await JSON.parse(resp.data)
+  const newChat = await doJsonAuthRequest({
+    url: CHAT_URL,
+    method: "put",
+    data: { ...chat, chatImage: newUrl[image.filename].url }
+  });
+  dispatch(setActiveChat(newChat))
+  dispatch({
+    type: UPDATE_CHAT,
+    payload: newChat
+  });
 }
 
 export const refreshChatList = () => async (dispatch) => {
   dispatch({ type: REFRESH_CHATLIST_START })
   dispatch(getChats())
 }
+
+export const uploadPhotoInMessage = (image) => async (dispatch) => {
+  const token = await getToken()
+  dispatch({
+    type: UPLOAD_START,
+  })
+  const resp = await RNFetchBlob.fetch('POST', UPLOAD_URL, {
+    Authorization: token,
+    // this is required, otherwise it won't be process as a multipart/form-data request
+    'Content-Type': 'multipart/form-data',
+  }, [
+      {
+        name: image.filename,
+        filename: image.filename,
+        data: RNFetchBlob.wrap(image.path),
+        type: image.mime
+      },
+    ]).uploadProgress({ interval: 50 }, (written, total) => {
+      dispatch({
+        type: UPLOAD_PROGRESS,
+        payload: written / total
+      });
+    })
+  dispatch({
+    type: UPLOAD_END
+  });
+  const newPicUrl = await JSON.parse(resp.data)
+  dispatch({
+    type: ADD_PICTURE_IN_MESSAGE_LOCALY,
+    payload: newPicUrl[image.filename].url
+  })
+}
+
+export const deletePhotoInMessage = (imageUrl) => (dispatch) => {
+  dispatch({
+    type: DELETE_PICTURE_IN_MESSAGE_LOCALY,
+    payload: imageUrl
+  })
+}
+
+export const deleteAllPhotoInMessageLocaly = () => ({
+  type: CLEAN_PICTURE_IN_MESSAGE_LOCALY
+})
