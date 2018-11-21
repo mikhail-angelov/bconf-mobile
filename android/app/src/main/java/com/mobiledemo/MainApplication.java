@@ -9,6 +9,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
@@ -62,6 +63,7 @@ public class MainApplication extends NavigationApplication {
             new ReactNativeConfigPackage(),
             new FBSDKPackage(mCallbackManager),
             new RNFirebasePackage(),
+            new RNFirebaseAuthPackage(),
             new RNFetchBlobPackage(),
             new PickerPackage(),
             new VectorIconsPackage()

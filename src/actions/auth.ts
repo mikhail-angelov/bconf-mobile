@@ -110,7 +110,7 @@ export const loginFacebook = () => async dispatch => {
     const currentUser = await firebase.auth().signInWithCredential(credential);
 
     const resp = await doJsonRequest({
-      url: AUTH_FACEBOOK_URL,
+      url: AUTH_SOCIAL_URL,
       method: "post",
       data: currentUser.user
     });

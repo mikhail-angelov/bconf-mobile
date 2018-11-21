@@ -4,9 +4,14 @@ import {
   Dimensions,
   Animated,
   Easing,
-  View, TouchableOpacity, Text, WebView, StyleSheet, Platform
+  View,
+  TouchableOpacity,
+  Text,
+  WebView,
+  StyleSheet,
+  Platform
 } from "react-native";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { goHome } from "../../navigation/navigation";
 import { login, loginGithub, loginFacebook } from "../../actions/auth";
 import { BLACK_COLOR } from "../../helpers/styleConstants";
@@ -15,7 +20,7 @@ import Input from "../CommonUIElements/Input";
 import Button from "../CommonUIElements/Button";
 import Link from "../CommonUIElements/Link";
 import { Navigation } from "react-native-navigation";
-import Config from 'react-native-config';
+import Config from "react-native-config";
 
 import {
   Header,
@@ -44,43 +49,46 @@ class SignIn extends React.Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
-      xPosition: new Animated.Value(Platform.OS === 'ios' ? 300 : 0),
+      xPosition: new Animated.Value(Platform.OS === "ios" ? 300 : 0),
       password: "",
       email: "",
       error: { email: "", password: "" },
-      showGithubWebview: false,
+      showGithubWebview: false
     };
   }
-  onLoad = async (state) => {
-    if (state.url.indexOf('code') >= 0) {
-      const githubCode = state.url.split('=')[1];
+  public onLoad = async state => {
+    if (state.url.indexOf("code") >= 0) {
+      const githubCode = state.url.split("=")[1];
       await this.props.loginGithub(githubCode);
       this.setState({ showGithubWebview: false });
     }
-  }
+  };
 
-  hide = () => {
+  public hide = () => {
     this.setState({ showGithubWebview: false });
-  }
+  };
 
   public render() {
+    console.log("!!!!!!", Config);
     return this.state.showGithubWebview ? (
       <View style={styles.container}>
         <View style={styles.topbar}>
-          <TouchableOpacity
-            onPress={this.hide.bind(this)}
-          >
+          <TouchableOpacity onPress={this.hide.bind(this)}>
             <Text>Go Back</Text>
           </TouchableOpacity>
         </View>
         <WebView
-          originWhitelist={['*']}
+          originWhitelist={["*"]}
           onNavigationStateChange={this.onLoad.bind(this)}
-          source={{ uri: `https://github.com/login/oauth/authorize?client_id=${Config.GITHUB_CLIENT_ID}&scope=user` }}
+          source={{
+            uri: `https://github.com/login/oauth/authorize?client_id=${
+              Config.GITHUB_CLIENT_ID
+            }&scope=user`
+          }}
         />
       </View>
-    ) :
-      (<Animated.View
+    ) : (
+      <Animated.View
         style={{ transform: [{ translateX: this.state.xPosition }], flex: 1 }}
       >
         <KeyboardAwareScrollView>
@@ -116,17 +124,15 @@ class SignIn extends React.Component<IProps, IState> {
                 disabled={!this.allFieldsFilled()}
               >
                 Sign In
-            </Button>
-              <Button
-                onPress={() => this.props.loginFacebook()}
-              >
+              </Button>
+              <Button onPress={() => this.props.loginFacebook()}>
                 Facebook Login
-            </Button>
+              </Button>
               <Button
                 onPress={() => this.setState({ showGithubWebview: true })}
               >
                 Github Login
-            </Button>
+              </Button>
               <Link
                 color={BLACK_COLOR}
                 onPress={() => {
@@ -137,7 +143,6 @@ class SignIn extends React.Component<IProps, IState> {
                   });
                 }}
                 title="Sign Up"
-
               />
               <Link
                 color={BLACK_COLOR}
@@ -153,7 +158,8 @@ class SignIn extends React.Component<IProps, IState> {
             </Body>
           </View>
         </KeyboardAwareScrollView>
-      </Animated.View >)
+      </Animated.View>
+    );
   }
 
   public componentDidMount() {
@@ -190,22 +196,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: "#F5FCFF"
   },
   topbar: {
     height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   topbarTextDisabled: {
-    color: 'gray'
+    color: "gray"
   }
 });
 
 const mapDispatchToProps = {
   login,
   loginGithub,
-  loginFacebook,
+  loginFacebook
 };
 
 const mapStateToProps = state => ({ auth: state.auth });
