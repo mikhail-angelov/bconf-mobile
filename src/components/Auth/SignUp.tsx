@@ -1,5 +1,5 @@
 import React from "react";
-import { KeyboardAvoidingView } from "react-native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from "styled-components";
 import Button from "../CommonUIElements/Button";
 import ValidatedInput from "./ValidatedInput";
@@ -53,7 +53,11 @@ class SignUp extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <SignUpView behavior="padding">
+      <KeyboardAwareScrollView contentContainerStyle={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
         <Header>
           <Title>SIGN UP</Title>
           <Annotation>Secret chat</Annotation>
@@ -85,16 +89,12 @@ class SignUp extends React.Component<IProps, IState> {
             <ErrorText> {this.props.auth.signUpError}</ErrorText>
           )}
         </Body>
-      </SignUpView>
+      </KeyboardAwareScrollView>
     );
   }
 }
 
-const SignUpView = styled(KeyboardAvoidingView)`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+
 
 const mapDispatchToProps = {
   signUp

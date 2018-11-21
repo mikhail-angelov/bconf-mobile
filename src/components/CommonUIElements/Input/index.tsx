@@ -24,6 +24,7 @@ const CustomInput = styled(TextInput)`
   width: 200px;
   height: 35px;
   text-align: center;
+  padding: 0px;
 `;
 const DangerCustomInput = styled(TextInput)`
   font-size: 24px;
