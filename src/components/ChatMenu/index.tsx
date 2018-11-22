@@ -56,7 +56,9 @@ class ChatMenu extends React.Component<IProps> {
                                         name: 'ProfileSettings',
                                         options: {
                                             topBar: {
-                                                visible: false
+                                                visible: false,
+                                                drawBehind: true,
+                                                animate: false,
                                             },
                                         }
                                     }

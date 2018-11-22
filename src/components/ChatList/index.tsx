@@ -110,7 +110,9 @@ class ChatList extends React.Component<IProps, IState> {
                   name: 'ProfileSettings',
                   options: {
                     topBar: {
-                      visible: false
+                      visible: false,
+                      drawBehind: true,
+                      animate: false,
                     },
                   }
                 }
@@ -134,7 +136,9 @@ class ChatList extends React.Component<IProps, IState> {
                       name: 'Chat',
                       options: {
                         topBar: {
-                          visible: false
+                          visible: false,
+                          drawBehind: true,
+                          animate: false,
                         },
                       }
                     }
@@ -163,7 +167,9 @@ class ChatList extends React.Component<IProps, IState> {
                   name: 'AddChat',
                   options: {
                     topBar: {
-                      visible: false
+                      visible: false,
+                      drawBehind: true,
+                      animate: false,
                     },
                   }
                 }
