@@ -40,7 +40,9 @@ class Chat extends React.PureComponent<IProps> {
                 name: 'ChatSettings',
                 options: {
                   topBar: {
-                    visible: false
+                    visible: false,
+                    drawBehind: true,
+                    animate: false,
                   },
                 }
               }

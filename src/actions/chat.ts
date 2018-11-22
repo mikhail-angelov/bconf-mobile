@@ -189,7 +189,7 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
   dispatch({
     type: UPLOAD_END
   });
-  const newUrl = await JSON.parse(resp.data)
+  const newUrl = JSON.parse(resp.data)
   const newChat = await doJsonAuthRequest({
     url: CHAT_URL,
     method: "put",
@@ -232,7 +232,7 @@ export const uploadPhotoInMessage = (image) => async (dispatch) => {
   dispatch({
     type: UPLOAD_END
   });
-  const newPicUrl = await JSON.parse(resp.data)
+  const newPicUrl = JSON.parse(resp.data)
   dispatch({
     type: ADD_PICTURE_IN_MESSAGE_LOCALY,
     payload: newPicUrl[image.filename].url

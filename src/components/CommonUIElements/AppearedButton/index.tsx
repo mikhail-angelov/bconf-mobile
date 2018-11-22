@@ -1,9 +1,12 @@
 import React from "react";
-import { Animated, Text, TouchableOpacity } from "react-native";
+import { Animated, Text, TouchableOpacity, TouchableNativeFeedback } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { BLACK_COLOR, SOFT_BLUE_COLOR, WHITE_COLOR } from "../../../helpers/styleConstants";
 
 import styled from "styled-components";
+
+import { Platform } from 'react-native';
+const { OS } = Platform;
 
 interface IProps {
   isButtonVisible: boolean;
@@ -68,10 +71,9 @@ class UIAppearedButton extends React.Component<IProps> {
 
 export default UIAppearedButton;
 
-const AppearedButtonWrap = styled(TouchableOpacity)`
+const AppearedButtonWrap = styled(Platform.OS === "android" ? TouchableNativeFeedback : TouchableOpacity)`
         position: absolute;
-        right: 20;
-        bottom: 20;
+        zIndex: 20;
       `;
 
 const AppearedButton = styled(Animated.View)`
@@ -87,4 +89,6 @@ const AppearedButton = styled(Animated.View)`
         shadowColor: ${BLACK_COLOR};
         flexDirection: row;
         display: flex;
+        right: 20;
+        bottom: 20;
       `;

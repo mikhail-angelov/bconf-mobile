@@ -92,7 +92,9 @@ class AddChat extends React.Component<IProps> {
                                 name: 'Chat',
                                 options: {
                                     topBar: {
-                                        visible: false
+                                        visible: false,
+                                        drawBehind: true,
+                                        animate: false,
                                     },
                                 }
                             }

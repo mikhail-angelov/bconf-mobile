@@ -100,7 +100,7 @@ class ChatList extends React.Component<IProps, IState> {
           animated={this.state.animated}
           chatMenuItems={[{ title: "Chats", handler: this.closeChatMenu }, { title: "Logout", handler: this.props.logout }]}
         />
-        <ChatListWrapper width={width}>
+        <ChatListWrapper width={width} style={{ zIndex: 0 }}>
           <Header
             title="Chats"
             leftIconFunction={this.showChatMenu}
@@ -110,7 +110,9 @@ class ChatList extends React.Component<IProps, IState> {
                   name: 'ProfileSettings',
                   options: {
                     topBar: {
-                      visible: false
+                      visible: false,
+                      drawBehind: true,
+                      animate: false,
                     },
                   }
                 }
@@ -134,7 +136,9 @@ class ChatList extends React.Component<IProps, IState> {
                       name: 'Chat',
                       options: {
                         topBar: {
-                          visible: false
+                          visible: false,
+                          drawBehind: true,
+                          animate: false,
                         },
                       }
                     }
@@ -156,14 +160,16 @@ class ChatList extends React.Component<IProps, IState> {
             ))}
           </ScrollView>
           <AppearedButton
-            isButtonVisible={this.state.isAddChatButtonVisible}            
+            isButtonVisible={this.state.isAddChatButtonVisible}
             buttonHandler={() => {
               Navigation.push("ChatList", {
                 component: {
                   name: 'AddChat',
                   options: {
                     topBar: {
-                      visible: false
+                      visible: false,
+                      drawBehind: true,
+                      animate: false,
                     },
                   }
                 }

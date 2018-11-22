@@ -28,6 +28,8 @@ on(NAVIGATE_CHAT_LIST, () => {
               options: {
                 topBar: {
                   visible: false,
+                  drawBehind: true,
+                  animate: false,
                 }
               },
             }
@@ -50,6 +52,8 @@ on(NAVIGATE_SIGNIN, () =>
               options: {
                 topBar: {
                   visible: false,
+                  drawBehind: true,
+                  animate: false,
                 }
               },
             }
