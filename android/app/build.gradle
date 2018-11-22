@@ -95,6 +95,14 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
+    lintOptions { 
+        checkReleaseBuilds false // Add this
+        abortOnError false
+    }
+
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion '28.0.3'
 

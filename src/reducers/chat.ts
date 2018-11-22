@@ -17,7 +17,10 @@ import {
   UPLOAD_PROGRESS,
   REFRESH_CHATLIST_START,
   REFRESH_CHATLIST_END,
-  GET_CHATLIST_TIMESTAMP
+  GET_CHATLIST_TIMESTAMP,
+  ADD_PICTURE_IN_MESSAGE_LOCALY,
+  DELETE_PICTURE_IN_MESSAGE_LOCALY,
+  CLEAN_PICTURE_IN_MESSAGE_LOCALY
 } from "../constants/actions";
 import _ from 'lodash'
 
@@ -36,7 +39,8 @@ export const initialState = {
   uploadingPhotoProgress: 0,
   uploadingPhoto: false,
   refreshingChatList: false,
-  lastChatsTimestamp: {}
+  lastChatsTimestamp: {},
+  imagesInCurrentMessage: []
 };
 
 const chat = (state = initialState, action) => {
@@ -114,6 +118,16 @@ const chat = (state = initialState, action) => {
     }
     case REFRESH_CHATLIST_END: {
       return { ...state, refreshingChatList: false };
+    }
+    case ADD_PICTURE_IN_MESSAGE_LOCALY: {
+      return { ...state, imagesInCurrentMessage: [...state.imagesInCurrentMessage, action.payload] };
+    }
+    case CLEAN_PICTURE_IN_MESSAGE_LOCALY: {
+      return { ...state, imagesInCurrentMessage: [] };
+    }
+    case DELETE_PICTURE_IN_MESSAGE_LOCALY: {
+      const newImagesInCurrentMessage = _.filter(state.imagesInCurrentMessage, imageUrl => imageUrl !== action.payload)
+      return { ...state, imagesInCurrentMessage: newImagesInCurrentMessage };
     }
     default: {
       return state;
