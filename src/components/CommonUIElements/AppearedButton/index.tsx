@@ -1,5 +1,5 @@
 import React from "react";
-import { Animated, Text, TouchableOpacity } from "react-native";
+import { Animated, Text, TouchableOpacity, Modal } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { BLACK_COLOR, SOFT_BLUE_COLOR, WHITE_COLOR } from "../../../helpers/styleConstants";
 

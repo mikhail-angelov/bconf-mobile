@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { TouchableOpacity, View, Text, Animated } from "react-native";
+import { TouchableOpacity, View, Text, Animated, Modal } from "react-native";
 import { Navigation } from "react-native-navigation";
 import { BLACK_COLOR, WHITE_COLOR } from "../../helpers/styleConstants";
 import styled from "styled-components";
@@ -25,58 +25,61 @@ class ChatMenu extends React.Component<IProps> {
     public render() {
         const { auth, chatMenuItems, width, closeMenu, isMenuOpen, animated } = this.props
         return (
-            <Animated.View
-                style={{
-                    width: width,
-                    height: '100%',
-                    position: 'absolute',
-                    zIndex: 20,
-                    bottom: 0,
-                    display: isMenuOpen ? 'flex' : 'none',
-                }}
-            >
-                <Overlay
-                    onPress={closeMenu} />
-                <ChatMenuView style={{
-                    transform: [{
-                        translateX: animated.interpolate(
-                            {
-                                inputRange: [0, 1],
-                                outputRange: [-width * 0.8, 0],
-                            }
-                        )
-                    }]
-                }}>
-                    <ChatMenuHeader
-                        onPress={() =>
-                            Navigation.push("ChatList", {
-                                component: {
-                                    name: 'ProfileSettings',
-                                    options: {
-                                        topBar: {
-                                            visible: false
-                                        },
-                                    }
+            <Modal visible={isMenuOpen ? true : false}>
+                <Animated.View
+                    style={{
+                        width: width,
+                        height: '100%',
+                        position: 'absolute',
+                        zIndex: 20,
+                        bottom: 0,
+                        display: isMenuOpen ? 'flex' : 'none',
+                    }}
+                    elevation={isMenuOpen ? 20 : 0}
+                    zIndex={20}>
+                    <Overlay
+                        onPress={closeMenu} />
+                    <ChatMenuView style={{
+                        transform: [{
+                            translateX: animated.interpolate(
+                                {
+                                    inputRange: [0, 1],
+                                    outputRange: [-width * 0.8, 0],
                                 }
-                            })}>
-                        <AvatarWrap>
-                            <Avatar
-                                srcImg={auth.srcAvatar}
-                                size="middle"
-                                avatarColor="#996699"
-                                name={auth.name} />
-                        </AvatarWrap>
-                        <AvatarUsername>{auth.name}</AvatarUsername>
-                    </ChatMenuHeader>
-                    <ChatMenuBody>
-                        {_.map(chatMenuItems, item => (
-                            <ChatMenuItem onPress={() => item.handler()}>
-                                <ChatMenuTitle>{item.title}</ChatMenuTitle>
-                            </ChatMenuItem>
-                        ))}
-                    </ChatMenuBody>
-                </ChatMenuView >
-            </Animated.View>
+                            )
+                        }]
+                    }}>
+                        <ChatMenuHeader
+                            onPress={() =>
+                                Navigation.push("ChatList", {
+                                    component: {
+                                        name: 'ProfileSettings',
+                                        options: {
+                                            topBar: {
+                                                visible: false
+                                            },
+                                        }
+                                    }
+                                })}>
+                            <AvatarWrap>
+                                <Avatar
+                                    srcImg={auth.srcAvatar}
+                                    size="middle"
+                                    avatarColor="#996699"
+                                    name={auth.name} />
+                            </AvatarWrap>
+                            <AvatarUsername>{auth.name}</AvatarUsername>
+                        </ChatMenuHeader>
+                        <ChatMenuBody>
+                            {_.map(chatMenuItems, item => (
+                                <ChatMenuItem onPress={() => item.handler()}>
+                                    <ChatMenuTitle>{item.title}</ChatMenuTitle>
+                                </ChatMenuItem>
+                            ))}
+                        </ChatMenuBody>
+                    </ChatMenuView >
+                </Animated.View>
+            </Modal>
         );
     }
 }
