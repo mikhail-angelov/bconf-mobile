@@ -22,10 +22,10 @@ import com.facebook.soloader.SoLoader;
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
 import com.reactnativenavigation.react.ReactGateway;
+import com.RNFetchBlob.RNFetchBlobPackage;  
 
 import java.util.Arrays;
 import java.util.List;
-
 
 public class MainApplication extends NavigationApplication {
 

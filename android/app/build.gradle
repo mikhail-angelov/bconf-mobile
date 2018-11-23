@@ -178,6 +178,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.facebook.android:facebook-android-sdk:4.34.0'
     implementation project(':react-native-fbsdk')
+    implementation project(':rn-fetch-blob')
 
 }
 
