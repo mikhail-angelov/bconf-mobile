@@ -26,9 +26,10 @@ import io from "socket.io-client";
 import _ from "lodash";
 import RNFetchBlob from 'rn-fetch-blob'
 import { AsyncStorage } from "react-native";
-import { doJsonAuthRequest, getToken, getRandomColor } from "./helper";
+import { doJsonAuthRequest, getToken, getRandomColor, getFilenameForAndroid } from "./helper";
 import { BASE_URL, CHAT_URL, MESSAGE_URL, FIND_USERS_URL, UPLOAD_URL } from "./endpoinds";
 import { CHAT_LIST_TIMESTAMP } from "../constants/storage";
+import { Platform } from "react-native";
 
 export const sendMessage = (chatId, message) => {
   return {
@@ -165,6 +166,7 @@ export const updateChatSettings = (chat) => async (dispatch) => {
 };
 
 export const changeChatPicture = (image, chat) => async (dispatch) => {
+  const filenameForAndroid = getFilenameForAndroid(image)
   const token = await getToken()
   dispatch({
     type: UPLOAD_START,
@@ -175,8 +177,8 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
     'Content-Type': 'multipart/form-data',
   }, [
       {
-        name: image.filename,
-        filename: image.filename,
+        name: Platform.OS === "ios" ? image.filename : filenameForAndroid,
+        filename: Platform.OS === "ios" ? image.filename : filenameForAndroid,
         data: RNFetchBlob.wrap(image.path),
         type: image.mime
       },
@@ -193,7 +195,7 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
   const newChat = await doJsonAuthRequest({
     url: CHAT_URL,
     method: "put",
-    data: { ...chat, chatImage: newUrl[image.filename].url }
+    data: { ...chat, chatImage: newUrl[Platform.OS === "ios" ? image.filename : filenameForAndroid].url }
   });
   dispatch(setActiveChat(newChat))
   dispatch({
@@ -208,6 +210,7 @@ export const refreshChatList = () => async (dispatch) => {
 }
 
 export const uploadPhotoInMessage = (image) => async (dispatch) => {
+  const filenameForAndroid = getFilenameForAndroid(image)
   const token = await getToken()
   dispatch({
     type: UPLOAD_START,
@@ -218,8 +221,8 @@ export const uploadPhotoInMessage = (image) => async (dispatch) => {
     'Content-Type': 'multipart/form-data',
   }, [
       {
-        name: image.filename,
-        filename: image.filename,
+        name: Platform.OS === "ios" ? image.filename : filenameForAndroid,
+        filename: Platform.OS === "ios" ? image.filename : filenameForAndroid,
         data: RNFetchBlob.wrap(image.path),
         type: image.mime
       },
@@ -235,7 +238,7 @@ export const uploadPhotoInMessage = (image) => async (dispatch) => {
   const newPicUrl = JSON.parse(resp.data)
   dispatch({
     type: ADD_PICTURE_IN_MESSAGE_LOCALY,
-    payload: newPicUrl[image.filename].url
+    payload: newPicUrl[Platform.OS === "ios" ? image.filename : filenameForAndroid].url
   })
 }
 
