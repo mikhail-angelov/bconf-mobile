@@ -21,7 +21,8 @@ interface IProps {
   chat: any;
   auth: any;
   chatColor: string;
-  updateChatSettings: ({ chatId, chatName }) => void;
+  chatImage: string;
+  updateChatSettings: ({ chatId, chatName, chatImage }) => void;
   changeChatPicture: (image, activeChat) => void;
 }
 
@@ -49,7 +50,7 @@ class ChatSettings extends React.Component<IProps, IState> {
     const { chat } = this.props
     const { chatName } = this.state
     this.setState({ isChatEdit: false })
-    this.props.updateChatSettings({ chatId: chat.activeChat.chatId, chatName })
+    this.props.updateChatSettings({ chatId: chat.activeChat.chatId, chatName, chatImage: chat.activeChat.chatImage })
   }
 
   public componentWillReceiveProps(nextProps) {
