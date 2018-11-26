@@ -20,7 +20,9 @@ import {
   GET_CHATLIST_TIMESTAMP,
   ADD_PICTURE_IN_MESSAGE_LOCALY,
   DELETE_PICTURE_IN_MESSAGE_LOCALY,
-  CLEAN_PICTURE_IN_MESSAGE_LOCALY
+  CLEAN_PICTURE_IN_MESSAGE_LOCALY,
+  GET_NEW_MESSAGES,
+  GET_NEW_MESSAGES_ERROR
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
@@ -71,22 +73,30 @@ export const getChats = () => async dispatch => {
   }
 };
 
-export const getMessages = chatId => async dispatch => {
+export const getMessages = (chatId) => async (dispatch, getState) => {
   try {
-    const messages = await doJsonAuthRequest({
-      url: MESSAGE_URL + chatId,
+    const chatMessages = getState().messages[chatId];
+    const newMessages = await doJsonAuthRequest({
+      url: `${MESSAGE_URL + chatId}?timestamp=${getTimestamp(chatMessages)}`,
       method: "get"
     });
     dispatch({
       type: GET_MESSAGES,
-      payload: messages
+      payload: { messages: newMessages, chatId }
     });
   } catch (e) {
     dispatch({ type: GET_MESSAGES_ERROR });
   }
 };
 
+const getTimestamp = (messages) => {
+  return messages ? messages[messages.length - 1].timestamp : 0;
+};
+
 export const setActiveChat = (chat) => dispatch => {
+  if (chat) {
+    dispatch(getMessages(chat.chatId));
+  }
   dispatch({ type: SET_ACTIVE_CHAT, payload: chat })
 };
 

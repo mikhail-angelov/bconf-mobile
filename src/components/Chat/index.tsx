@@ -20,6 +20,7 @@ interface IProps {
   chatImage: string | undefined;
   width: string;
   chatColor: string;
+  messages: any;
 }
 class Chat extends React.PureComponent<IProps> {
   public componentWillReceiveProps(nextProps) {
@@ -29,7 +30,7 @@ class Chat extends React.PureComponent<IProps> {
   }
 
   public render() {
-    const { chat, width, auth } = this.props;
+    const { chat, width, auth, messages } = this.props;
     return (
       <ChatView style={{ width: width }}>
         <Header
@@ -60,7 +61,7 @@ class Chat extends React.PureComponent<IProps> {
           }
           chatColor={chat.activeChat.chatColor}
           leftIconName="arrow-left" />
-        <MessagesList messages={chat.messages} userEmail={auth.email} />
+        <MessagesList messages={messages} userEmail={auth.email} />
         <MessageInput
           handleSendMessage={(message) => this.props.sendMessage(chat.activeChat.chatId, message)}
         />
@@ -83,7 +84,11 @@ const mapDispatchToProps = {
   getChatlistTimestamp
 };
 
-const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
+const selector = (state) => {
+  return ({ auth: state.auth, chat: state.chat, messages: state.messages[state.chat.activeChat.chatId] });
+}
+
+const mapStateToProps = state => selector(state);
 
 export default connect(
   mapStateToProps,

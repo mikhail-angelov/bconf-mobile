@@ -25,7 +25,6 @@ import {
 import _ from 'lodash'
 
 export const initialState = {
-  messages: [],
   chats: [],
   usersInNewChat: [],
   getChatsError: false,
@@ -45,12 +44,19 @@ export const initialState = {
 
 const chat = (state = initialState, action) => {
   switch (action.type) {
+    case GET_CHATS: {
+      const chats = action.payload;
+      return { ...state, chats, getChatsError: false };
+    }
+    case GET_CHATS_ERROR: {
+      return { ...state, getChatsError: true };
+    }
+    case SET_ACTIVE_CHAT: {
+      return { ...state, activeChat: { ...action.payload } };
+    }
     case RECEIVE_MESSAGE:
     case NEW_MESSAGE: {
-      let newMessageAttached = state.messages
-      if (action.payload.chatId === state.activeChat.chatId) {
-        newMessageAttached = [...state.messages, action.payload];
-      }
+
       const indexChat = _.findIndex(state.chats, (o) => {
         return o.chatId === action.payload.chatId;
       })
@@ -59,24 +65,7 @@ const chat = (state = initialState, action) => {
         lastMessageAuthorId: action.payload.author._id, lastMessageAuthor: action.payload.author.name
       }
       const filteredChats = _.filter(state.chats, el => el.chatId !== updChat.chatId)
-      return { ...state, chats: [...filteredChats, updChat], messages: newMessageAttached }
-    }
-    case GET_CHATS: {
-      const chats = action.payload;
-      return { ...state, chats, getChatsError: false };
-    }
-    case GET_MESSAGES: {
-      const messages = action.payload;
-      return { ...state, messages, getMessagesError: false };
-    }
-    case GET_MESSAGES: {
-      return { ...state, getMessagesError: true };
-    }
-    case GET_CHATS_ERROR: {
-      return { ...state, getChatsError: true };
-    }
-    case SET_ACTIVE_CHAT: {
-      return { ...state, activeChat: { ...action.payload } };
+      return { ...state, chats: [...filteredChats, updChat] }
     }
     case DELETE_ALL_USERS_FROM_CHAT_LOCALY: {
       return { ...state, usersInNewChat: [] };
