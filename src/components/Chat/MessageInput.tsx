@@ -103,9 +103,9 @@ class MessageInput extends React.Component<IProps, IState> {
             </MessageImageWrap>
           ))
           }
-          {chat.uploadingPhoto && <MessageImageProgress>
-            {chat.uploadingPhotoProgress === 0 && <Progress.Circle color={SOFT_BLUE_COLOR} size={50} indeterminate={true} />}
-            {chat.uploadingPhotoProgress !== 0 && <Progress.Pie color={SOFT_BLUE_COLOR} progress={chat.uploadingPhotoProgress} size={50} />}
+          {chat.uploadingPhotoInChat && <MessageImageProgress>
+            {chat.uploadingPhotoInChatProgress === 0 && <Progress.Circle color={SOFT_BLUE_COLOR} size={50} indeterminate={true} />}
+            {chat.uploadingPhotoInChatProgress !== 0 && <Progress.Pie color={SOFT_BLUE_COLOR} progress={chat.uploadingPhotoInChatProgress} size={50} />}
           </MessageImageProgress>}
         </UploadPhotoWrap>
       </MessageInputView>

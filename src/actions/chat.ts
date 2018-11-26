@@ -12,9 +12,12 @@ import {
   CREATE_NEW_CHAT,
   DELETE_ALL_USERS_FROM_CHAT_LOCALY,
   UPDATE_CHAT,
-  UPLOAD_START,
-  UPLOAD_PROGRESS,
-  UPLOAD_END,
+  UPLOAD_PICTURES_IN_CHAT_START,
+  UPLOAD_PICTURES_IN_CHAT_PROGRESS,
+  UPLOAD_PICTURES_IN_CHAT_END,
+  UPLOAD_CHAT_PHOTO_START,
+  UPLOAD_CHAT_PHOTO_PROGRESS,
+  UPLOAD_CHAT_PHOTO_END,
   REFRESH_CHATLIST_END,
   REFRESH_CHATLIST_START,
   GET_CHATLIST_TIMESTAMP,
@@ -169,7 +172,7 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
   const filenameForAndroid = getFilenameForAndroid(image)
   const token = await getToken()
   dispatch({
-    type: UPLOAD_START,
+    type: UPLOAD_CHAT_PHOTO_START,
   })
   const resp = await RNFetchBlob.fetch('POST', UPLOAD_URL, {
     Authorization: token,
@@ -184,12 +187,12 @@ export const changeChatPicture = (image, chat) => async (dispatch) => {
       },
     ]).uploadProgress({ interval: 50 }, (written, total) => {
       dispatch({
-        type: UPLOAD_PROGRESS,
+        type: UPLOAD_CHAT_PHOTO_PROGRESS,
         payload: written / total
       });
     })
   dispatch({
-    type: UPLOAD_END
+    type: UPLOAD_CHAT_PHOTO_END
   });
   const newUrl = JSON.parse(resp.data)
   const newChat = await doJsonAuthRequest({
@@ -213,7 +216,7 @@ export const uploadPhotoInMessage = (image) => async (dispatch) => {
   const filenameForAndroid = getFilenameForAndroid(image)
   const token = await getToken()
   dispatch({
-    type: UPLOAD_START,
+    type: UPLOAD_PICTURES_IN_CHAT_START,
   })
   const resp = await RNFetchBlob.fetch('POST', UPLOAD_URL, {
     Authorization: token,
@@ -228,12 +231,12 @@ export const uploadPhotoInMessage = (image) => async (dispatch) => {
       },
     ]).uploadProgress({ interval: 50 }, (written, total) => {
       dispatch({
-        type: UPLOAD_PROGRESS,
+        type: UPLOAD_PICTURES_IN_CHAT_PROGRESS,
         payload: written / total
       });
     })
   dispatch({
-    type: UPLOAD_END
+    type: UPLOAD_PICTURES_IN_CHAT_END
   });
   const newPicUrl = JSON.parse(resp.data)
   dispatch({

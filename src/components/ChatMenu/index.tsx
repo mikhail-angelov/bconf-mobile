@@ -50,7 +50,7 @@ class ChatMenu extends React.Component<IProps> {
                         }]
                     }}>
                         <ChatMenuHeader
-                            onPress={() =>
+                            onPress={() => {
                                 Navigation.push("ChatList", {
                                     component: {
                                         name: 'ProfileSettings',
@@ -62,7 +62,9 @@ class ChatMenu extends React.Component<IProps> {
                                             },
                                         }
                                     }
-                                })}>
+                                })
+                                closeMenu()
+                            }}>
                             <AvatarWrap>
                                 <Avatar
                                     srcImg={auth.srcAvatar}

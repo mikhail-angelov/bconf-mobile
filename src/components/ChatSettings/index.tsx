@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { View, Dimensions, Text, TouchableOpacity, Modal, Alert } from "react-native";
+import { View, Dimensions, Text, TouchableOpacity, Modal } from "react-native";
 import _ from 'lodash'
 import styled from "styled-components";
 import Input from "../CommonUIElements/Input";
@@ -21,7 +21,7 @@ interface IProps {
   chat: any;
   auth: any;
   chatColor: string;
-  updateChatSettings: ({ chatId, chatName, chatImage }) => void;
+  updateChatSettings: ({ chatId, chatName }) => void;
   changeChatPicture: (image, activeChat) => void;
 }
 
@@ -29,7 +29,6 @@ interface IState {
   isChatEdit: boolean;
   isUploadPhotoButtonVisible: boolean;
   chatName: string;
-  chatImage: string;
   error: object;
   photos: object;
 }
@@ -39,8 +38,7 @@ class ChatSettings extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       chatName: props.chat.activeChat.chatName,
-      chatImage: props.chat.activeChat.chatImage,
-      error: { chatName: "", chatImage: "", email: "" },
+      error: { chatName: "" },
       isChatEdit: false,
       isUploadPhotoButtonVisible: false,
       photos: [],
@@ -49,9 +47,9 @@ class ChatSettings extends React.Component<IProps, IState> {
 
   public updateChatSettings() {
     const { chat } = this.props
-    const { chatName, chatImage } = this.state
-    this.props.updateChatSettings({ chatId: chat.activeChat.chatId, chatName, chatImage })
+    const { chatName } = this.state
     this.setState({ isChatEdit: false })
+    this.props.updateChatSettings({ chatId: chat.activeChat.chatId, chatName })
   }
 
   public componentWillReceiveProps(nextProps) {
@@ -77,7 +75,6 @@ class ChatSettings extends React.Component<IProps, IState> {
     const { isChatEdit, isUploadPhotoButtonVisible } = this.state
     const chatSettingsItems = [
       { fieldName: 'chatName' },
-      { fieldName: 'chatImage' },
     ]
     const maxStringLength = 40
     return (
@@ -137,9 +134,9 @@ class ChatSettings extends React.Component<IProps, IState> {
             </View>
           </Modal>
         </View>
-        {chat.uploadingPhoto && <UploadSection>
-          {chat.uploadingPhoto && chat.uploadingPhotoProgress === 0 && <Progress.Circle color={SOFT_BLUE_COLOR} size={100} indeterminate={true} />}
-          {chat.uploadingPhotoProgress !== 0 && <Progress.Pie color={SOFT_BLUE_COLOR} progress={chat.uploadingPhotoProgress} size={100} />}
+        {chat.uploadingChatPhoto && <UploadSection>
+          {chat.uploadingChatPhoto && chat.uploadingChatPhotoProgress === 0 && <Progress.Circle color={SOFT_BLUE_COLOR} size={100} indeterminate={true} />}
+          {chat.uploadingChatPhotoProgress !== 0 && <Progress.Pie color={SOFT_BLUE_COLOR} progress={chat.uploadingChatPhotoProgress} size={100} />}
         </UploadSection>}
       </ChatSettingsWrap>
     );
