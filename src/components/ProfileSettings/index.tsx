@@ -121,9 +121,9 @@ class ProfileSettings extends React.Component<IProps, IState> {
             <View
               style={{ bottom: 0, position: "absolute", width: '95%', marginRight: 10 }}>
               <Button
-                onPress={() => {
+                onPress={() =>
                   this.getPhotos()
-                }}
+                }
                 style={{ width: '100%' }}>
                 Choose photo
               </Button>
