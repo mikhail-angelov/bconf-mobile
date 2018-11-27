@@ -1,11 +1,7 @@
 import {
-  SEND_MESSAGE,
-  RECEIVE_MESSAGE,
   NEW_MESSAGE,
   GET_CHATS,
   GET_CHATS_ERROR,
-  GET_MESSAGES,
-  GET_MESSAGES_ERROR,
   SET_ACTIVE_CHAT,
   ADD_USER_TO_CHAT_LOCALY,
   DELETE_USER_FROM_CHAT_LOCALY,
@@ -54,7 +50,6 @@ const chat = (state = initialState, action) => {
     case SET_ACTIVE_CHAT: {
       return { ...state, activeChat: { ...action.payload } };
     }
-    case RECEIVE_MESSAGE:
     case NEW_MESSAGE: {
 
       const indexChat = _.findIndex(state.chats, (o) => {

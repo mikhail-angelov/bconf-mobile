@@ -7,13 +7,14 @@ import { Navigation } from "react-native-navigation";
 import MessageInput from "./MessageInput";
 import { MessagesList } from "./MessagesList";
 import { goToAuth } from "../../navigation/navigation";
-import { sendMessage, setActiveChat, getChatlistTimestamp } from "../../actions/chat";
+import { sendMessage, unsetActiveChat, getChatlistTimestamp } from "../../actions/chat";
+import _ from "lodash";
 
 interface IProps {
   chat: any;
   auth: any;
   sendMessage: (chatId, text) => void;
-  setActiveChat: () => void;
+  unsetActiveChat: () => void;
   getChatlistTimestamp: () => void;
   chatId: string;
   chatName: string;
@@ -55,7 +56,7 @@ class Chat extends React.PureComponent<IProps> {
           isAvatarVisible={true}
           leftIconFunction={() => {
             this.props.getChatlistTimestamp()
-            this.props.setActiveChat()
+            this.props.unsetActiveChat()
             Navigation.popToRoot("ChatList")
           }
           }
@@ -74,18 +75,19 @@ const ChatView = styled(KeyboardAvoidingView).attrs({
   behavior: "padding"
 })`
   display: flex;
-  flexDirection: column;
+  flex-direction: column;
   height: 100%;
 `;
 
 const mapDispatchToProps = {
   sendMessage,
-  setActiveChat,
+  unsetActiveChat,
   getChatlistTimestamp
 };
 
 const selector = (state) => {
-  return ({ auth: state.auth, chat: state.chat, messages: state.messages[state.chat.activeChat.chatId] });
+  const messages = _.get(state, `messages[${state.chat.activeChat.chatId}]`, []);
+  return ({ auth: state.auth, chat: state.chat, messages });
 }
 
 const mapStateToProps = state => selector(state);

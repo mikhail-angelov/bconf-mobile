@@ -1,4 +1,4 @@
-import { GET_MESSAGES, RECEIVE_MESSAGE, NEW_MESSAGE, GET_NEW_MESSAGES } from "../constants/actions";
+import { LOAD_MESSAGES, NEW_MESSAGE } from "../constants/actions";
 
 const initialState = {
 
@@ -6,13 +6,12 @@ const initialState = {
 
 const messages = (state = initialState, action) => {
     switch (action.type) {
-        case GET_MESSAGES: {
+        case LOAD_MESSAGES: {
             console.log(action.payload.messages)
             return state[action.payload.chatId] ?
                 { ...state, [action.payload.chatId]: [...state[action.payload.chatId], ...action.payload.messages] } :
                 { ...state, [action.payload.chatId]: action.payload.messages }
         }
-        case RECEIVE_MESSAGE:
         case NEW_MESSAGE: {
             return { ...state, [action.payload.chatId]: [...state[action.payload.chatId], action.payload] }
         }
