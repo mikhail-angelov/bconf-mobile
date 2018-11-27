@@ -76,7 +76,7 @@ class ChatMenu extends React.Component<IProps> {
                         </ChatMenuHeader>
                         <ChatMenuBody>
                             {_.map(chatMenuItems, item => (
-                                <ChatMenuItem onPress={() => item.handler()}>
+                                <ChatMenuItem onPress={() => item.handler()} key={item.key}>
                                     <ChatMenuTitle>{item.title}</ChatMenuTitle>
                                 </ChatMenuItem>
                             ))}

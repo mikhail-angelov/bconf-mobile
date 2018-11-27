@@ -82,8 +82,7 @@ class ChatList extends React.Component<IProps, IState> {
   };
 
   public setActiveChatAndGetMessages(chatProperties) {
-    this.props.setActiveChat(chatProperties)
-    this.props.getMessages(chatProperties.chatId)
+    this.props.setActiveChat(chatProperties);
   }
 
   // public resetActiveChat = () => {
@@ -98,7 +97,7 @@ class ChatList extends React.Component<IProps, IState> {
           closeMenu={this.closeChatMenu}
           isMenuOpen={this.state.isMenuOpen}
           animated={this.state.animated}
-          chatMenuItems={[{ title: "Chats", handler: this.closeChatMenu }, { title: "Logout", handler: this.props.logout }]}
+          chatMenuItems={[{ title: "Chats", handler: this.closeChatMenu, key: "chats" }, { title: "Logout", handler: this.props.logout, key: "logout" }]}
         />
         <ChatListWrapper width={width} style={{ zIndex: 0 }}>
           <Header
@@ -146,6 +145,7 @@ class ChatList extends React.Component<IProps, IState> {
                 saveChatlistTimestamp={() => saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...this.props.chat.lastChatsTimestamp, [chat.chatId]: Date.now() })}
                 name={chat.chatName}
                 id={chat.chatId}
+                key={chat.chatId}
                 chatImage={chat.chatImage}
                 chatColor={chat.chatColor}
                 lastMessageText={chat.lastMessageText}
@@ -187,7 +187,7 @@ class ChatList extends React.Component<IProps, IState> {
 
 const ChatListWrapper = styled(View)`
         display: flex;
-        flexDirection: column;
+        flex-direction: column;
         backgroundColor: ${WHITE_COLOR};
         borderLeftWidth: 3;
         borderColor: rgba(0,0,0,0.05);

@@ -7,19 +7,21 @@ import { Navigation } from "react-native-navigation";
 import MessageInput from "./MessageInput";
 import { MessagesList } from "./MessagesList";
 import { goToAuth } from "../../navigation/navigation";
-import { sendMessage, setActiveChat, getChatlistTimestamp } from "../../actions/chat";
+import { sendMessage, unsetActiveChat, getChatlistTimestamp } from "../../actions/chat";
+import _ from "lodash";
 
 interface IProps {
   chat: any;
   auth: any;
   sendMessage: (chatId, text) => void;
-  setActiveChat: () => void;
+  unsetActiveChat: () => void;
   getChatlistTimestamp: () => void;
   chatId: string;
   chatName: string;
   chatImage: string | undefined;
   width: string;
   chatColor: string;
+  messages: any;
 }
 class Chat extends React.PureComponent<IProps> {
   public componentWillReceiveProps(nextProps) {
@@ -29,7 +31,7 @@ class Chat extends React.PureComponent<IProps> {
   }
 
   public render() {
-    const { chat, width, auth } = this.props;
+    const { chat, width, auth, messages } = this.props;
     return (
       <ChatView style={{ width: width }}>
         <Header
@@ -54,13 +56,13 @@ class Chat extends React.PureComponent<IProps> {
           isAvatarVisible={true}
           leftIconFunction={() => {
             this.props.getChatlistTimestamp()
-            this.props.setActiveChat()
+            this.props.unsetActiveChat()
             Navigation.popToRoot("ChatList")
           }
           }
           chatColor={chat.activeChat.chatColor}
           leftIconName="arrow-left" />
-        <MessagesList messages={chat.messages} userEmail={auth.email} />
+        <MessagesList messages={messages} userEmail={auth.email} />
         <MessageInput
           handleSendMessage={(message) => this.props.sendMessage(chat.activeChat.chatId, message)}
         />
@@ -73,17 +75,22 @@ const ChatView = styled(KeyboardAvoidingView).attrs({
   behavior: "padding"
 })`
   display: flex;
-  flexDirection: column;
+  flex-direction: column;
   height: 100%;
 `;
 
 const mapDispatchToProps = {
   sendMessage,
-  setActiveChat,
+  unsetActiveChat,
   getChatlistTimestamp
 };
 
-const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
+const selector = (state) => {
+  const messages = _.get(state, `messages[${state.chat.activeChat.chatId}]`, []);
+  return ({ auth: state.auth, chat: state.chat, messages });
+}
+
+const mapStateToProps = state => selector(state);
 
 export default connect(
   mapStateToProps,

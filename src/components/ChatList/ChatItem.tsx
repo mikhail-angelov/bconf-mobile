@@ -69,11 +69,11 @@ const ChatListItemWrapper = styled(TouchableOpacity)`
             height: 110px;
             width: 100%;
             display: flex;
-            flexDirection: row;
+            flex-direction: row;
             padding: 0 10px 10px 0px;
-  backgroundColor: ${WHITE_COLOR};
+  background-color: ${WHITE_COLOR};
   &:active {
-          backgroundColor: ${WHITE_COLOR};
+          background-color: ${WHITE_COLOR};
     }
   `;
 

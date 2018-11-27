@@ -2,8 +2,8 @@ import {
   OUTCOMING_MESSAGE,
   GET_CHATS,
   GET_CHATS_ERROR,
-  GET_MESSAGES_ERROR,
-  GET_MESSAGES,
+  LOAD_MESSAGES_ERROR,
+  LOAD_MESSAGES,
   SET_ACTIVE_CHAT,
   SEND_MESSAGE,
   ADD_USER_TO_CHAT_LOCALY,
@@ -23,7 +23,7 @@ import {
   GET_CHATLIST_TIMESTAMP,
   ADD_PICTURE_IN_MESSAGE_LOCALY,
   DELETE_PICTURE_IN_MESSAGE_LOCALY,
-  CLEAN_PICTURE_IN_MESSAGE_LOCALY
+  CLEAN_PICTURE_IN_MESSAGE_LOCALY,
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
@@ -74,24 +74,36 @@ export const getChats = () => async dispatch => {
   }
 };
 
-export const getMessages = chatId => async dispatch => {
+export const getMessages = (chatId) => async (dispatch, getState) => {
   try {
-    const messages = await doJsonAuthRequest({
-      url: MESSAGE_URL + chatId,
+    const chatMessages = getState().messages[chatId];
+    const newMessages = await doJsonAuthRequest({
+      url: `${MESSAGE_URL + chatId}?timestamp=${getTimestamp(chatMessages)}`,
       method: "get"
     });
     dispatch({
-      type: GET_MESSAGES,
-      payload: messages
+      type: LOAD_MESSAGES,
+      payload: { messages: newMessages, chatId }
     });
   } catch (e) {
-    dispatch({ type: GET_MESSAGES_ERROR });
+    dispatch({ type: LOAD_MESSAGES_ERROR });
   }
 };
 
+const getTimestamp = (messages) => {
+  return messages && messages.length > 0 ? messages[messages.length - 1].timestamp : 0;
+};
+
 export const setActiveChat = (chat) => dispatch => {
+  if (chat) {
+    dispatch(getMessages(chat.chatId));
+  }
   dispatch({ type: SET_ACTIVE_CHAT, payload: chat })
 };
+
+export const unsetActiveChat = () => dispatch => {
+  dispatch({ type: SET_ACTIVE_CHAT, payload: null })
+}
 
 export const findUsers = (username) => async (dispatch) => {
   try {
