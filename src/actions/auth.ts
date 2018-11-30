@@ -20,7 +20,7 @@ import {
   SIGN_UP_URL,
   REMIND_PASSWORD_URL,
   AUTH_CHECK_URL,
-  CHANGE_USER_SETTINGS_URL,
+  UPDATE_USER_URL,
   UPLOAD_URL
 } from "./endpoinds";
 import { AsyncStorage } from "react-native";
@@ -70,6 +70,51 @@ export const setRemindPasswordError = error => ({
   payload: error
 });
 
+const checkPermission = async (user) => {
+  const enabled = await firebase.messaging().hasPermission();
+  if (enabled) {
+    getFirebaseMsgToken(user);
+  } else {
+    requestPermission(user);
+  }
+}
+
+const getFirebaseMsgToken = async (user) => {
+  let firebaseMsgToken = user.firebaseMsgToken;
+  if (!firebaseMsgToken) {
+    firebaseMsgToken = await firebase.messaging().getToken();
+    if (firebaseMsgToken) {
+      // user has a device token
+      console.log("FSM token:", firebaseMsgToken)
+      await saveUserFcmToken(firebaseMsgToken)
+    }
+  }
+}
+
+const saveUserFcmToken = async (firebaseMsgToken) => {
+  try {
+    const resp = await doJsonAuthRequest({
+      url: UPDATE_USER_URL,
+      method: "post",
+      data: { firebaseMsgToken }
+    })
+    console.log('fcmToken saved successfully', resp.user)
+  } catch (e) {
+    console.log('error saving fcmToken', e);
+  }
+}
+
+const requestPermission = async (user) => {
+  try {
+    await firebase.messaging().requestPermission();
+    // User has authorised
+    getFirebaseMsgToken(user);
+  } catch (error) {
+    // User has rejected permissions
+    console.log('permission rejected');
+  }
+}
+
 export const login = ({ email, password }) => async dispatch => {
   try {
     const resp = await doJsonRequest({
@@ -77,6 +122,7 @@ export const login = ({ email, password }) => async dispatch => {
       method: "post",
       data: { email, password }
     });
+    await checkPermission(resp.user);
     setAuth({ token: resp.token, userId: resp.user._id });
     return dispatch({
       type: AUTH_USER,
@@ -219,13 +265,13 @@ export const changePassword = ({ password, oldPassword }) => ({
 export const saveProfileSettings = ({ name, email, srcAvatar }) => async dispatch => {
   try {
     const resp = await doJsonAuthRequest({
-      url: CHANGE_USER_SETTINGS_URL,
+      url: UPDATE_USER_URL,
       method: "post",
       data: { name, email, srcAvatar }
     });
     dispatch({
       type: CHANGE_USER_SETTINGS,
-      payload: { name: resp.name, email: resp.email, srcAvatar }
+      payload: { name: resp.user.name, email: resp.user.email, srcAvatar }
     });
   } catch (e) {
     console.log("Error: " + e);
@@ -259,13 +305,13 @@ export const changeUserPicture = (image, user) => async (dispatch) => {
     type: UPLOAD_USER_PHOTO_END
   });
   const newUrl = JSON.parse(resp.data)
-  const updateUser = await doJsonAuthRequest({
-    url: CHANGE_USER_SETTINGS_URL,
+  const response = await doJsonAuthRequest({
+    url: UPDATE_USER_URL,
     method: "post",
     data: { ...user, srcAvatar: newUrl[Platform.OS === "ios" ? image.filename : filenameForAndroid].url }
   });
   dispatch({
     type: CHANGE_USER_SETTINGS,
-    payload: updateUser
+    payload: response.user
   });
 }
