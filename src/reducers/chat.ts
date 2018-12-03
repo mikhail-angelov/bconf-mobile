@@ -19,7 +19,9 @@ import {
   GET_CHATLIST_TIMESTAMP,
   ADD_PICTURE_IN_MESSAGE_LOCALY,
   DELETE_PICTURE_IN_MESSAGE_LOCALY,
-  CLEAN_PICTURE_IN_MESSAGE_LOCALY
+  CLEAN_PICTURE_IN_MESSAGE_LOCALY,
+  OPEN_SEARCH_BAR,
+  CLOSE_SEARCH_BAR,
 } from "../constants/actions";
 import _ from 'lodash'
 
@@ -124,6 +126,12 @@ const chat = (state = initialState, action) => {
     case DELETE_PICTURE_IN_MESSAGE_LOCALY: {
       const newImagesInCurrentMessage = _.filter(state.imagesInCurrentMessage, imageUrl => imageUrl !== action.payload)
       return { ...state, imagesInCurrentMessage: newImagesInCurrentMessage };
+    }
+    case OPEN_SEARCH_BAR: {
+      return { ...state, isSearchBarActive: true };
+    }
+    case CLOSE_SEARCH_BAR: {
+      return { ...state, isSearchBarActive: false };
     }
     default: {
       return state;

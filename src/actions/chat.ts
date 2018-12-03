@@ -24,6 +24,8 @@ import {
   ADD_PICTURE_IN_MESSAGE_LOCALY,
   DELETE_PICTURE_IN_MESSAGE_LOCALY,
   CLEAN_PICTURE_IN_MESSAGE_LOCALY,
+  OPEN_SEARCH_BAR,
+  CLOSE_SEARCH_BAR
 } from "../constants/actions";
 import io from "socket.io-client";
 import _ from "lodash";
@@ -76,16 +78,17 @@ export const getChats = () => async dispatch => {
 
 export const getMessages = (chatId) => async (dispatch, getState) => {
   try {
-    const chatMessages = getState().messages[chatId];
+    const chatMessages = getState().messages.allMessages[chatId];
     const newMessages = await doJsonAuthRequest({
       url: `${MESSAGE_URL + chatId}?timestamp=${getTimestamp(chatMessages)}`,
       method: "get"
     });
     dispatch({
       type: LOAD_MESSAGES,
-      payload: { messages: newMessages, chatId }
+      payload: { newMessages: _.reverse(newMessages), chatId }
     });
   } catch (e) {
+    console.log(e)
     dispatch({ type: LOAD_MESSAGES_ERROR });
   }
 };
@@ -266,4 +269,12 @@ export const deletePhotoInMessage = (imageUrl) => (dispatch) => {
 
 export const deleteAllPhotoInMessageLocaly = () => ({
   type: CLEAN_PICTURE_IN_MESSAGE_LOCALY
+})
+
+export const openSearchBar = () => ({
+  type: OPEN_SEARCH_BAR
+})
+
+export const closeSearchBar = () => ({
+  type: CLOSE_SEARCH_BAR
 })

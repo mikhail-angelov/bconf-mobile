@@ -6,7 +6,6 @@ import { BLACK_COLOR, SOFT_BLUE_COLOR, WHITE_COLOR } from "../../../helpers/styl
 import styled from "styled-components";
 
 import { Platform } from 'react-native';
-const { OS } = Platform;
 
 interface IProps {
   isButtonVisible: boolean;
@@ -73,22 +72,22 @@ export default UIAppearedButton;
 
 const AppearedButtonWrap = styled(Platform.OS === "android" ? TouchableNativeFeedback : TouchableOpacity)`
         position: absolute;
-        zIndex: 20;
+        z-index: 20;
+        right: 20;
+        bottom: 20;
       `;
 
 const AppearedButton = styled(Animated.View)`
-        padding: ${props => (props.buttonText ? '10px' : '20px')}
+        padding: ${props => (props.buttonText ? '10px' : '20px')};
         position: absolute;
         right: 10;
         bottom: 10;
-        backgroundColor: ${SOFT_BLUE_COLOR};
+        background-color: ${SOFT_BLUE_COLOR};
         border-radius: 50;
-        shadowRadius: 3; 
-        shadowOpacity: 0.2; 
-        shadowOffset: {width: 1, height: 1}; 
-        shadowColor: ${BLACK_COLOR};
-        flexDirection: row;
+        shadow-radius: 3; 
+        shadow-opacity: 0.2; 
+        shadow-offset: {width: 1, height: 1}; 
+        shadow-color: ${BLACK_COLOR};
+        flex-direction: row;
         display: flex;
-        right: 20;
-        bottom: 20;
       `;

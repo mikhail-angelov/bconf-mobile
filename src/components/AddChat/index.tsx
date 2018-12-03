@@ -5,7 +5,7 @@ import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styled from "styled-components";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR, GRAY_COLOR } from "../../helpers/styleConstants";
-import { addUserToChatLocaly, deleteUserFromChatLocaly, findUsers, deleteAllUsersFromChatLocaly, createNewChat } from "../../actions/chat";
+import { addUserToChatLocaly, deleteUserFromChatLocaly, findUsers, deleteAllUsersFromChatLocaly, createNewChat, openSearchBar, closeSearchBar } from "../../actions/chat";
 import { Avatar } from "../Avatar";
 import Header from "../Header";
 import AppearedButton from "../CommonUIElements/AppearedButton";
@@ -22,7 +22,9 @@ interface IProps {
     auth: any;
     chat: any;
     users: object;
-    deleteAllUsersFromChatLocaly: () => void
+    deleteAllUsersFromChatLocaly: () => void;
+    openSearchBar: () => void;
+    closeSearchBar: () => void;
 }
 class AddChat extends React.Component<IProps> {
     constructor(props) {
@@ -46,7 +48,10 @@ class AddChat extends React.Component<IProps> {
         return (
             <AddChatWrap>
                 <Header
-                    rightIconName="search"
+                    isSearchBarActive={chat.isSearchBarActive}
+                    whatSearch="Username"
+                    rightIconFunction={chat.isSearchBarActive ? () => this.props.closeSearchBar() : () => this.props.openSearchBar()}
+                    rightIconName={chat.isSearchBarActive ? "times" : "search"}
                     inputHandler={this.props.findUsers}
                     title="Add Chat"
                     width={width}
@@ -54,6 +59,7 @@ class AddChat extends React.Component<IProps> {
                     leftIconFunction={() => {
                         this.props.deleteAllUsersFromChatLocaly()
                         Navigation.popToRoot("ChatList")
+                        if (chat.isSearchBarActive) { this.props.closeSearchBar() }
                     }} />
                 <AddChatView>
                     <UserList>
@@ -109,25 +115,42 @@ class AddChat extends React.Component<IProps> {
     }
 }
 
+const mapDispatchToProps = {
+    findUsers,
+    addUserToChatLocaly,
+    deleteUserFromChatLocaly,
+    createNewChat,
+    deleteAllUsersFromChatLocaly,
+    openSearchBar,
+    closeSearchBar
+};
+
+const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AddChat);
+
 const AddChatWrap = styled(View)`
-        display: flex;
-        flexDirection: column;
-        height: 100%;
-        `;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    `;
 
 const AddChatView = styled(View)`
-        display: flex;
-        flexDirection: column;
-        height: 100%;
-        alignItems: center;
-        width: ${width}
-        `;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+    width: ${width}
+    `;
 
 const UserName = styled(Text)`
-        fontSize: 18px;
-        color: ${BLACK_COLOR};
-        marginLeft: 10px;
-        width: 65%
+    font-size: 18px;
+    color: ${BLACK_COLOR};
+    margin-left: 10px;
+    width: 65%
     `;
 
 const UserList = styled(ScrollView)`
@@ -142,48 +165,33 @@ const CreateChatButtonWrap = styled(TouchableOpacity)`
 
 const CreateChatButton = styled(Animated.View)`
     padding: 13px;
-    backgroundColor: ${SOFT_BLUE_COLOR};
+    background-color: ${SOFT_BLUE_COLOR};
     border-radius: 50;
-    shadowRadius: 3; 
-    shadowOpacity: 0.2; 
-    shadowOffset: {width: 1, height: 1}; 
-    shadowColor: ${BLACK_COLOR};
-    flexDirection: row;
+    shadow-radius: 3; 
+    shadow-opacity: 0.2; 
+    shadow-offset: {width: 1, height: 1}; 
+    shadow-color: ${BLACK_COLOR};
+    flex-direction: row;
     display: flex;
-      `;
+    `;
 
 const AvatarSide = styled(View)`
     width: 20%;
     height: 100%;
     display: flex;
-    alignItems: center;
-    justifyContent: center;
-    shadowRadius: 5;
-    shadowOpacity: 0.3;
-    shadowOffset: {width: 2, height: 2};
-    shadowColor: ${BLACK_COLOR};
-`;
+    align-items: center;
+    justify-content: center;
+    shadow-radius: 5;
+    shadow-opacity: 0.3;
+    shadow-offset: {width: 2, height: 2};
+    shadow-color: ${BLACK_COLOR};
+    `;
 
 const UserItem = styled(TouchableOpacity)`
-        width: ${width}
-        height: 70px;
-        flexDirection: row;
-        display: flex;
-        alignItems: center;
-        justifyContent: flex-start;
-              `;
-
-const mapDispatchToProps = {
-    findUsers,
-    addUserToChatLocaly,
-    deleteUserFromChatLocaly,
-    createNewChat,
-    deleteAllUsersFromChatLocaly
-};
-
-const mapStateToProps = state => ({ auth: state.auth, chat: state.chat });
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AddChat);
+    width: ${width};
+    height: 70px;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    `;
