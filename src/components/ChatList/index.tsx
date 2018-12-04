@@ -6,9 +6,7 @@ import { ScrollView, Animated, Dimensions, View, RefreshControl, Text } from "re
 import styled from "styled-components";
 import { logout } from "../../actions/auth";
 import { cleanFindMessages } from "../../actions/messages";
-import { saveChatlistTimestamp } from "../../actions/storage";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR } from "../../helpers/styleConstants";
-import { CHAT_LIST_TIMESTAMP } from "../../constants/storage";
 import { getMessages, setActiveChat, getChats, refreshChatList, closeSearchBar } from "../../actions/chat";
 import { Navigation } from "react-native-navigation";
 import ChatMenu from "../ChatMenu";
@@ -35,7 +33,6 @@ interface IProps {
   refreshChatList: () => void;
   closeSearchBar: () => void;
   cleanFindMessages: () => void;
-  saveChatlistTimestamp: (key, data) => void;
   refreshingChatList: boolean;
 }
 
@@ -87,10 +84,6 @@ class ChatList extends React.Component<IProps, IState> {
   public setActiveChatAndGetMessages(chatProperties) {
     this.props.setActiveChat(chatProperties);
   }
-
-  // public resetActiveChat = () => {
-  //   this.props.setActiveChat(null, null, null)
-  // }
 
   public render() {
     return (
@@ -145,7 +138,6 @@ class ChatList extends React.Component<IProps, IState> {
                       }
                     }
                   })}
-                saveChatlistTimestamp={() => saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...this.props.chat.lastChatsTimestamp, [chat.chatId]: Date.now() })}
                 cleanFindMessagesAndCloseFindBar={() => {
                   this.props.cleanFindMessages()
                   this.props.closeSearchBar()

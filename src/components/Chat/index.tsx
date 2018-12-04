@@ -43,12 +43,18 @@ class Chat extends React.PureComponent<IProps, IState> {
     super(props)
     this.state = {
       currentMessageNumber: 0,
-      currentSelectedMessage: props.messages.filteredMessages ? props.messages.filteredMessages[0] : null
+      currentSelectedMessage: []
     }
   }
   public componentWillReceiveProps(nextProps) {
     if (!nextProps.auth.authenticated) {
       goToAuth();
+    }
+  }
+
+  public componentDidUpdate(prevProps) {
+    if (prevProps.messages.filteredMessages.length !== this.props.messages.filteredMessages.length) {
+      this.setState({ currentSelectedMessage: this.props.messages.filteredMessages[0] })
     }
   }
 
@@ -111,20 +117,23 @@ class Chat extends React.PureComponent<IProps, IState> {
         {chat.isSearchBarActive ?
           <SearchMessagesBar>
             <Icon.Button
-              size={25}
+              size={20}
               onPress={() => this.nextMessage(messages.filteredMessages, currentMessageNumber)}
               backgroundColor='d6efef'
-              name='arrow-down'
+              name='arrow-up'
               color={SOFT_BLUE_COLOR}
             />
-            <Text>
+            <Text
+              style={{ marginRight: 10, marginLeft: 10 }}
+            >
+
               {/* to do: refactor this code */}
-              {messages.filteredMessages.length} / {currentMessageNumber + 1}
+              {messages.filteredMessages.length} / {messages.filteredMessages.length ? currentMessageNumber + 1 : 0}
             </Text>
             <Icon.Button
-              size={25}
+              size={20}
               onPress={() => this.prevMessage(messages.filteredMessages, currentMessageNumber)}
-              name='arrow-up'
+              name='arrow-down'
               backgroundColor='d6efef'
               color={SOFT_BLUE_COLOR}
             />

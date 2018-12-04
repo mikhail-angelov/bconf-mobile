@@ -1,8 +1,6 @@
 import io from "socket.io-client";
 import { getChats } from "../actions/chat";
 import { NEW_MESSAGE, AUTH_USER, SEND_MESSAGE } from "../constants/actions";
-import { CHAT_LIST_TIMESTAMP } from "../constants/storage";
-import { saveChatlistTimestamp } from "../actions/storage";
 import { BASE_URL } from "../actions/endpoinds";
 
 let socket
@@ -16,10 +14,6 @@ const socketEvents = store => next => action => {
     });
     socket.on("message", message => {
       console.log("message", message);
-      const currentStore = store.getState()
-      if (message.chatId === currentStore.chat.activeChat.chatId) {
-        saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...currentStore.chat.lastChatsTimestamp, [message.chatId]: Date.now() })
-      }
       store.dispatch({ type: NEW_MESSAGE, payload: message });
     });
     store.dispatch(getChats());

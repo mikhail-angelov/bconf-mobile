@@ -36,9 +36,7 @@ const MessageWrapper = styled(View).attrs({})`
   border-radius: 10px;
   background-color: ${(props: IMessageProps) =>
     props.isMyMessage ? "#d6efef" : "#fef8e5"};
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-right: 5px;
+  margin: 5px;
   flex: none;
   align-self: ${(props: IMessageProps) =>
     props.isMyMessage ? "flex-end" : "flex-start"};

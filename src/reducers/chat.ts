@@ -24,6 +24,8 @@ import {
   CLOSE_SEARCH_BAR,
 } from "../constants/actions";
 import _ from 'lodash'
+import { CHAT_LIST_TIMESTAMP } from "../constants/storage";
+import { saveChatlistTimestamp } from "../actions/storage";
 
 export const initialState = {
   chats: [],
@@ -56,7 +58,9 @@ const chat = (state = initialState, action) => {
       return { ...state, activeChat: { ...action.payload } };
     }
     case NEW_MESSAGE: {
-
+      if (action.payload.chatId === state.activeChat.chatId) {
+        saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...state.lastChatsTimestamp, [action.payload.chatId]: Date.now() })
+      }
       const indexChat = _.findIndex(state.chats, (o) => {
         return o.chatId === action.payload.chatId;
       })

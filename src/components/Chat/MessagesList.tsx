@@ -14,22 +14,13 @@ interface IProps {
 export class MessagesList extends React.Component<IProps> {
 
   public componentDidUpdate(prevProps) {
-    if (prevProps.messages.length !== this.props.messages.length) {
-      this.scrollToEnd()
+    if (prevProps.messages.length !== this.props.messages.length && this.props.messages.length !== 0) {
+      this.flatListRef.scrollToOffset({ animated: true, offset: 0 })
     }
     if (prevProps.currentSelectedMessage !== this.props.currentSelectedMessage && this.props.currentSelectedMessage) {
       const indexMessage = _.findIndex(this.props.messages, this.props.currentSelectedMessage)
-      console.log(indexMessage)
       this.flatListRef.scrollToIndex({ animated: true, index: indexMessage, viewPosition: 0.5 });
     }
-  }
-
-  public componentDidMount() {
-    this.scrollToEnd()
-  }
-
-  public scrollToEnd = () => {
-    this.flatListRef.scrollToEnd();
   }
 
   public MessagesItem = ({ item }) => {
@@ -46,6 +37,7 @@ export class MessagesList extends React.Component<IProps> {
     const { messages } = this.props
     return (
       <FlatList
+        inverted
         onScrollToIndexFailed={() => console.log('scroll error')}
         ref={(ref) => { this.flatListRef = ref; }}
         style={{

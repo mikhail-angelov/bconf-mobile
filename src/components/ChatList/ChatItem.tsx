@@ -16,7 +16,6 @@ interface IProps {
   id: number;
   lastMessageTimestamp: number;
   setActiveChatAndGetMessages: () => void;
-  saveChatlistTimestamp: () => void;
   cleanFindMessagesAndCloseFindBar: () => void;
   navigateToChat: any;
   haveNewMessages: boolean;
@@ -31,7 +30,6 @@ export const ChatListItem = ({
   chatColor,
   navigateToChat,
   chatImage,
-  saveChatlistTimestamp,
   haveNewMessages,
   cleanFindMessagesAndCloseFindBar
 }: IProps) => {
@@ -41,7 +39,6 @@ export const ChatListItem = ({
         cleanFindMessagesAndCloseFindBar()
         setActiveChatAndGetMessages()
         navigateToChat()
-        saveChatlistTimestamp()
       }}
     >
       <AvatarSide>

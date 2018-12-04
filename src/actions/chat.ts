@@ -1,5 +1,4 @@
 import {
-  OUTCOMING_MESSAGE,
   GET_CHATS,
   GET_CHATS_ERROR,
   LOAD_MESSAGES_ERROR,
@@ -27,13 +26,13 @@ import {
   OPEN_SEARCH_BAR,
   CLOSE_SEARCH_BAR
 } from "../constants/actions";
-import io from "socket.io-client";
 import _ from "lodash";
 import RNFetchBlob from 'rn-fetch-blob'
 import { AsyncStorage } from "react-native";
 import { doJsonAuthRequest, getToken, getRandomColor, getFilenameForAndroid } from "./helper";
-import { BASE_URL, CHAT_URL, MESSAGE_URL, FIND_USERS_URL, UPLOAD_URL } from "./endpoinds";
+import { CHAT_URL, MESSAGE_URL, FIND_USERS_URL, UPLOAD_URL } from "./endpoinds";
 import { CHAT_LIST_TIMESTAMP } from "../constants/storage";
+import { saveChatlistTimestamp } from "./storage";
 import { Platform } from "react-native";
 
 export const sendMessage = (chatId, message) => {
@@ -78,14 +77,14 @@ export const getChats = () => async dispatch => {
 
 export const getMessages = (chatId) => async (dispatch, getState) => {
   try {
-    const chatMessages = getState().messages.allMessages[chatId];
+    const timestamp = getState().chat.lastChatsTimestamp[chatId]
     const newMessages = await doJsonAuthRequest({
-      url: `${MESSAGE_URL + chatId}?timestamp=${getTimestamp(chatMessages)}`,
+      url: `${MESSAGE_URL + chatId}?timestamp=${timestamp}`,
       method: "get"
     });
     dispatch({
       type: LOAD_MESSAGES,
-      payload: { newMessages: _.reverse(newMessages), chatId }
+      payload: { newMessages, chatId }
     });
   } catch (e) {
     console.log(e)
@@ -93,14 +92,10 @@ export const getMessages = (chatId) => async (dispatch, getState) => {
   }
 };
 
-const getTimestamp = (messages) => {
-  return messages && messages.length > 0 ? messages[messages.length - 1].timestamp : 0;
-};
-
-export const setActiveChat = (chat) => dispatch => {
-  if (chat) {
-    dispatch(getMessages(chat.chatId));
-  }
+export const setActiveChat = (chat) => (dispatch, getState) => {
+  const timestampsFromState = getState().chat.lastChatsTimestamp
+  dispatch(getMessages(chat.chatId));
+  saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...timestampsFromState, [chat.chatId]: Date.now() })
   dispatch({ type: SET_ACTIVE_CHAT, payload: chat })
 };
 
