@@ -23,6 +23,8 @@ import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
 import com.reactnativenavigation.react.ReactGateway;
 import com.RNFetchBlob.RNFetchBlobPackage;  
+import com.rnim.rn.audio.ReactNativeAudioPackage; // <-- New
+import com.zmxv.RNSound.RNSoundPackage; // <-- New
 
 import java.util.Arrays;
 import java.util.List;
@@ -66,7 +68,10 @@ public class MainApplication extends NavigationApplication {
             new RNFirebaseAuthPackage(),
             new RNFetchBlobPackage(),
             new PickerPackage(),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new MainReactPackage(),
+            new ReactNativeAudioPackage(), // <-- New
+            new RNSoundPackage()
     );
   }
 

@@ -76,6 +76,8 @@
 		C265BB44219C50D600041C13 /* RSKImageCropper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C265BB42219C50D600041C13 /* RSKImageCropper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C265BB76219C50DD00041C13 /* QBImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C265BB75219C50DD00041C13 /* QBImagePicker.framework */; };
 		C265BB77219C50DD00041C13 /* QBImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C265BB75219C50DD00041C13 /* QBImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C29F18B621B7E41100F454F6 /* libRNAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C29F18B121B7E3ED00F454F6 /* libRNAudio.a */; };
+		C29F18BF21B7FA2F00F454F6 /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C29F18BE21B7FA1800F454F6 /* libRNSound.a */; };
 		C2E4852C2194718F002B908B /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C275488A218C768000E1066D /* libART.a */; };
 		F4FEEEA416E5D9B6189C1785 /* libPods-mobileDemo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301FDBCEDD9240A15EEEFB5A /* libPods-mobileDemo-tvOS.a */; };
 		F9B77463EAD24CE88693DB30 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C308E16CB66F4CB88472301D /* Feather.ttf */; };
@@ -411,6 +413,20 @@
 			remoteGlobalIDString = 323A12871E5F266B004975B8;
 			remoteInfo = "ART-tvOS";
 		};
+		C29F18B021B7E3ED00F454F6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C29F188021B7E3ED00F454F6 /* RNAudio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 42F559BA1CFC90C400DC3F84;
+			remoteInfo = RNAudio;
+		};
+		C29F18BD21B7FA1800F454F6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C29F18B921B7FA1800F454F6 /* RNSound.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 19825A1E1BD4A89800EE0337;
+			remoteInfo = RNSound;
+		};
 		C2D2D278216B306900A1EB52 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D1F9C33FC17045B79F33AFC3 /* RNVectorIcons.xcodeproj */;
@@ -515,6 +531,8 @@
 		C265BB42219C50D600041C13 /* RSKImageCropper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RSKImageCropper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C265BB75219C50DD00041C13 /* QBImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = QBImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2754884218C768000E1066D /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
+		C29F188021B7E3ED00F454F6 /* RNAudio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNAudio.xcodeproj; path = "../node_modules/react-native-audio/ios/RNAudio.xcodeproj"; sourceTree = "<group>"; };
+		C29F18B921B7FA1800F454F6 /* RNSound.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
 		C308E16CB66F4CB88472301D /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		C672BBCD058C423583051411 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		C79F093DC805497F94F7A8EA /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
@@ -544,6 +562,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C29F18BF21B7FA2F00F454F6 /* libRNSound.a in Frameworks */,
+				C29F18B621B7E41100F454F6 /* libRNAudio.a in Frameworks */,
 				C2E4852C2194718F002B908B /* libART.a in Frameworks */,
 				3A2215BA2147EBF4009E0C43 /* libReactNativeNavigation.a in Frameworks */,
 				9A092C64219B0E76009724AF /* RSKImageCropper.framework in Frameworks */,
@@ -771,6 +791,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				C29F18B921B7FA1800F454F6 /* RNSound.xcodeproj */,
+				C29F188021B7E3ED00F454F6 /* RNAudio.xcodeproj */,
 				C2754884218C768000E1066D /* ART.xcodeproj */,
 				9AFE958B218356CA00C20A51 /* ios */,
 				3A22158C2147EB57009E0C43 /* ReactNativeNavigation.xcodeproj */,
@@ -881,6 +903,22 @@
 			children = (
 				C275488A218C768000E1066D /* libART.a */,
 				C275488C218C768000E1066D /* libART-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C29F188121B7E3ED00F454F6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C29F18B121B7E3ED00F454F6 /* libRNAudio.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C29F18BA21B7FA1800F454F6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C29F18BE21B7FA1800F454F6 /* libRNSound.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1144,12 +1182,20 @@
 					ProjectRef = 3A22158C2147EB57009E0C43 /* ReactNativeNavigation.xcodeproj */;
 				},
 				{
+					ProductGroup = C29F188121B7E3ED00F454F6 /* Products */;
+					ProjectRef = C29F188021B7E3ED00F454F6 /* RNAudio.xcodeproj */;
+				},
+				{
 					ProductGroup = C275487A218C740400E1066D /* Products */;
 					ProjectRef = 45502973F7164E1B9CE73435 /* RNFetchBlob.xcodeproj */;
 				},
 				{
 					ProductGroup = C2E484EC21946879002B908B /* Products */;
 					ProjectRef = 681BB03443C540708EFF2488 /* RNFirebase.xcodeproj */;
+				},
+				{
+					ProductGroup = C29F18BA21B7FA1800F454F6 /* Products */;
+					ProjectRef = C29F18B921B7FA1800F454F6 /* RNSound.xcodeproj */;
 				},
 				{
 					ProductGroup = C2D2D274216B306800A1EB52 /* Products */;
@@ -1480,6 +1526,20 @@
 			fileType = archive.ar;
 			path = "libART-tvOS.a";
 			remoteRef = C275488B218C768000E1066D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C29F18B121B7E3ED00F454F6 /* libRNAudio.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNAudio.a;
+			remoteRef = C29F18B021B7E3ED00F454F6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C29F18BE21B7FA1800F454F6 /* libRNSound.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSound.a;
+			remoteRef = C29F18BD21B7FA1800F454F6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		C2D2D279216B306900A1EB52 /* libRNVectorIcons.a */ = {
