@@ -1,8 +1,9 @@
-import { LOAD_MESSAGES, NEW_MESSAGE, FIND_MESSAGES, CLEAN_FIND_MESSAGES } from "../constants/actions";
+import { LOAD_MESSAGES, NEW_MESSAGE, CLEAN_FIND_MESSAGES_INPUT_VALUE, SET_FIND_MESSAGES_INPUT_VALUE } from "../constants/actions";
 import _ from "lodash"
-const initialState = {
-    allMessages: [],
-    filteredMessages: []
+
+export const initialState = {
+    findMessagesInputValue: '',
+    allMessages: []
 }
 
 const messages = (state = initialState, action) => {
@@ -15,11 +16,11 @@ const messages = (state = initialState, action) => {
         case NEW_MESSAGE: {
             return { ...state, allMessages: { ...state.allMessages, [action.payload.chatId]: [action.payload, ...state.allMessages[action.payload.chatId]] } }
         }
-        case FIND_MESSAGES: {
-            return { ...state, filteredMessages: action.payload };
+        case SET_FIND_MESSAGES_INPUT_VALUE: {
+            return { ...state, findMessagesInputValue: action.payload };
         }
-        case CLEAN_FIND_MESSAGES: {
-            return { ...state, filteredMessages: [] };
+        case CLEAN_FIND_MESSAGES_INPUT_VALUE: {
+            return { ...state, findMessagesInputValue: '' };
         }
         default:
             return state;

@@ -32,6 +32,7 @@ interface IProps {
   leftIconFunction: () => void;
   headerTitleFunction: () => void;
   isAvatarVisible: boolean;
+  isSearchResultEmpty: boolean;
 }
 class Header extends React.Component<IProps, IState> {
   private timer = Date.now();
@@ -68,7 +69,7 @@ class Header extends React.Component<IProps, IState> {
       isAvatarVisible,
       headerTitleFunction,
       isSearchBarActive,
-      messages
+      isSearchResultEmpty
     } = this.props;
     const { inputValue } = this.state;
     return (
@@ -105,18 +106,11 @@ class Header extends React.Component<IProps, IState> {
                     />
                   </AvatarWrap>}
                 <Title>
-                  <Text style={{ fontSize: 22, fontWeight: "500" }}>{title}</Text>
+                  <TitleText>{title}</TitleText>
                   {subTitle && (
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        fontWeight: "700",
-                        color: "#aab6b7",
-                        marginTop: 3
-                      }}
-                    >
+                    <SubtitleText>
                       {subTitle}
-                    </Text>
+                    </SubtitleText>
                   )}
                 </Title>
               </TitleWrap>
@@ -137,7 +131,7 @@ class Header extends React.Component<IProps, IState> {
             </IconWrap>
           </RightSide>
         </Head>
-        {isSearchBarActive && !!inputValue.length && (messages.filteredMessages.length > 0) && (
+        {isSearchBarActive && !!inputValue.length && isSearchResultEmpty && (
           <Text style={{ position: "absolute", top: 30, left: "25%" }}>
             {whatSearch} {inputValue} not found
           </Text>
@@ -147,6 +141,18 @@ class Header extends React.Component<IProps, IState> {
   }
 }
 
+const TitleText = styled(Text)`
+      font-size: 22;
+      font-weight: 500;
+    `
+
+const SubtitleText = styled(Text)`
+    font-size: 12;
+    font-weight: 700;
+    color: #aab6b7;
+    margin-top: 3
+
+`
 const IconWrap = styled(TouchableOpacity)`
       display: flex;
       width: 35px;
@@ -160,8 +166,8 @@ const AvatarWrap = styled(View)`
       margin-right: 10px;
       shadow-radius: 5;
       shadow-opacity: 0.2;
-  shadow-offset: {width: 1, height: 1 };
-  shadow-color: ${BLACK_COLOR}
+    shadow-offset: {width: 1, height: 1 };
+    shadow-color: ${BLACK_COLOR}
         `;
 
 const HeaderWrapper = styled(View)`

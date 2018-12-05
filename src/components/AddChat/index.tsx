@@ -48,6 +48,7 @@ class AddChat extends React.Component<IProps> {
         return (
             <AddChatWrap>
                 <Header
+                    isSearchResultEmpty={chat.usersInNewChat.length > 0}
                     isSearchBarActive={chat.isSearchBarActive}
                     whatSearch="Username"
                     rightIconFunction={chat.isSearchBarActive ? () => this.props.closeSearchBar() : () => this.props.openSearchBar()}

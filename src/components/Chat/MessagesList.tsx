@@ -7,6 +7,7 @@ import { WHITE_COLOR } from "../../helpers/styleConstants";
 
 interface IProps {
   userEmail: string;
+  isSearchBarActive: boolean;
   messages: object;
   currentSelectedMessage: object;
   filteredMessages: object;
@@ -24,12 +25,12 @@ export class MessagesList extends React.Component<IProps> {
   }
 
   public MessagesItem = ({ item }) => {
-    const { userEmail, currentSelectedMessage, filteredMessages } = this.props
+    const { userEmail, currentSelectedMessage, filteredMessages, isSearchBarActive } = this.props
     return (<Message key={item._id} idx={item._id}
       files={item.links}
       text={item.text} isMyMessage={item.author.email === userEmail}
       timestamp={item.timestamp}
-      selectedMessage={filteredMessages.length !== 0 ? _.isEqual(currentSelectedMessage, item) : null} />
+      selectedMessage={isSearchBarActive && filteredMessages.length !== 0 ? _.isEqual(currentSelectedMessage, item) : null} />
     )
   }
 

@@ -2,6 +2,8 @@ import io from "socket.io-client";
 import { getChats } from "../actions/chat";
 import { NEW_MESSAGE, AUTH_USER, SEND_MESSAGE } from "../constants/actions";
 import { BASE_URL } from "../actions/endpoinds";
+import { CHAT_LIST_TIMESTAMP } from "../constants/storage";
+import { saveChatlistTimestamp } from "../actions/storage";
 
 let socket
 const socketEvents = store => next => action => {
@@ -13,6 +15,9 @@ const socketEvents = store => next => action => {
       console.log("error", message);
     });
     socket.on("message", message => {
+      if (message.chatId === store.getState().chat.activeChat.chatId) {
+        saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...store.getState().chat.lastChatsTimestamp, [message.chatId]: message.timestamp })
+      }
       console.log("message", message);
       store.dispatch({ type: NEW_MESSAGE, payload: message });
     });

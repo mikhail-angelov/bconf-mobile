@@ -1,20 +1,15 @@
 import {
-    FIND_MESSAGES,
-    CLEAN_FIND_MESSAGES
+    SET_FIND_MESSAGES_INPUT_VALUE,
+    CLEAN_FIND_MESSAGES_INPUT_VALUE
 } from "../constants/actions";
 import _ from "lodash";
 
-export const findMessages = (inputValue) => (dispatch, getState) => {
-    const activeChatId = getState().chat.activeChat.chatId;
-    const allMessages = getState().messages.allMessages
-    const filteredMessages = _.filter(allMessages[activeChatId], message => {
-        return message.text.indexOf(inputValue) !== -1
-    })
+export const setFindMessagesInputValue = (inputValue) => (dispatch) => {
     dispatch({
-        type: FIND_MESSAGES,
-        payload: filteredMessages
+        type: SET_FIND_MESSAGES_INPUT_VALUE,
+        payload: inputValue
     })
 }
-export const cleanFindMessages = () => ({
-    type: CLEAN_FIND_MESSAGES
+export const cleanFindMessagesInputValue = () => ({
+    type: CLEAN_FIND_MESSAGES_INPUT_VALUE
 })

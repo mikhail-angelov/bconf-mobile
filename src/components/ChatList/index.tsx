@@ -5,7 +5,7 @@ import _ from "lodash"
 import { ScrollView, Animated, Dimensions, View, RefreshControl, Text } from "react-native";
 import styled from "styled-components";
 import { logout } from "../../actions/auth";
-import { cleanFindMessages } from "../../actions/messages";
+import { cleanFindMessagesInputValue } from "../../actions/messages";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR } from "../../helpers/styleConstants";
 import { getMessages, setActiveChat, getChats, refreshChatList, closeSearchBar } from "../../actions/chat";
 import { Navigation } from "react-native-navigation";
@@ -32,7 +32,7 @@ interface IProps {
   getChats: () => void;
   refreshChatList: () => void;
   closeSearchBar: () => void;
-  cleanFindMessages: () => void;
+  cleanFindMessagesInputValue: () => void;
   refreshingChatList: boolean;
 }
 
@@ -139,7 +139,7 @@ class ChatList extends React.Component<IProps, IState> {
                     }
                   })}
                 cleanFindMessagesAndCloseFindBar={() => {
-                  this.props.cleanFindMessages()
+                  this.props.cleanFindMessagesInputValue()
                   this.props.closeSearchBar()
                 }}
                 name={chat.chatName}
@@ -202,7 +202,7 @@ const mapDispatchToProps = {
   logout,
   getChats,
   refreshChatList,
-  cleanFindMessages,
+  cleanFindMessagesInputValue,
   closeSearchBar
 };
 

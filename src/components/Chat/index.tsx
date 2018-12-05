@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { MessagesList } from "./MessagesList";
 import { goToAuth } from "../../navigation/navigation";
 import { WHITE_COLOR, SOFT_BLUE_COLOR } from "../../helpers/styleConstants";
-import { findMessages, cleanFindMessages } from "../../actions/messages";
+import { setFindMessagesInputValue, cleanFindMessagesInputValue } from "../../actions/messages";
 import { sendMessage, unsetActiveChat, getChatlistTimestamp, openSearchBar, closeSearchBar } from "../../actions/chat";
 import _ from "lodash";
 
@@ -27,8 +27,8 @@ interface IProps {
   getChatlistTimestamp: () => void;
   openSearchBar: () => void;
   closeSearchBar: () => void;
-  findMessages: () => void;
-  cleanFindMessages: () => void;
+  setFindMessagesInputValue: () => void;
+  cleanFindMessagesInputValue: () => void;
   chatId: string;
   chatName: string;
   chatImage: string | undefined;
@@ -36,6 +36,7 @@ interface IProps {
   chatColor: string;
   messages: any;
   messagesByUserId: object;
+  filteredMessages: object;
   isSearchBarActive: boolean;
 }
 class Chat extends React.PureComponent<IProps, IState> {
@@ -53,31 +54,34 @@ class Chat extends React.PureComponent<IProps, IState> {
   }
 
   public componentDidUpdate(prevProps) {
-    if (prevProps.messages.filteredMessages.length !== this.props.messages.filteredMessages.length) {
-      this.setState({ currentSelectedMessage: this.props.messages.filteredMessages[0] })
+    if (prevProps.filteredMessages.length !== this.props.filteredMessages.length) {
+      this.setState({ currentSelectedMessage: this.props.filteredMessages[0] })
     }
   }
 
-  public nextMessage(filteredMessages, currentMessageNumber) {
+  public nextMessage(currentMessageNumber) {
+    const { filteredMessages } = this.props
     const newNumber = currentMessageNumber === filteredMessages.length - 1 ? 0 : currentMessageNumber + 1
     const nextMessage = filteredMessages[newNumber]
     this.setState({ currentSelectedMessage: nextMessage, currentMessageNumber: newNumber })
   }
 
-  public prevMessage(filteredMessages, currentMessageNumber) {
+  public prevMessage(currentMessageNumber) {
+    const { filteredMessages } = this.props
     const newNumber = currentMessageNumber === 0 ? filteredMessages.length - 1 : currentMessageNumber - 1
     const nextMessage = filteredMessages[newNumber]
     this.setState({ currentSelectedMessage: nextMessage, currentMessageNumber: newNumber })
   }
 
   public render() {
-    const { chat, width, auth, messagesByUserId, messages } = this.props;
+    const { chat, width, auth, messagesByUserId, filteredMessages } = this.props;
     const { currentSelectedMessage, currentMessageNumber } = this.state
     return (
       <ChatView style={{ width: width }}>
         <Header
           whatSearch="Messages"
-          inputHandler={this.props.findMessages}
+          isSearchResultEmpty={filteredMessages.length > 0}
+          inputHandler={this.props.setFindMessagesInputValue}
           isSearchBarActive={chat.isSearchBarActive}
           headerTitleFunction={() =>
             Navigation.push("ChatList", {
@@ -95,7 +99,7 @@ class Chat extends React.PureComponent<IProps, IState> {
             })}
           rightIconFunction={chat.isSearchBarActive ? () => {
             this.props.closeSearchBar()
-            this.props.cleanFindMessages()
+            this.props.cleanFindMessagesInputValue()
           } : () => this.props.openSearchBar()}
           rightIconName={chat.isSearchBarActive ? "times" : "search"}
           chatImage={chat.activeChat.chatImage}
@@ -104,7 +108,7 @@ class Chat extends React.PureComponent<IProps, IState> {
           width={width}
           isAvatarVisible={true}
           leftIconFunction={() => {
-            this.props.cleanFindMessages()
+            this.props.cleanFindMessagesInputValue()
             this.props.getChatlistTimestamp()
             this.props.unsetActiveChat()
             Navigation.popToRoot("ChatList")
@@ -113,12 +117,17 @@ class Chat extends React.PureComponent<IProps, IState> {
           }
           chatColor={chat.activeChat.chatColor}
           leftIconName="arrow-left" />
-        <MessagesList filteredMessages={messages.filteredMessages} messages={messagesByUserId} userEmail={auth.email} currentSelectedMessage={currentSelectedMessage} />
+        <MessagesList
+          isSearchBarActive={chat.isSearchBarActive}
+          filteredMessages={filteredMessages}
+          messages={messagesByUserId}
+          userEmail={auth.email}
+          currentSelectedMessage={currentSelectedMessage} />
         {chat.isSearchBarActive ?
           <SearchMessagesBar>
             <Icon.Button
               size={20}
-              onPress={() => this.nextMessage(messages.filteredMessages, currentMessageNumber)}
+              onPress={() => this.nextMessage(currentMessageNumber)}
               backgroundColor='d6efef'
               name='arrow-up'
               color={SOFT_BLUE_COLOR}
@@ -128,11 +137,11 @@ class Chat extends React.PureComponent<IProps, IState> {
             >
 
               {/* to do: refactor this code */}
-              {messages.filteredMessages.length} / {messages.filteredMessages.length ? currentMessageNumber + 1 : 0}
+              {filteredMessages.length} / {filteredMessages.length ? currentMessageNumber + 1 : 0}
             </Text>
             <Icon.Button
               size={20}
-              onPress={() => this.prevMessage(messages.filteredMessages, currentMessageNumber)}
+              onPress={() => this.prevMessage(currentMessageNumber)}
               name='arrow-down'
               backgroundColor='d6efef'
               color={SOFT_BLUE_COLOR}
@@ -175,13 +184,16 @@ const mapDispatchToProps = {
   getChatlistTimestamp,
   openSearchBar,
   closeSearchBar,
-  findMessages,
-  cleanFindMessages
+  setFindMessagesInputValue,
+  cleanFindMessagesInputValue
 };
 
 const selector = (state) => {
+  const filteredMessages = _.filter(state.messages.allMessages[state.chat.activeChat.chatId], message => {
+    return message.text.indexOf(state.messages.findMessagesInputValue) !== -1
+  })
   const messagesByUserId = _.get(state, `messages.allMessages[${state.chat.activeChat.chatId}]`, []);
-  return ({ auth: state.auth, chat: state.chat, messagesByUserId, messages: state.messages });
+  return ({ auth: state.auth, chat: state.chat, messagesByUserId, filteredMessages });
 }
 
 const mapStateToProps = state => selector(state);

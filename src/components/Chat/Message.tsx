@@ -28,7 +28,7 @@ export const Message = ({ text, files, idx, isMyMessage, timestamp, selectedMess
 
 interface IMessageProps {
   isMyMessage: boolean;
-  selectedMessage: any;
+  selectedMessage: boolean;
 }
 
 const MessageWrapper = styled(View).attrs({})`
