@@ -21,16 +21,16 @@ interface IAvatarProps {
 }
 
 const AvatarWrapper = styled(View).attrs({})`
-      overflow:hidden;
-      height: 68%;
-      width: 70%;
-      borderRadius: 45;
-      borderWidth: 3;
-      borderColor: ${WHITE_COLOR};
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+      border-radius: 45;
+      border-width: 3;
+      border-color: ${WHITE_COLOR};
       display: flex;
-      alignItems: center;
-      justifyContent: center;
-      backgroundColor: ${(props: IAvatarProps) =>
+      align-items: center;
+      justify-content: center;
+      background-color: ${(props: IAvatarProps) =>
     props.avatarColor || '#eee'};
     `;
 
@@ -40,8 +40,8 @@ const AvaImg = styled(Image)`
 `;
 
 const AvaText = styled(Text)`
-    fontSize: ${(props: IAvatarProps) =>
+    font-size: ${(props: IAvatarProps) =>
     props.size === "small" ? "12px" : "24px"
-  }};
+  };
     color: ${WHITE_COLOR};
   `;

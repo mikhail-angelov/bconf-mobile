@@ -1,41 +1,56 @@
 import React from "react";
 import _ from "lodash";
-import { ScrollView } from "react-native";
+import { FlatList } from 'react-native';
 import styled from "styled-components";
 import { Message } from "./Message";
 import { WHITE_COLOR } from "../../helpers/styleConstants";
 
 interface IProps {
   userEmail: string;
+  isSearchBarActive: boolean;
   messages: object;
+  currentSelectedMessage: object;
+  filteredMessages: object;
 }
 export class MessagesList extends React.Component<IProps> {
-  public scrollToEnd = () => {
-    this.scrollView.scrollToEnd();
+
+  public componentDidUpdate(prevProps) {
+    if (prevProps.messages.length !== this.props.messages.length && this.props.messages.length !== 0) {
+      this.flatListRef.scrollToOffset({ animated: true, offset: 0 })
+    }
+    if (prevProps.currentSelectedMessage !== this.props.currentSelectedMessage && this.props.currentSelectedMessage) {
+      const indexMessage = _.findIndex(this.props.messages, this.props.currentSelectedMessage)
+      this.flatListRef.scrollToIndex({ animated: true, index: indexMessage, viewPosition: 0.5 });
+    }
   }
+
+  public MessagesItem = ({ item }) => {
+    const { userEmail, currentSelectedMessage, filteredMessages, isSearchBarActive } = this.props
+    return (<Message key={item._id} idx={item._id}
+      files={item.links}
+      text={item.text} isMyMessage={item.author.email === userEmail}
+      timestamp={item.timestamp}
+      selectedMessage={isSearchBarActive && filteredMessages.length !== 0 ? _.isEqual(currentSelectedMessage, item) : null} />
+    )
+  }
+
   public render() {
-    const { messages, userEmail } = this.props
+    const { messages } = this.props
     return (
-      <ScrollView
+      <FlatList
+        inverted
+        onScrollToIndexFailed={() => console.log('scroll error')}
+        ref={(ref) => { this.flatListRef = ref; }}
         style={{
-          flex: 1,
-          padding: 20,
-          paddingTop: 0,
+          paddingRight: 20,
+          paddingLeft: 20,
           display: "flex",
           flexDirection: "column",
           backgroundColor: `${WHITE_COLOR}`
         }}
-        ref={(scrollView) => { this.scrollView = scrollView }}
-        onContentSizeChange={() => {
-          this.scrollToEnd()
-        }}>
-        {_.map(messages, message => (
-          <Message key={message._id} idx={message._id}
-            files={message.links}
-            text={message.text} isMyMessage={message.author.email === userEmail}
-            timestamp={message.timestamp} />
-        ))
-        }
-      </ScrollView >)
+        data={messages}
+        renderItem={this.MessagesItem}
+      />
+    )
   }
 }

@@ -5,10 +5,9 @@ import _ from "lodash"
 import { ScrollView, Animated, Dimensions, View, RefreshControl, Text } from "react-native";
 import styled from "styled-components";
 import { logout } from "../../actions/auth";
-import { saveChatlistTimestamp } from "../../actions/storage";
+import { cleanFindMessagesInputValue } from "../../actions/messages";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR } from "../../helpers/styleConstants";
-import { CHAT_LIST_TIMESTAMP } from "../../constants/storage";
-import { getMessages, setActiveChat, getChats, refreshChatList } from "../../actions/chat";
+import { getMessages, setActiveChat, getChats, refreshChatList, closeSearchBar } from "../../actions/chat";
 import { Navigation } from "react-native-navigation";
 import ChatMenu from "../ChatMenu";
 import Header from "../Header";
@@ -32,7 +31,8 @@ interface IProps {
   logout: () => void;
   getChats: () => void;
   refreshChatList: () => void;
-  saveChatlistTimestamp: (key, data) => void;
+  closeSearchBar: () => void;
+  cleanFindMessagesInputValue: () => void;
   refreshingChatList: boolean;
 }
 
@@ -84,10 +84,6 @@ class ChatList extends React.Component<IProps, IState> {
   public setActiveChatAndGetMessages(chatProperties) {
     this.props.setActiveChat(chatProperties);
   }
-
-  // public resetActiveChat = () => {
-  //   this.props.setActiveChat(null, null, null)
-  // }
 
   public render() {
     return (
@@ -142,7 +138,10 @@ class ChatList extends React.Component<IProps, IState> {
                       }
                     }
                   })}
-                saveChatlistTimestamp={() => saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...this.props.chat.lastChatsTimestamp, [chat.chatId]: Date.now() })}
+                cleanFindMessagesAndCloseFindBar={() => {
+                  this.props.cleanFindMessagesInputValue()
+                  this.props.closeSearchBar()
+                }}
                 name={chat.chatName}
                 id={chat.chatId}
                 key={chat.chatId}
@@ -188,9 +187,9 @@ class ChatList extends React.Component<IProps, IState> {
 const ChatListWrapper = styled(View)`
         display: flex;
         flex-direction: column;
-        backgroundColor: ${WHITE_COLOR};
-        borderLeftWidth: 3;
-        borderColor: rgba(0,0,0,0.05);
+        background-color: ${WHITE_COLOR};
+        border-left-width: 3;
+        border-color: rgba(0,0,0,0.05);
         height: 100%;
         position: relative;
       `;
@@ -202,7 +201,9 @@ const mapDispatchToProps = {
   setActiveChat,
   logout,
   getChats,
-  refreshChatList
+  refreshChatList,
+  cleanFindMessagesInputValue,
+  closeSearchBar
 };
 
 export default connect(

@@ -1,5 +1,4 @@
 import {
-  OUTCOMING_MESSAGE,
   GET_CHATS,
   GET_CHATS_ERROR,
   LOAD_MESSAGES_ERROR,
@@ -24,14 +23,16 @@ import {
   ADD_PICTURE_IN_MESSAGE_LOCALY,
   DELETE_PICTURE_IN_MESSAGE_LOCALY,
   CLEAN_PICTURE_IN_MESSAGE_LOCALY,
+  OPEN_SEARCH_BAR,
+  CLOSE_SEARCH_BAR
 } from "../constants/actions";
-import io from "socket.io-client";
 import _ from "lodash";
 import RNFetchBlob from 'rn-fetch-blob'
 import { AsyncStorage } from "react-native";
 import { doJsonAuthRequest, getToken, getRandomColor, getFilenameForAndroid } from "./helper";
-import { BASE_URL, CHAT_URL, MESSAGE_URL, FIND_USERS_URL, UPLOAD_URL } from "./endpoinds";
+import { CHAT_URL, MESSAGE_URL, FIND_USERS_URL, UPLOAD_URL } from "./endpoinds";
 import { CHAT_LIST_TIMESTAMP } from "../constants/storage";
+import { saveChatlistTimestamp } from "./storage";
 import { Platform } from "react-native";
 
 export const sendMessage = (chatId, message) => {
@@ -76,28 +77,25 @@ export const getChats = () => async dispatch => {
 
 export const getMessages = (chatId) => async (dispatch, getState) => {
   try {
-    const chatMessages = getState().messages[chatId];
+    const timestamp = getState().chat.lastChatsTimestamp[chatId]
     const newMessages = await doJsonAuthRequest({
-      url: `${MESSAGE_URL + chatId}?timestamp=${getTimestamp(chatMessages)}`,
+      url: `${MESSAGE_URL + chatId}?timestamp=${timestamp || 0}`,
       method: "get"
     });
     dispatch({
       type: LOAD_MESSAGES,
-      payload: { messages: newMessages, chatId }
+      payload: { newMessages, chatId }
     });
   } catch (e) {
+    console.log(e)
     dispatch({ type: LOAD_MESSAGES_ERROR });
   }
 };
 
-const getTimestamp = (messages) => {
-  return messages && messages.length > 0 ? messages[messages.length - 1].timestamp : 0;
-};
-
-export const setActiveChat = (chat) => dispatch => {
-  if (chat) {
-    dispatch(getMessages(chat.chatId));
-  }
+export const setActiveChat = (chat) => (dispatch, getState) => {
+  const timestampsFromState = getState().chat.lastChatsTimestamp
+  dispatch(getMessages(chat.chatId));
+  saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...timestampsFromState, [chat.chatId]: Date.now() })
   dispatch({ type: SET_ACTIVE_CHAT, payload: chat })
 };
 
@@ -266,4 +264,12 @@ export const deletePhotoInMessage = (imageUrl) => (dispatch) => {
 
 export const deleteAllPhotoInMessageLocaly = () => ({
   type: CLEAN_PICTURE_IN_MESSAGE_LOCALY
+})
+
+export const openSearchBar = () => ({
+  type: OPEN_SEARCH_BAR
+})
+
+export const closeSearchBar = () => ({
+  type: CLOSE_SEARCH_BAR
 })

@@ -9,24 +9,26 @@ import { MESSAGE_TIMESTAMP_FORMAT } from '../../helpers/constants'
 
 const { width } = Dimensions.get('window')
 
-export const Message = ({ text, files, idx, isMyMessage, timestamp }) => {
-
+export const Message = ({ text, files, idx, isMyMessage, timestamp, selectedMessage }) => {
   return (
-    <MessageWrapper isMyMessage={isMyMessage}>
-      {_.map(files, fileUrl => (
-        <MessageImage
-          source={{ uri: fileUrl }}
-        />))}
-      <MessageText isMyMessage={isMyMessage}>{text}</MessageText>
-      <DateText isMyMessage={isMyMessage}>
-        {moment(timestamp).format(MESSAGE_TIMESTAMP_FORMAT)}
-      </DateText>
-    </MessageWrapper>
+    <View style={{ backgroundColor: selectedMessage ? SOFT_BLUE_COLOR : "transparent", borderRadius: 10 }}>
+      <MessageWrapper isMyMessage={isMyMessage}>
+        {_.map(files, fileUrl => (
+          <MessageImage
+            source={{ uri: fileUrl }}
+          />))}
+        <MessageText isMyMessage={isMyMessage}>{text}</MessageText>
+        <DateText isMyMessage={isMyMessage}>
+          {moment(timestamp).format(MESSAGE_TIMESTAMP_FORMAT)}
+        </DateText>
+      </MessageWrapper>
+    </View>
   );
 };
 
 interface IMessageProps {
   isMyMessage: boolean;
+  selectedMessage: boolean;
 }
 
 const MessageWrapper = styled(View).attrs({})`
@@ -34,7 +36,7 @@ const MessageWrapper = styled(View).attrs({})`
   border-radius: 10px;
   background-color: ${(props: IMessageProps) =>
     props.isMyMessage ? "#d6efef" : "#fef8e5"};
-  margin-top: 10px;
+  margin: 5px;
   flex: none;
   align-self: ${(props: IMessageProps) =>
     props.isMyMessage ? "flex-end" : "flex-start"};
@@ -44,7 +46,7 @@ const MessageWrapper = styled(View).attrs({})`
 `;
 
 const MessageText = styled(Text)`
-  marginBottom: 3px;
+  margin-bottom: 3px;
   color: black;
   letter-spacing: 0.7px;
   text-align: ${(props: IMessageProps) =>
@@ -62,9 +64,9 @@ const MessageImage = styled(Image)`
     overflow: hidden;
     width: 280; 
     height: 180; 
-    borderWidth: 0.5; 
-    borderRadius: 10;
-    marginBottom: 5; 
-    backgroundColor: ${WHITE_COLOR};
-    borderColor: ${SOFT_BLUE_COLOR};
+    border-width: 0.5; 
+    border-radius: 10;
+    margin-bottom: 5; 
+    background-color: ${WHITE_COLOR};
+    border-color: ${SOFT_BLUE_COLOR};
 `;

@@ -17,7 +17,8 @@ interface IProps {
   deletePhotoInMessage: (imageUrl) => void;
   deleteAllPhotoInMessageLocaly: () => void;
   chatId: string;
-  imagesInCurrentMessage: object
+  imagesInCurrentMessage: object;
+  chat: object;
 }
 interface IState {
   textInput: string;
@@ -128,17 +129,17 @@ export default connect(
 
 
 const MessageInputView = styled(View)`
-flex-direction: row
-padding: 4px;
-margin: 10px;
-    marginBottom: ${height > 800 ? "30px" : "10px"}
+    flex-direction: row;
+    padding: 4px;
+    margin: 10px;
+    margin-bottom: ${height > 800 ? "30px" : "10px"};
     align-items: center;
     justify-content: center;
-    borderWidth: 1;
-    borderColor: #888;
-    backgroundColor: #d6efef;
-    borderRadius: 5px;
-    borderColor: ${WHITE_COLOR};
+    border-width: 1;
+    border-color: #888;
+    background-color: #d6efef;
+    border-radius: 5px;
+    border-color: ${WHITE_COLOR};
     min-height: 50px;
     `;
 
@@ -146,13 +147,13 @@ const MessageImage = styled(Image)`
     overflow: hidden; 
     width: 130; 
     height: 80; 
-    borderWidth: 0.5; 
-    borderRadius: 10;
-    marginBottom: 5; 
-    marginTop: 10; 
-    marginRight: 10; 
-    backgroundColor: ${WHITE_COLOR}; 
-    borderColor: ${SOFT_BLUE_COLOR};
+    border-width: 0.5; 
+    border-radius: 10;
+    margin-bottom: 5; 
+    margin-top: 10; 
+    margin-right: 10; 
+    background-color: ${WHITE_COLOR}; 
+    border-color: ${SOFT_BLUE_COLOR};
     `;
 
 const UploadPhotoWrap = styled(ScrollView)`
@@ -167,16 +168,16 @@ const MessageImageProgress = styled(View)`
       overflow: hidden; 
       width: 130; 
       height: 80;
-      borderWidth: 0.5;
-      borderRadius: 10;
+      border-width: 0.5;
+      border-radius: 10;
       display: flex;
-      alignItems: center;
-      justifyContent: center;
-      marginBottom: 5; 
-      marginTop: 10;
-      marginRight: 10; 
-      backgroundColor: ${WHITE_COLOR};
-      borderColor: ${SOFT_BLUE_COLOR}
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 5; 
+      margin-top: 10;
+      margin-right: 10; 
+      background-color: ${WHITE_COLOR};
+      border-color: ${SOFT_BLUE_COLOR}
       `;
 
 const MessageImageWrap = styled(View)``;

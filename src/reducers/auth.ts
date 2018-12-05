@@ -19,7 +19,8 @@ const initialState = {
   signUpError: "",
   authenticated: false,
   remindPasswordError: "",
-  users: []
+  users: [],
+  isSearchBarActive: false
 };
 
 const auth = (state = initialState, action) => {

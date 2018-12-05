@@ -16,7 +16,7 @@ interface IProps {
   id: number;
   lastMessageTimestamp: number;
   setActiveChatAndGetMessages: () => void;
-  saveChatlistTimestamp: () => void;
+  cleanFindMessagesAndCloseFindBar: () => void;
   navigateToChat: any;
   haveNewMessages: boolean;
 }
@@ -30,15 +30,15 @@ export const ChatListItem = ({
   chatColor,
   navigateToChat,
   chatImage,
-  saveChatlistTimestamp,
-  haveNewMessages
+  haveNewMessages,
+  cleanFindMessagesAndCloseFindBar
 }: IProps) => {
   return (
     <ChatListItemWrapper
       onPress={() => {
+        cleanFindMessagesAndCloseFindBar()
         setActiveChatAndGetMessages()
         navigateToChat()
-        saveChatlistTimestamp()
       }}
     >
       <AvatarSide>
@@ -66,81 +66,82 @@ export const ChatListItem = ({
 };
 
 const ChatListItemWrapper = styled(TouchableOpacity)`
-            height: 110px;
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            padding: 0 10px 10px 0px;
+  height: 110px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 0 10px 10px 0px;
   background-color: ${WHITE_COLOR};
   &:active {
           background-color: ${WHITE_COLOR};
     }
-  `;
+`;
 
 const AvatarSide = styled(View)`
-    width: 25%;
-    height: 100%;
-    display: flex;
-    alignItems: center;
-    justifyContent: center;
-    shadowRadius: 5;
-    shadowOpacity: 0.3;
-  shadowOffset: {width: 2, height: 2};
-  shadowColor: ${BLACK_COLOR};
-          `;
+  width: 25%;
+  padding: 10px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  shadow-radius: 5;
+  shadow-opacity: 0.3;
+  shadow-offset: {width: 2, height: 2};
+  shadow-color: ${BLACK_COLOR};
+`;
 
 const LastMessageArea = styled(View)`
-            width: 50%;
-            height: 100%;
-            paddingTop: 20px;
-            paddingLeft:5px;
-          `;
+  width: 50%;
+  height: 100%;
+  padding-top: 20px;
+  padding-left:5px;
+`;
 
 const ChatNameText = styled(Text)`
-            fontWeight: 500;
-            fontSize: 18px;
-          `;
+  font-weight: 500;
+  font-size: 18px;
+`;
 
 const LastMessageAuthor = styled(Text)`
-            fontSize: 14px;
-          `;
+  font-size: 14px;
+`;
 
 const LastMessageText = styled(Text)`
-            fontSize: 14px;
+  font-size: 14px;
   color: ${GRAY_COLOR};
-          `;
+`;
 
 const ChatName = styled(View)`
-    display: flex;
-    flexDirection: row;
-    `;
+  display: flex;
+  flex-direction: row;
+`;
 
 const LastMessage = styled(View)`
-            fontSize: 14px;
-            display: flex;
-            flexDirection: row;
-            marginTop: 2px;
-          `;
+  font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 2px;
+`;
 
 const Indicator = styled(View)`
-      marginTop: 7px;
-      marginLeft: 5px;
-          width: 7px;
-          height: 7px;
-          borderRadius: 20px;
-    backgroundColor: ${SOFT_BLUE_COLOR};
-    borderColor: ${BLACK_COLOR};
-        borderWidth: 0.3;
-        `;
+  margin-top: 7px;
+  margin-left: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 20px;
+  background-color: ${SOFT_BLUE_COLOR};
+  border-color: ${BLACK_COLOR};
+  border-width: 0.3;
+`;
 
 const Timestamp = styled(Text)`
-          width: 25%;
-          height: 100%;
-          fontSize: 12px;
+  width: 25%;
+  height: 100%;
+  font-size: 12px;
   color: ${GRAY_COLOR};
-            textAlign: right;
-            paddingTop: 20px;
-            paddingRight: 10px;
-            letter-spacing: 1px;
-          `;
+  text-align: right;
+  padding-top: 20px;
+  padding-right: 10px;
+  letter-spacing: 1px;
+`;
 
