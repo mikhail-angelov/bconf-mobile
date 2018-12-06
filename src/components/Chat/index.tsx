@@ -7,7 +7,6 @@ import { Navigation } from "react-native-navigation";
 import MessageInput from "./MessageInput";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { MessagesList } from "./MessagesList";
-import AudioExample from "../CommonUIElements/VoiceButton";
 import { goToAuth } from "../../navigation/navigation";
 import { WHITE_COLOR, SOFT_BLUE_COLOR } from "../../helpers/styleConstants";
 import { setFindMessagesInputValue, cleanFindMessagesInputValue } from "../../actions/messages";
@@ -118,13 +117,12 @@ class Chat extends React.PureComponent<IProps, IState> {
           }
           chatColor={chat.activeChat.chatColor}
           leftIconName="arrow-left" />
-        {/* <MessagesList
+        <MessagesList
           isSearchBarActive={chat.isSearchBarActive}
           filteredMessages={filteredMessages}
           messages={messagesByUserId}
           userEmail={auth.email}
-          currentSelectedMessage={currentSelectedMessage} /> */}
-          <AudioExample/>
+          currentSelectedMessage={currentSelectedMessage} />
         {chat.isSearchBarActive ?
           <SearchMessagesBar>
             <Icon.Button

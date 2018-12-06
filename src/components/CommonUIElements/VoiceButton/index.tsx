@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styled from "styled-components";
 
 import {
   AppRegistry,
@@ -9,12 +10,15 @@ import {
   Platform,
   PermissionsAndroid,
 } from 'react-native';
+import { SOFT_BLUE_COLOR, WHITE_COLOR } from "../../../helpers/styleConstants";
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import Sound from 'react-native-sound';
 import { AudioRecorder, AudioUtils } from 'react-native-audio';
 
 interface IProps {
   changePassword: (newPassword: string) => void;
+  uploadAudio: (filePath: string) => void;
 }
 interface IState {
   currentTime: number,
@@ -63,6 +67,7 @@ class AudioExample extends Component<IProps, IState> {
       };
 
       AudioRecorder.onFinished = (data) => {
+        console.log("HARE!", data)
         // Android callback comes in the form of a promise instead.
         if (Platform.OS === 'ios') {
           this.finishRecording(data.status === "OK", data.audioFileURL, data.audioFileSize);
@@ -71,57 +76,33 @@ class AudioExample extends Component<IProps, IState> {
     });
   }
 
-  public renderButton(title, onPress, active) {
-    const style = (active) ? styles.activeButtonText : styles.buttonText;
+  // async pause() {
+  //   if (!this.state.recording) {
+  //     console.warn('Can\'t pause, not recording!');
+  //     return;
+  //   }
 
-    return (
-      <TouchableHighlight style={styles.button} onPress={onPress}>
-        <Text style={style}>
-          {title}
-        </Text>
-      </TouchableHighlight>
-    );
-  }
+  //   try {
+  //     const filePath = await AudioRecorder.pauseRecording();
+  //     this.setState({ paused: true });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
-  public renderPauseButton(onPress, active) {
-    const style = (active) ? styles.activeButtonText : styles.buttonText;
-    const title = this.state.paused ? "RESUME" : "PAUSE";
-    return (
-      <TouchableHighlight style={styles.button} onPress={onPress}>
-        <Text style={style}>
-          {title}
-        </Text>
-      </TouchableHighlight>
-    );
-  }
+  // async resume() {
+  //   if (!this.state.paused) {
+  //     console.warn('Can\'t resume, not paused!');
+  //     return;
+  //   }
 
-  async pause() {
-    if (!this.state.recording) {
-      console.warn('Can\'t pause, not recording!');
-      return;
-    }
-
-    try {
-      const filePath = await AudioRecorder.pauseRecording();
-      this.setState({ paused: true });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async resume() {
-    if (!this.state.paused) {
-      console.warn('Can\'t resume, not paused!');
-      return;
-    }
-
-    try {
-      await AudioRecorder.resumeRecording();
-      this.setState({ paused: false });
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  //   try {
+  //     await AudioRecorder.resumeRecording();
+  //     this.setState({ paused: false });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   async stop() {
     if (!this.state.recording) {
@@ -148,8 +129,6 @@ class AudioExample extends Component<IProps, IState> {
       await this.stop();
     }
 
-    // These timeouts are a hacky workaround for some issues with react-native-sound.
-    // See https://github.com/zmxv/react-native-sound/issues/89.
     setTimeout(() => {
       const sound = new Sound(this.state.audioPath, '', (error) => {
         if (error) {
@@ -195,56 +174,22 @@ class AudioExample extends Component<IProps, IState> {
 
   finishRecording(didSucceed, filePath, fileSize) {
     this.setState({ finished: didSucceed });
-    console.log(`Finished recording of duration ${this.state.currentTime} seconds at path: ${filePath} and size of ${fileSize || 0} bytes`);
+    this.props.uploadAudio(filePath)
+    console.log("filepath", filePath)
   }
 
   render() {
 
     return (
-      <View style={styles.container}>
-        <View style={styles.controls}>
-          {this.renderButton("RECORD", () => { this.record() }, this.state.recording)}
-          {this.renderButton("PLAY", () => { this.play() })}
-          {this.renderButton("STOP", () => { this.stop() })}
-          {/* {this.renderButton("PAUSE", () => {this.pause()} )} */}
-          {this.renderPauseButton(() => { this.state.paused ? this.resume() : this.pause() })}
-          <Text style={styles.progressText}>{this.state.currentTime}s</Text>
-        </View>
-      </View>
+      <Icon
+        onPress={this.state.recording ? () => this.stop() : () => this.record()}
+        style={{ marginLeft: 12, marginRight: 12 }}
+        size={22}
+        name={this.state.recording ? "stop" : "microphone"}
+        backgroundColor={WHITE_COLOR}
+        color="#f5775f" />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#2b608a",
-  },
-  controls: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-  progressText: {
-    paddingTop: 50,
-    fontSize: 50,
-    color: "#fff"
-  },
-  button: {
-    padding: 20
-  },
-  disabledButtonText: {
-    color: '#eee'
-  },
-  buttonText: {
-    fontSize: 20,
-    color: "#fff"
-  },
-  activeButtonText: {
-    fontSize: 20,
-    color: "#B81F00"
-  }
-
-});
 
 export default AudioExample;

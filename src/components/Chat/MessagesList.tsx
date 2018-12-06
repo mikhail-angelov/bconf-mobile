@@ -28,6 +28,7 @@ export class MessagesList extends React.Component<IProps> {
     const { userEmail, currentSelectedMessage, filteredMessages, isSearchBarActive } = this.props
     return (<Message key={item._id} idx={item._id}
       files={item.links}
+      audioFiles={item.audioLinks}
       text={item.text} isMyMessage={item.author.email === userEmail}
       timestamp={item.timestamp}
       selectedMessage={isSearchBarActive && filteredMessages.length !== 0 ? _.isEqual(currentSelectedMessage, item) : null} />

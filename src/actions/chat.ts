@@ -24,7 +24,13 @@ import {
   DELETE_PICTURE_IN_MESSAGE_LOCALY,
   CLEAN_PICTURE_IN_MESSAGE_LOCALY,
   OPEN_SEARCH_BAR,
-  CLOSE_SEARCH_BAR
+  CLOSE_SEARCH_BAR,
+  UPLOAD_AUDIO_IN_CHAT_START,
+  UPLOAD_AUDIO_IN_CHAT_PROGRESS,
+  UPLOAD_AUDIO_IN_CHAT_END,
+  ADD_AUDIO_IN_MESSAGE_LOCALY,
+  DELETE_AUDIO_IN_MESSAGE_LOCALY,
+  CLEAN_AUDIO_IN_MESSAGE_LOCALY,
 } from "../constants/actions";
 import _ from "lodash";
 import RNFetchBlob from 'rn-fetch-blob'
@@ -179,7 +185,7 @@ export const updateChatSettings = (chat) => async (dispatch) => {
 };
 
 export const changeChatPicture = (image, chat) => async (dispatch) => {
-  const filenameForAndroid = getFilenameForAndroid(image)
+  const filenameForAndroid = getFilenameForAndroid(image.path)
   const token = await getToken()
   dispatch({
     type: UPLOAD_CHAT_PHOTO_START,
@@ -223,7 +229,8 @@ export const refreshChatList = () => async (dispatch) => {
 }
 
 export const uploadPhotoInMessage = (image) => async (dispatch) => {
-  const filenameForAndroid = getFilenameForAndroid(image)
+  console.log(image)
+  const filenameForAndroid = getFilenameForAndroid(image.path)
   const token = await getToken()
   dispatch({
     type: UPLOAD_PICTURES_IN_CHAT_START,
@@ -266,6 +273,17 @@ export const deleteAllPhotoInMessageLocaly = () => ({
   type: CLEAN_PICTURE_IN_MESSAGE_LOCALY
 })
 
+export const deleteAudioInMessage = (audioUrl) => (dispatch) => {
+  dispatch({
+    type: DELETE_AUDIO_IN_MESSAGE_LOCALY,
+    payload: audioUrl
+  })
+}
+
+export const deleteAllAudiosInMessageLocaly = () => ({
+  type: CLEAN_AUDIO_IN_MESSAGE_LOCALY
+})
+
 export const openSearchBar = () => ({
   type: OPEN_SEARCH_BAR
 })
@@ -273,3 +291,36 @@ export const openSearchBar = () => ({
 export const closeSearchBar = () => ({
   type: CLOSE_SEARCH_BAR
 })
+
+export const uploadAudio = (filePath) => async (dispatch) => {
+  const filename = getFilenameForAndroid(filePath)
+  const token = await getToken()
+  dispatch({
+    type: UPLOAD_AUDIO_IN_CHAT_START,
+  })
+  const resp = await RNFetchBlob.fetch('POST', UPLOAD_URL, {
+    Authorization: token,
+    // this is required, otherwise it won't be process as a multipart/form-data request
+    'Content-Type': 'multipart/form-data',
+  }, [
+      {
+        name: filename,
+        filename,
+        data: RNFetchBlob.wrap(filePath),
+        type: 'audio/aac'
+      },
+    ]).uploadProgress({ interval: 50 }, (written, total) => {
+      dispatch({
+        type: UPLOAD_AUDIO_IN_CHAT_PROGRESS,
+        payload: written / total
+      });
+    })
+  dispatch({
+    type: UPLOAD_AUDIO_IN_CHAT_END
+  });
+  const newPicUrl = JSON.parse(resp.data)
+  dispatch({
+    type: ADD_AUDIO_IN_MESSAGE_LOCALY,
+    payload: newPicUrl[filename].url
+  })
+}

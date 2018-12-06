@@ -233,7 +233,7 @@ export const saveProfileSettings = ({ name, email, srcAvatar }) => async dispatc
 };
 
 export const changeUserPicture = (image, user) => async (dispatch) => {
-  const filenameForAndroid = getFilenameForAndroid(image)
+  const filenameForAndroid = getFilenameForAndroid(image.path)
   const token = await getToken()
   dispatch({
     type: UPLOAD_USER_PHOTO_START,

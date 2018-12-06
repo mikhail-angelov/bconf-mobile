@@ -22,6 +22,12 @@ import {
   CLEAN_PICTURE_IN_MESSAGE_LOCALY,
   OPEN_SEARCH_BAR,
   CLOSE_SEARCH_BAR,
+  UPLOAD_AUDIO_IN_CHAT_START,
+  UPLOAD_AUDIO_IN_CHAT_PROGRESS,
+  UPLOAD_AUDIO_IN_CHAT_END,
+  ADD_AUDIO_IN_MESSAGE_LOCALY,
+  DELETE_AUDIO_IN_MESSAGE_LOCALY,
+  CLEAN_AUDIO_IN_MESSAGE_LOCALY,
 } from "../constants/actions";
 import _ from 'lodash'
 
@@ -40,7 +46,8 @@ export const initialState = {
   uploadingPhoto: false,
   refreshingChatList: false,
   lastChatsTimestamp: {},
-  imagesInCurrentMessage: []
+  imagesInCurrentMessage: [],
+  audiosInCurrentMessage: []
 };
 
 const chat = (state = initialState, action) => {
@@ -98,11 +105,20 @@ const chat = (state = initialState, action) => {
     case UPLOAD_PICTURES_IN_CHAT_PROGRESS: {
       return { ...state, uploadingPhotoInChatProgress: action.payload };
     }
+    case UPLOAD_AUDIO_IN_CHAT_PROGRESS: {
+      return { ...state, uploadingAudioInChatProgress: action.payload };
+    }
     case UPLOAD_CHAT_PHOTO_START: {
       return { ...state, uploadingChatPhoto: true };
     }
+    case UPLOAD_AUDIO_IN_CHAT_START: {
+      return { ...state, uploadingChatAudio: true };
+    }
     case UPLOAD_CHAT_PHOTO_END: {
       return { ...state, uploadingChatPhoto: false, uploadingChatPhotoProgress: 0 };
+    }
+    case UPLOAD_AUDIO_IN_CHAT_END: {
+      return { ...state, uploadingChatAudio: false, uploadingChatAudioProgress: 0 };
     }
     case UPLOAD_CHAT_PHOTO_PROGRESS: {
       return { ...state, uploadingChatPhotoProgress: action.payload };
@@ -116,15 +132,25 @@ const chat = (state = initialState, action) => {
     case REFRESH_CHATLIST_END: {
       return { ...state, refreshingChatList: false };
     }
+    case ADD_AUDIO_IN_MESSAGE_LOCALY: {
+      return { ...state, audiosInCurrentMessage: [...state.audiosInCurrentMessage, action.payload] };
+    }
     case ADD_PICTURE_IN_MESSAGE_LOCALY: {
       return { ...state, imagesInCurrentMessage: [...state.imagesInCurrentMessage, action.payload] };
     }
     case CLEAN_PICTURE_IN_MESSAGE_LOCALY: {
       return { ...state, imagesInCurrentMessage: [] };
     }
+    case CLEAN_AUDIO_IN_MESSAGE_LOCALY: {
+      return { ...state, audiosInCurrentMessage: [] };
+    }
     case DELETE_PICTURE_IN_MESSAGE_LOCALY: {
       const newImagesInCurrentMessage = _.filter(state.imagesInCurrentMessage, imageUrl => imageUrl !== action.payload)
       return { ...state, imagesInCurrentMessage: newImagesInCurrentMessage };
+    }
+    case DELETE_AUDIO_IN_MESSAGE_LOCALY: {
+      const newAudiosInCurrentMessage = _.filter(state.audiosInCurrentMessage, audioUrl => audioUrl !== action.payload)
+      return { ...state, audiosInCurrentMessage: newAudiosInCurrentMessage };
     }
     case OPEN_SEARCH_BAR: {
       return { ...state, isSearchBarActive: true };
