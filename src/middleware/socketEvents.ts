@@ -1,30 +1,40 @@
-import io from "socket.io-client";
 import { getChats } from "../actions/chat";
 import { NEW_MESSAGE, AUTH_USER, SEND_MESSAGE } from "../constants/actions";
 import { BASE_URL } from "../actions/endpoinds";
 import { CHAT_LIST_TIMESTAMP } from "../constants/storage";
 import { saveChatlistTimestamp } from "../actions/storage";
 
-let socket
+let ws
 const socketEvents = store => next => action => {
   if (action.type === AUTH_USER) {
-    socket = io(BASE_URL, {
-      query: { token: action.payload.token }
-    });
-    socket.on("error", message => {
-      console.log("error", message);
-    });
-    socket.on("message", message => {
-      if (message.chatId === store.getState().chat.activeChat.chatId) {
-        saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...store.getState().chat.lastChatsTimestamp, [message.chatId]: message.timestamp })
-      }
+
+    ws = new WebSocket(`${BASE_URL}?token=${action.payload.token}`);
+
+    ws.onopen = () => {
+      console.log("connected websocket")
+    };
+
+    ws.onmessage = (e) => {
+      const message = e.data;
       console.log("message", message);
-      store.dispatch({ type: NEW_MESSAGE, payload: message });
-    });
+      const currentStore = store.getState()
+      if (message.chatId === currentStore.chat.activeChat.chatId) {
+        saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...currentStore.chat.lastChatsTimestamp, [message.chatId]: Date.now() })
+      }
+      store.dispatch({ type: NEW_MESSAGE, payload: JSON.parse(message) });
+    };
+
+    ws.onerror = (e) => {
+      console.log(e.message);
+    };
+
+    ws.onclose = (e) => {
+      console.log(e.code, e.reason);
+    };
+
     store.dispatch(getChats());
   } else if (action.type === SEND_MESSAGE) {
-    console.log(socket)
-    socket.emit("message", JSON.stringify({
+    ws.send(JSON.stringify({
       chatId: action.payload.chatId,
       message: action.payload.message
     }))
