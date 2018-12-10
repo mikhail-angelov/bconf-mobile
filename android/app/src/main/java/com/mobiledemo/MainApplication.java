@@ -9,6 +9,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import io.invertase.firebase.RNFirebasePackage;
+
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
@@ -41,6 +42,7 @@ public class MainApplication extends NavigationApplication {
   public void onCreate() {
     super.onCreate();
     AppEventsLogger.activateApp(this);
+    SoLoader.init(this, false);
   }
   @Override
   protected ReactGateway createReactGateway() {

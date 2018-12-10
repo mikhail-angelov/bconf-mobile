@@ -163,10 +163,11 @@ configurations.all {
 }
 
 dependencies {
-    compile project(':react-native-config')
-    compile project(':rn-fetch-blob')
-    compile project(':react-native-vector-icons')
-    compile project(':react-native-image-crop-picker')
+    implementation project(':react-native-config')
+    implementation project(':rn-fetch-blob')
+    implementation project(':react-native-vector-icons')
+    implementation project(':react-native-image-crop-picker')
+    implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.android.support:design:25.4.0'
