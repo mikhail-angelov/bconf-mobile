@@ -76,34 +76,6 @@ class AudioExample extends Component<IProps, IState> {
     });
   }
 
-  // async pause() {
-  //   if (!this.state.recording) {
-  //     console.warn('Can\'t pause, not recording!');
-  //     return;
-  //   }
-
-  //   try {
-  //     const filePath = await AudioRecorder.pauseRecording();
-  //     this.setState({ paused: true });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
-  // async resume() {
-  //   if (!this.state.paused) {
-  //     console.warn('Can\'t resume, not paused!');
-  //     return;
-  //   }
-
-  //   try {
-  //     await AudioRecorder.resumeRecording();
-  //     this.setState({ paused: false });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
   async stop() {
     if (!this.state.recording) {
       console.warn('Can\'t stop, not recording!');
@@ -122,30 +94,6 @@ class AudioExample extends Component<IProps, IState> {
     } catch (error) {
       console.error(error);
     }
-  }
-
-  async play() {
-    if (this.state.recording) {
-      await this.stop();
-    }
-
-    setTimeout(() => {
-      const sound = new Sound(this.state.audioPath, '', (error) => {
-        if (error) {
-          console.log('failed to load the sound', error);
-        }
-      });
-
-      setTimeout(() => {
-        sound.play((success) => {
-          if (success) {
-            console.log('successfully finished playing');
-          } else {
-            console.log('playback failed due to audio decoding errors');
-          }
-        });
-      }, 100);
-    }, 100);
   }
 
   async record() {
@@ -172,13 +120,13 @@ class AudioExample extends Component<IProps, IState> {
     }
   }
 
-  finishRecording(didSucceed, filePath, fileSize) {
+  public finishRecording(didSucceed, filePath, fileSize) {
     this.setState({ finished: didSucceed });
     this.props.uploadAudio(filePath)
     console.log("filepath", filePath)
   }
 
-  render() {
+  public render() {
 
     return (
       <Icon

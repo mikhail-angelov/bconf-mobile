@@ -2,7 +2,7 @@ import React from "react";
 import _ from "lodash";
 import { FlatList } from 'react-native';
 import styled from "styled-components";
-import { Message } from "./Message";
+import Message from "./Message";
 import { WHITE_COLOR } from "../../helpers/styleConstants";
 
 interface IProps {
