@@ -73,23 +73,21 @@ export const setRemindPasswordError = error => ({
 const checkPermission = async (user) => {
   const enabled = await firebase.messaging().hasPermission();
   if (enabled) {
-    getFirebaseMsgToken(user);
+    getFirebaseMsgToken();
   } else {
     requestPermission(user);
   }
 }
 
-const getFirebaseMsgToken = async (user) => {
-  let firebaseMsgToken = user.firebaseMsgToken;
-  if (!firebaseMsgToken) {
-    firebaseMsgToken = await firebase.messaging().getToken();
-    if (firebaseMsgToken) {
-      // user has a device token
-      console.log("FSM token:", firebaseMsgToken)
-      await saveUserFcmToken(firebaseMsgToken)
-    }
+const getFirebaseMsgToken = async () => {
+  const firebaseMsgToken = await firebase.messaging().getToken();
+  if (firebaseMsgToken) {
+    // user has a device token
+    console.log("FSM token:", firebaseMsgToken)
+    await saveUserFcmToken(firebaseMsgToken)
   }
 }
+
 
 const saveUserFcmToken = async (firebaseMsgToken) => {
   try {
@@ -108,7 +106,7 @@ const requestPermission = async (user) => {
   try {
     await firebase.messaging().requestPermission();
     // User has authorised
-    getFirebaseMsgToken(user);
+    getFirebaseMsgToken();
   } catch (error) {
     // User has rejected permissions
     console.log('permission rejected');

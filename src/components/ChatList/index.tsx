@@ -2,7 +2,7 @@ import React from "react";
 import { ChatListItem } from "./ChatItem";
 import { connect } from "react-redux";
 import _ from "lodash"
-import { ScrollView, Animated, Dimensions, View, RefreshControl, Text } from "react-native";
+import { ScrollView, Animated, Dimensions, View, RefreshControl, Platform } from "react-native";
 import styled from "styled-components";
 import { logout } from "../../actions/auth";
 import { cleanFindMessagesInputValue } from "../../actions/messages";
@@ -13,6 +13,7 @@ import ChatMenu from "../ChatMenu";
 import Header from "../Header";
 import AppearedButton from "../CommonUIElements/AppearedButton";
 import selector from "./selector";
+import firebase from "react-native-firebase";
 
 const { width } = Dimensions.get('window')
 interface IProps {
@@ -54,6 +55,44 @@ class ChatList extends React.Component<IProps, IState> {
       currentChatMenuScrollPosition: 0,
       refreshing: false,
     };
+  }
+
+  componentDidMount() {
+    this.messageListener = firebase.messaging().onMessage((message: RemoteMessage) => {
+      // Process your message as required
+      console.log("!!!!!Message received", message)
+    });
+    this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
+      console.log("++++", notification)
+      // Process your notification as required
+      // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
+    });
+    const channel = new firebase.notifications.Android.Channel('channel', 'Channel', firebase.notifications.Android.Importance.Max)
+      .setDescription('My apps test channel');
+    firebase.notifications().android.createChannel(channel);
+
+
+    this.notificationListener = firebase.notifications().onNotification((notification) => {
+      const notificationLocal = notification
+        .setTitle(notification.title)
+        .setBody(notification.body)
+        .android.setChannelId('channelId')
+        .android.setSmallIcon('ic_launcher')
+        .android.setPriority(firebase.notifications.Android.Priority.High);
+
+      firebase.notifications().displayNotification(notificationLocal)
+    });
+    this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
+      // Process your token as required
+      console.log("FCM token has been changed")
+    });
+  }
+  componentWillUnmount() {
+    console.log("Component unmounted!!!!!!")
+    this.notificationDisplayedListener();
+    this.notificationListener();
+    this.onTokenRefreshListener();
+    this.messageListener();
   }
 
   public showChatMenu = () => {
