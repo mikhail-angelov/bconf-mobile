@@ -5,8 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { View, Text, Image, Dimensions } from "react-native";
 import _ from "lodash"
 import moment from "moment";
-import Sound from 'react-native-sound';
-
+import { MessageVoice } from './MessageVoice';
 import { MESSAGE_TIMESTAMP_FORMAT } from '../../helpers/constants'
 
 const { width } = Dimensions.get('window')
@@ -26,10 +25,10 @@ export default class Message extends React.Component<IProps>{
     super(props)
     this.state = {
       duration: {},
-      stateAudioFiles: {}
+      stateAudioFiles: {},
+      isPlayning: false,
     }
   }
-
 
   public render() {
     const { text, files, audioFiles, idx, isMyMessage, timestamp, selectedMessage } = this.props
@@ -41,31 +40,7 @@ export default class Message extends React.Component<IProps>{
               source={{ uri: fileUrl }}
             />))}
           {_.map(audioFiles, fileUrl => (
-            <MessageVoice>
-              <Icon
-                onPress={
-                  () => {
-                    const sound = new Sound(fileUrl, '', (error) => {
-                      if (error) {
-                        console.log('failed to load the sound', error);
-                      }
-                    });
-                    this.setState({ [fileUrl]: { duration: sound.getDuration(), currentTime: sound.getCurrentTime(), isDownloaded: true } });
-                    sound.play((success) => {
-                      if (success) {
-                        console.log('successfully finished playing');
-                      } else {
-                        console.log('playback failed due to audio decoding errors');
-                      }
-                    })
-                  }}
-                size={32}
-                name="play"
-                backgroundColor={WHITE_COLOR}
-                style={{ margin: 8 }}
-                color={WHITE_COLOR} />
-              <Text>{this.state.duration[fileUrl]}</Text>
-            </MessageVoice>))}
+            <MessageVoice fileUrl={fileUrl} />))}
           <MessageText isMyMessage={isMyMessage}>{text}</MessageText>
           <DateText isMyMessage={isMyMessage}>
             {moment(timestamp).format(MESSAGE_TIMESTAMP_FORMAT)}
@@ -120,11 +95,4 @@ const MessageImage = styled(Image)`
     background-color: ${WHITE_COLOR};
     border-color: ${SOFT_BLUE_COLOR};
     `;
-const MessageVoice = styled(View)`
-        width: 280;
-        height: 50;
-        border-width: 0.5;
-        border-radius: 10;
-        margin-bottom: 5;
-    border-color: ${SOFT_BLUE_COLOR};
-    `;
+
