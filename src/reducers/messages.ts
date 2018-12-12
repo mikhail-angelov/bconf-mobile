@@ -1,9 +1,17 @@
-import { LOAD_MESSAGES, NEW_MESSAGE, CLEAN_FIND_MESSAGES_INPUT_VALUE, SET_FIND_MESSAGES_INPUT_VALUE } from "../constants/actions";
+import {
+    LOAD_MESSAGES,
+    NEW_MESSAGE,
+    CLEAN_FIND_MESSAGES_INPUT_VALUE,
+    SET_FIND_MESSAGES_INPUT_VALUE,
+    TOGGLE_VOICE_MESSAGE_STATUS,
+    DOWNLOAD_PLAYER
+} from "../constants/actions";
 import _ from "lodash"
 
 export const initialState = {
     findMessagesInputValue: '',
-    allMessages: []
+    allMessages: [],
+    isDownloaded: false
 }
 
 const messages = (state = initialState, action) => {
@@ -22,9 +30,14 @@ const messages = (state = initialState, action) => {
         case CLEAN_FIND_MESSAGES_INPUT_VALUE: {
             return { ...state, findMessagesInputValue: '' };
         }
+        case TOGGLE_VOICE_MESSAGE_STATUS: {
+            return { ...state, voiceMessagePlayers: { [action.payload.playerUrl]: { playStatus: action.payload.playStatus, isDownloaded: true } } };
+        }
+        case DOWNLOAD_PLAYER: {
+            return { ...state, voiceMessagePlayers: { [action.payload.playerUrl]: { isDownloaded: action.payload.isDownloaded } } };
+        }
         default:
             return state;
     }
 }
-
 export default messages;

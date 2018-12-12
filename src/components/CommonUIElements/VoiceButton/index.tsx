@@ -1,19 +1,11 @@
 import React, { Component } from 'react';
-import styled from "styled-components";
 
 import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  TouchableHighlight,
-  Platform,
-  PermissionsAndroid,
-} from 'react-native';
-import { SOFT_BLUE_COLOR, WHITE_COLOR } from "../../../helpers/styleConstants";
-import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import Sound from 'react-native-sound';
+  Platform
+} from 'react-native';
+import { WHITE_COLOR } from "../../../helpers/styleConstants";
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AudioRecorder, AudioUtils } from 'react-native-audio';
 
 interface IProps {

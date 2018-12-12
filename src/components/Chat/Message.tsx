@@ -18,6 +18,9 @@ interface IProps {
   isMyMessage: boolean;
   timestamp: number;
   selectedMessage: object;
+  voiceMessagePlayers: object | null;
+  downloadPlayer: (url) => void;
+  togglePlayer: () => void;
 }
 
 export default class Message extends React.Component<IProps>{
@@ -31,7 +34,15 @@ export default class Message extends React.Component<IProps>{
   }
 
   public render() {
-    const { text, files, audioFiles, idx, isMyMessage, timestamp, selectedMessage } = this.props
+    const {
+      text,
+      files,
+      audioFiles,
+      isMyMessage,
+      timestamp,
+      selectedMessage,
+      voiceMessagePlayers
+    } = this.props
     return (
       <View style={{ backgroundColor: selectedMessage ? SOFT_BLUE_COLOR : "transparent", borderRadius: 10 }}>
         <MessageWrapper isMyMessage={isMyMessage}>
@@ -40,7 +51,14 @@ export default class Message extends React.Component<IProps>{
               source={{ uri: fileUrl }}
             />))}
           {_.map(audioFiles, fileUrl => (
-            <MessageVoice fileUrl={fileUrl} />))}
+            <MessageVoice
+              fileUrl={fileUrl}
+              togglePlayer={this.props.togglePlayer}
+              downloadPlayer={this.props.downloadPlayer}
+              voiceMessagePlayers={voiceMessagePlayers
+                ? voiceMessagePlayers[fileUrl]
+                : null}
+            />))}
           <MessageText isMyMessage={isMyMessage}>{text}</MessageText>
           <DateText isMyMessage={isMyMessage}>
             {moment(timestamp).format(MESSAGE_TIMESTAMP_FORMAT)}
@@ -64,6 +82,10 @@ const MessageWrapper = styled(View).attrs({})`
       margin: 5px;
       flex: none;
   align-self: ${(props: IMessageProps) =>
+    props.isMyMessage ? "flex-end" : "flex-start"};
+  justify-content: ${(props: IMessageProps) =>
+    props.isMyMessage ? "flex-end" : "flex-start"};
+  align-items: ${(props: IMessageProps) =>
     props.isMyMessage ? "flex-end" : "flex-start"};
       max-width: 90%;
   text-align: ${(props: IMessageProps) =>

@@ -11,6 +11,9 @@ interface IProps {
   messages: object;
   currentSelectedMessage: object;
   filteredMessages: object;
+  voiceMessagePlayers: object;
+  togglePlayer: () => void;
+  downloadPlayer: (url) => void;
 }
 export class MessagesList extends React.Component<IProps> {
 
@@ -27,6 +30,9 @@ export class MessagesList extends React.Component<IProps> {
   public MessagesItem = ({ item }) => {
     const { userEmail, currentSelectedMessage, filteredMessages, isSearchBarActive } = this.props
     return (<Message key={item._id} idx={item._id}
+      voiceMessagePlayers={this.props.voiceMessagePlayers}
+      downloadPlayer={this.props.downloadPlayer}
+      togglePlayer={this.props.togglePlayer}
       files={item.links}
       audioFiles={item.audioLinks}
       text={item.text} isMyMessage={item.author.email === userEmail}

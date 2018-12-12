@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { MessagesList } from "./MessagesList";
 import { goToAuth } from "../../navigation/navigation";
 import { WHITE_COLOR, SOFT_BLUE_COLOR } from "../../helpers/styleConstants";
-import { setFindMessagesInputValue, cleanFindMessagesInputValue } from "../../actions/messages";
+import { setFindMessagesInputValue, cleanFindMessagesInputValue, togglePlayer, downloadPlayer } from "../../actions/messages";
 import { sendMessage, unsetActiveChat, getChatlistTimestamp, openSearchBar, closeSearchBar } from "../../actions/chat";
 import _ from "lodash";
 
@@ -29,6 +29,8 @@ interface IProps {
   closeSearchBar: () => void;
   setFindMessagesInputValue: () => void;
   cleanFindMessagesInputValue: () => void;
+  togglePlayer: () => void;
+  downloadPlayer: (url) => void;
   chatId: string;
   chatName: string;
   chatImage: string | undefined;
@@ -37,6 +39,7 @@ interface IProps {
   messages: any;
   messagesByUserId: object;
   filteredMessages: object;
+  voiceMessagePlayers: object;
   isSearchBarActive: boolean;
 }
 class Chat extends React.PureComponent<IProps, IState> {
@@ -74,7 +77,14 @@ class Chat extends React.PureComponent<IProps, IState> {
   }
 
   public render() {
-    const { chat, width, auth, messagesByUserId, filteredMessages } = this.props;
+    const {
+      chat,
+      width,
+      auth,
+      messagesByUserId,
+      filteredMessages,
+      voiceMessagePlayers
+    } = this.props;
     const { currentSelectedMessage, currentMessageNumber } = this.state
     return (
       <ChatView style={{ width: width }}>
@@ -118,6 +128,9 @@ class Chat extends React.PureComponent<IProps, IState> {
           chatColor={chat.activeChat.chatColor}
           leftIconName="arrow-left" />
         <MessagesList
+          voiceMessagePlayers={voiceMessagePlayers}
+          downloadPlayer={this.props.downloadPlayer}
+          togglePlayer={this.props.togglePlayer}
           isSearchBarActive={chat.isSearchBarActive}
           filteredMessages={filteredMessages}
           messages={messagesByUserId}
@@ -185,15 +198,17 @@ const mapDispatchToProps = {
   openSearchBar,
   closeSearchBar,
   setFindMessagesInputValue,
-  cleanFindMessagesInputValue
-};
+  cleanFindMessagesInputValue,
+  togglePlayer,
+  downloadPlayer
+}
 
 const selector = (state) => {
   const filteredMessages = _.filter(state.messages.allMessages[state.chat.activeChat.chatId], message => {
     return message.text.indexOf(state.messages.findMessagesInputValue) !== -1
   })
   const messagesByUserId = _.get(state, `messages.allMessages[${state.chat.activeChat.chatId}]`, []);
-  return ({ auth: state.auth, chat: state.chat, messagesByUserId, filteredMessages });
+  return ({ auth: state.auth, chat: state.chat, messagesByUserId, filteredMessages, voiceMessagePlayers: state.messages.voiceMessagePlayers });
 }
 
 const mapStateToProps = state => selector(state);
