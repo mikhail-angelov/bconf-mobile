@@ -2,7 +2,7 @@ import React from "react";
 import { ChatListItem } from "./ChatItem";
 import { connect } from "react-redux";
 import _ from "lodash"
-import { ScrollView, Animated, Dimensions, View, RefreshControl, Text } from "react-native";
+import { ScrollView, Animated, Dimensions, View, RefreshControl, Alert } from "react-native";
 import styled from "styled-components";
 import { logout } from "../../actions/auth";
 import { cleanFindMessagesInputValue } from "../../actions/messages";
@@ -13,6 +13,8 @@ import ChatMenu from "../ChatMenu";
 import Header from "../Header";
 import AppearedButton from "../CommonUIElements/AppearedButton";
 import selector from "./selector";
+import PushNotification from 'react-native-push-notification';
+import NotifService from './NotifService';
 
 const { width } = Dimensions.get('window')
 interface IProps {
@@ -54,6 +56,24 @@ class ChatList extends React.Component<IProps, IState> {
       currentChatMenuScrollPosition: 0,
       refreshing: false,
     };
+    this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
+  }
+
+  componentDidMount() {
+    this.notif.checkPermission(this.handlePerm.bind(this))
+  }
+  onRegister(token) {
+    Alert.alert("Registered !", JSON.stringify(token));
+    console.log("Token!!", token);
+    this.setState({ registerToken: token.token, gcmRegistered: true });
+  }
+
+  onNotif(notif) {
+    console.log(notif);
+    Alert.alert(notif.title, notif.message);
+  }
+  handlePerm(perms) {
+    Alert.alert("Permissions", JSON.stringify(perms));
   }
 
   public showChatMenu = () => {

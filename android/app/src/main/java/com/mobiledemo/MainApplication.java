@@ -3,6 +3,7 @@ package com.mobiledemo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.CallbackManager;
@@ -66,7 +67,8 @@ public class MainApplication extends NavigationApplication {
             new RNFirebaseAuthPackage(),
             new RNFetchBlobPackage(),
             new PickerPackage(),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new ReactNativePushNotificationPackage()
     );
   }
 
