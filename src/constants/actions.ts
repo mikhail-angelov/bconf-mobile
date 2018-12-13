@@ -9,6 +9,7 @@ export const CHANGE_PASSWORD = "CHANGE_PASSWORD";
 export const SIGN_UP_ERROR = "SIGN_UP_ERROR";
 export const CHANGE_USER_SETTINGS = "CHANGE_USER_SETTINGS";
 export const FIND_USERS = "FIND_USERS";
+export const UPDATE_USER_URL = "UPDATE_USER_URL";
 
 // chat
 export const NEW_MESSAGE = "NEW_MESSAGE";

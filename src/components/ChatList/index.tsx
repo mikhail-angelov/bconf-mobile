@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import _ from "lodash"
 import { ScrollView, Animated, Dimensions, View, RefreshControl, Text } from "react-native";
 import styled from "styled-components";
-import { logout } from "../../actions/auth";
+import { logout, saveFcmToken } from "../../actions/auth";
 import { cleanFindMessagesInputValue } from "../../actions/messages";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR } from "../../helpers/styleConstants";
 import { getMessages, setActiveChat, getChats, refreshChatList, closeSearchBar } from "../../actions/chat";
@@ -13,6 +13,7 @@ import ChatMenu from "../ChatMenu";
 import Header from "../Header";
 import AppearedButton from "../CommonUIElements/AppearedButton";
 import selector from "./selector";
+import {NotificationsAndroid} from 'react-native-notifications';
 
 const { width } = Dimensions.get('window')
 interface IProps {
@@ -54,6 +55,14 @@ class ChatList extends React.Component<IProps, IState> {
       currentChatMenuScrollPosition: 0,
       refreshing: false,
     };
+  }
+
+  componentDidMount() {
+    console.log("component mounted!!!")
+    NotificationsAndroid.setRegistrationTokenUpdateListener((deviceToken) => {
+      this.props.saveFcmToken(deviceToken)
+      console.log('Push-notifications registered!', deviceToken)
+    });
   }
 
   public showChatMenu = () => {
@@ -203,7 +212,8 @@ const mapDispatchToProps = {
   getChats,
   refreshChatList,
   cleanFindMessagesInputValue,
-  closeSearchBar
+  closeSearchBar,
+  saveFcmToken
 };
 
 export default connect(

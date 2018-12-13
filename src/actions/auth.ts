@@ -11,6 +11,7 @@ import {
   UPLOAD_USER_PHOTO_START,
   UPLOAD_USER_PHOTO_PROGRESS,
   UPLOAD_USER_PHOTO_END,
+  UPDATE_USER_URL
 } from "../constants/actions";
 import RNFetchBlob from 'rn-fetch-blob'
 import { setAuth, doJsonRequest, doJsonAuthRequest, getFilenameForAndroid, getToken } from "./helper";
@@ -87,6 +88,20 @@ export const login = ({ email, password }) => async dispatch => {
     dispatch(setAuthError("Incorrect username or password"));
   }
 };
+
+export const saveFcmToken = async (firebaseMsgToken) => {
+  try {
+    const resp = await doJsonAuthRequest({
+      url: UPDATE_USER_URL,
+      method: "post",
+      data: { firebaseMsgToken }
+    })
+    console.log('fcmToken saved successfully', resp.user)
+  } catch (e) {
+    console.log('error saving fcmToken', e);
+  }
+}
+
 
 export const loginFacebook = () => async dispatch => {
   try {

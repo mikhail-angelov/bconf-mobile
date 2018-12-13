@@ -156,17 +156,17 @@ android {
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         def requested = details.requested
-        if (requested.group == 'com.android.support' && requested.name != 'multidex') {
+        if (requested.group == 'com.android.support' && requested.name != 'multidex' && requested.name != 'multidex-instrumentation') {
             details.useVersion "${rootProject.ext.supportLibVersion}"
         }
     }
 }
 
 dependencies {
-    compile project(':react-native-config')
-    compile project(':rn-fetch-blob')
-    compile project(':react-native-vector-icons')
-    compile project(':react-native-image-crop-picker')
+    implementation project(':react-native-config')
+    implementation project(':rn-fetch-blob')
+    implementation project(':react-native-vector-icons')
+    implementation project(':react-native-image-crop-picker')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.android.support:design:25.4.0'
@@ -179,6 +179,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:4.34.0'
     implementation project(':react-native-fbsdk')
     implementation project(':rn-fetch-blob')
+    implementation project(':reactnativenotifications')
 
 }
 
