@@ -34,6 +34,7 @@ import { CHAT_URL, MESSAGE_URL, FIND_USERS_URL, UPLOAD_URL } from "./endpoinds";
 import { CHAT_LIST_TIMESTAMP } from "../constants/storage";
 import { saveChatlistTimestamp } from "./storage";
 import { Platform } from "react-native";
+import { Navigation } from "react-native-navigation";
 
 export const sendMessage = (chatId, message) => {
   return {
@@ -97,6 +98,19 @@ export const setActiveChat = (chat) => (dispatch, getState) => {
   dispatch(getMessages(chat.chatId));
   saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...timestampsFromState, [chat.chatId]: Date.now() })
   dispatch({ type: SET_ACTIVE_CHAT, payload: chat })
+  Navigation.push("ChatList", {
+    component: {
+      id: 'Chat',
+      name: 'Chat',
+      options: {
+        topBar: {
+          visible: false,
+          drawBehind: true,
+          animate: false,
+        },
+      }
+    }
+  })
 };
 
 export const unsetActiveChat = () => dispatch => {

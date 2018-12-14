@@ -6,6 +6,6 @@ export const SIGN_UP_URL = `${BASE_URL}auth/register`;
 export const REMIND_PASSWORD_URL = `${BASE_URL}auth/remind`;
 export const CHAT_URL = `${BASE_URL}chat`;
 export const MESSAGE_URL = `${BASE_URL}messages/`;
-export const CHANGE_USER_SETTINGS_URL = `${BASE_URL}auth/changeSettings`;
+export const UPDATE_USER_URL = `${BASE_URL}auth/updateUser`;
 export const FIND_USERS_URL = `${BASE_URL}users/search/`;
 export const UPLOAD_URL = `${BASE_URL}upload`;

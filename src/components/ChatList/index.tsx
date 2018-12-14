@@ -13,7 +13,7 @@ import ChatMenu from "../ChatMenu";
 import Header from "../Header";
 import AppearedButton from "../CommonUIElements/AppearedButton";
 import selector from "./selector";
-import {NotificationsAndroid} from 'react-native-notifications';
+import { NotificationsAndroid } from 'react-native-notifications';
 
 const { width } = Dimensions.get('window')
 interface IProps {
@@ -35,6 +35,7 @@ interface IProps {
   closeSearchBar: () => void;
   cleanFindMessagesInputValue: () => void;
   refreshingChatList: boolean;
+  saveFcmToken: (deviceToken: string) => void;
 }
 
 interface IState {
@@ -44,10 +45,35 @@ interface IState {
   animated: any;
   currentChatMenuScrollPosition: number;
 }
+NotificationsAndroid.setRegistrationTokenUpdateListener(onPushRegistered);
+NotificationsAndroid.setNotificationOpenedListener(onNotificationOpened);
+NotificationsAndroid.setNotificationReceivedListener(onNotificationReceived);
 
+let mainscreen
+
+console.log("mainscreen", NotificationsAndroid)
+
+function onPushRegistered(deviceToken) {
+  console.log("DEVICE TOKEN:", deviceToken)
+  if (mainscreen) {
+    mainscreen.onPushRegistered(deviceToken);
+  }
+}
+
+function onNotificationOpened(notification) {
+  if (mainscreen) {
+    mainscreen.onNotificationOpened(notification)
+  }
+}
+
+function onNotificationReceived(notification) {
+  if (mainscreen) {
+    mainscreen.onNotificationReceived(notification)
+  }
+}
 class ChatList extends React.Component<IProps, IState> {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isMenuOpen: false,
       animated: new Animated.Value(0),
@@ -55,14 +81,26 @@ class ChatList extends React.Component<IProps, IState> {
       currentChatMenuScrollPosition: 0,
       refreshing: false,
     };
+    mainscreen = this
   }
 
-  componentDidMount() {
-    console.log("component mounted!!!")
-    NotificationsAndroid.setRegistrationTokenUpdateListener((deviceToken) => {
-      this.props.saveFcmToken(deviceToken)
-      console.log('Push-notifications registered!', deviceToken)
-    });
+  public onPushRegistered = (deviceToken) => {
+    this.props.saveFcmToken(deviceToken)
+  }
+  public onNotificationReceived(notification) {
+    console.log("onNotificationReceived: ", notification);
+  }
+  onNotificationOpened(notification) {
+    console.log("onNotificationOpened: ", notification);
+  }
+
+  async onCheckPermissions() {
+    const hasPermissions = await NotificationsAndroid.isRegisteredForRemoteNotifications();
+    if (hasPermissions) {
+      alert('Yay! You have permissions');
+    } else {
+      alert('Boo! You don\'t have permissions');
+    }
   }
 
   public showChatMenu = () => {
@@ -133,20 +171,6 @@ class ChatList extends React.Component<IProps, IState> {
             onScrollBeginDrag={(event) => this.toggleAddChatButton(event)}>
             {_.map(this.props.sortedChats, chat => (
               <ChatListItem
-                navigateToChat={() =>
-                  Navigation.push("ChatList", {
-                    component: {
-                      id: 'Chat',
-                      name: 'Chat',
-                      options: {
-                        topBar: {
-                          visible: false,
-                          drawBehind: true,
-                          animate: false,
-                        },
-                      }
-                    }
-                  })}
                 cleanFindMessagesAndCloseFindBar={() => {
                   this.props.cleanFindMessagesInputValue()
                   this.props.closeSearchBar()
