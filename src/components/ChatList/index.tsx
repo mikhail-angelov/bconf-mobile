@@ -92,6 +92,7 @@ class ChatList extends React.Component<IProps, IState> {
   }
   onNotificationOpened(notification) {
     console.log("onNotificationOpened: ", notification);
+    this.props.setActiveChat(notification.data.chatId)
   }
 
   async onCheckPermissions() {
@@ -127,10 +128,6 @@ class ChatList extends React.Component<IProps, IState> {
       duration: 500,
     }).start(() => this.setState({ isMenuOpen: false }));
   };
-
-  public setActiveChatAndGetMessages(chatProperties) {
-    this.props.setActiveChat(chatProperties);
-  }
 
   public render() {
     return (
@@ -187,7 +184,7 @@ class ChatList extends React.Component<IProps, IState> {
                   chat.lastMessageTimestamp - this.props.chat.lastChatsTimestamp[chat.chatId] > 0 &&
                   chat.lastMessageAuthorId !== this.props.auth.id)}
                 setActiveChatAndGetMessages={() =>
-                  this.setActiveChatAndGetMessages({ chatId: chat.chatId, chatName: chat.chatName, chatColor: chat.chatColor, chatImage: chat.chatImage })}
+                  this.props.setActiveChat(chat.chatId)}
               />
             ))}
           </ScrollView>
