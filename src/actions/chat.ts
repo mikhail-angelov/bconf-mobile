@@ -34,6 +34,7 @@ import { CHAT_URL, MESSAGE_URL, FIND_USERS_URL, UPLOAD_URL } from "./endpoinds";
 import { CHAT_LIST_TIMESTAMP } from "../constants/storage";
 import { saveChatlistTimestamp } from "./storage";
 import { Platform } from "react-native";
+import { Navigation } from "react-native-navigation";
 
 export const sendMessage = (chatId, message) => {
   return {
@@ -92,11 +93,25 @@ export const getMessages = (chatId) => async (dispatch, getState) => {
   }
 };
 
-export const setActiveChat = (chat) => (dispatch, getState) => {
+export const setActiveChat = (chatId) => (dispatch, getState) => {
   const timestampsFromState = getState().chat.lastChatsTimestamp
-  dispatch(getMessages(chat.chatId));
-  saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...timestampsFromState, [chat.chatId]: Date.now() })
-  dispatch({ type: SET_ACTIVE_CHAT, payload: chat })
+  dispatch(getMessages(chatId));
+  saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...timestampsFromState, [chatId]: Date.now() })
+  const newActiveChat = _.find(getState().chat.chats, chat => chat.chatId === chatId)
+  dispatch({ type: SET_ACTIVE_CHAT, payload: { ...newActiveChat } })
+  Navigation.push("ChatList", {
+    component: {
+      id: 'Chat',
+      name: 'Chat',
+      options: {
+        topBar: {
+          visible: false,
+          drawBehind: true,
+          animate: false,
+        },
+      }
+    }
+  })
 };
 
 export const unsetActiveChat = () => dispatch => {
@@ -149,11 +164,11 @@ export const createNewChat = (users) => async (dispatch) => {
     const newChatWithColorAndImage = {
       ...newChat, chatColor
     }
-    dispatch(setActiveChat(newChatWithColorAndImage))
     dispatch({
       type: CREATE_NEW_CHAT,
       payload: newChatWithColorAndImage
     });
+    dispatch(setActiveChat(newChat.chatId))
   } catch (e) {
     console.log("Error :" + e)
   }

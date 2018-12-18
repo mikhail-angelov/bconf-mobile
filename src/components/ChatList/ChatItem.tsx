@@ -38,7 +38,6 @@ export const ChatListItem = ({
       onPress={() => {
         cleanFindMessagesAndCloseFindBar()
         setActiveChatAndGetMessages()
-        navigateToChat()
       }}
     >
       <AvatarSide>

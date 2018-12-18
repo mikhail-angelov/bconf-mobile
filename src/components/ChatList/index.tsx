@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import _ from "lodash"
 import { ScrollView, Animated, Dimensions, View, RefreshControl, Text } from "react-native";
 import styled from "styled-components";
-import { logout } from "../../actions/auth";
+import { logout, saveFcmToken } from "../../actions/auth";
 import { cleanFindMessagesInputValue } from "../../actions/messages";
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR } from "../../helpers/styleConstants";
 import { getMessages, setActiveChat, getChats, refreshChatList, closeSearchBar } from "../../actions/chat";
@@ -13,6 +13,7 @@ import ChatMenu from "../ChatMenu";
 import Header from "../Header";
 import AppearedButton from "../CommonUIElements/AppearedButton";
 import selector from "./selector";
+import { NotificationsAndroid } from 'react-native-notifications';
 
 const { width } = Dimensions.get('window')
 interface IProps {
@@ -34,6 +35,7 @@ interface IProps {
   closeSearchBar: () => void;
   cleanFindMessagesInputValue: () => void;
   refreshingChatList: boolean;
+  saveFcmToken: (deviceToken: string) => void;
 }
 
 interface IState {
@@ -43,10 +45,35 @@ interface IState {
   animated: any;
   currentChatMenuScrollPosition: number;
 }
+NotificationsAndroid.setRegistrationTokenUpdateListener(onPushRegistered);
+NotificationsAndroid.setNotificationOpenedListener(onNotificationOpened);
+NotificationsAndroid.setNotificationReceivedListener(onNotificationReceived);
 
+let mainscreen
+
+console.log("mainscreen", NotificationsAndroid)
+
+function onPushRegistered(deviceToken) {
+  console.log("DEVICE TOKEN:", deviceToken)
+  if (mainscreen) {
+    mainscreen.onPushRegistered(deviceToken);
+  }
+}
+
+function onNotificationOpened(notification) {
+  if (mainscreen) {
+    mainscreen.onNotificationOpened(notification)
+  }
+}
+
+function onNotificationReceived(notification) {
+  if (mainscreen) {
+    mainscreen.onNotificationReceived(notification)
+  }
+}
 class ChatList extends React.Component<IProps, IState> {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isMenuOpen: false,
       animated: new Animated.Value(0),
@@ -54,6 +81,27 @@ class ChatList extends React.Component<IProps, IState> {
       currentChatMenuScrollPosition: 0,
       refreshing: false,
     };
+    mainscreen = this
+  }
+
+  public onPushRegistered = (deviceToken) => {
+    this.props.saveFcmToken(deviceToken)
+  }
+  public onNotificationReceived(notification) {
+    console.log("onNotificationReceived: ", notification);
+  }
+  onNotificationOpened(notification) {
+    console.log("onNotificationOpened: ", notification);
+    this.props.setActiveChat(notification.data.chatId)
+  }
+
+  async onCheckPermissions() {
+    const hasPermissions = await NotificationsAndroid.isRegisteredForRemoteNotifications();
+    if (hasPermissions) {
+      alert('Yay! You have permissions');
+    } else {
+      alert('Boo! You don\'t have permissions');
+    }
   }
 
   public showChatMenu = () => {
@@ -80,10 +128,6 @@ class ChatList extends React.Component<IProps, IState> {
       duration: 500,
     }).start(() => this.setState({ isMenuOpen: false }));
   };
-
-  public setActiveChatAndGetMessages(chatProperties) {
-    this.props.setActiveChat(chatProperties);
-  }
 
   public render() {
     return (
@@ -124,20 +168,6 @@ class ChatList extends React.Component<IProps, IState> {
             onScrollBeginDrag={(event) => this.toggleAddChatButton(event)}>
             {_.map(this.props.sortedChats, chat => (
               <ChatListItem
-                navigateToChat={() =>
-                  Navigation.push("ChatList", {
-                    component: {
-                      id: 'Chat',
-                      name: 'Chat',
-                      options: {
-                        topBar: {
-                          visible: false,
-                          drawBehind: true,
-                          animate: false,
-                        },
-                      }
-                    }
-                  })}
                 cleanFindMessagesAndCloseFindBar={() => {
                   this.props.cleanFindMessagesInputValue()
                   this.props.closeSearchBar()
@@ -154,7 +184,7 @@ class ChatList extends React.Component<IProps, IState> {
                   chat.lastMessageTimestamp - this.props.chat.lastChatsTimestamp[chat.chatId] > 0 &&
                   chat.lastMessageAuthorId !== this.props.auth.id)}
                 setActiveChatAndGetMessages={() =>
-                  this.setActiveChatAndGetMessages({ chatId: chat.chatId, chatName: chat.chatName, chatColor: chat.chatColor, chatImage: chat.chatImage })}
+                  this.props.setActiveChat(chat.chatId)}
               />
             ))}
           </ScrollView>
@@ -203,7 +233,8 @@ const mapDispatchToProps = {
   getChats,
   refreshChatList,
   cleanFindMessagesInputValue,
-  closeSearchBar
+  closeSearchBar,
+  saveFcmToken
 };
 
 export default connect(

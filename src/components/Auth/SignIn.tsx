@@ -69,7 +69,6 @@ class SignIn extends React.Component<IProps, IState> {
   };
 
   public render() {
-    console.log("!!!!!!", Config);
     return this.state.showGithubWebview ? (
       <View style={styles.container}>
         <View style={styles.topbar}>
@@ -83,83 +82,83 @@ class SignIn extends React.Component<IProps, IState> {
           source={{
             uri: `https://github.com/login/oauth/authorize?client_id=${
               Config.GITHUB_CLIENT_ID
-            }&scope=user`
+              }&scope=user`
           }}
         />
       </View>
     ) : (
-      <Animated.View
-        style={{ transform: [{ translateX: this.state.xPosition }], flex: 1 }}
-      >
-        <KeyboardAwareScrollView>
-          <View style={{ flex: 1 }}>
-            <Header style={{ height: 50 }}>
-              <Title>SIGN IN</Title>
-              <Annotation>Secret chat</Annotation>
-            </Header>
-            <Body>
-              <Input
-                placeholder="Email"
-                onChangeText={email => this.setState({ email })}
-                value={this.state.email}
-                error={this.state.error.email}
-                textContentType="emailAddress"
-                autoCapitalize="none"
-              />
-              <Input
-                placeholder="Password"
-                onChangeText={password => this.setState({ password })}
-                value={this.state.password}
-                error={this.state.error.password}
-                type="password"
-                textContentType="password"
-                secureTextEntry={true}
-                autoCapitalize="none"
-              />
-              <LoginErrorNotification>
-                {this.props.auth.authError}
-              </LoginErrorNotification>
-              <Button
-                onPress={() => this.handleLogin()}
-                disabled={!this.allFieldsFilled()}
-              >
-                Sign In
+        <Animated.View
+          style={{ transform: [{ translateX: this.state.xPosition }], flex: 1 }}
+        >
+          <KeyboardAwareScrollView>
+            <View style={{ flex: 1 }}>
+              <Header style={{ height: 50 }}>
+                <Title>SIGN IN</Title>
+                <Annotation>Secret chat</Annotation>
+              </Header>
+              <Body>
+                <Input
+                  placeholder="Email"
+                  onChangeText={email => this.setState({ email })}
+                  value={this.state.email}
+                  error={this.state.error.email}
+                  textContentType="emailAddress"
+                  autoCapitalize="none"
+                />
+                <Input
+                  placeholder="Password"
+                  onChangeText={password => this.setState({ password })}
+                  value={this.state.password}
+                  error={this.state.error.password}
+                  type="password"
+                  textContentType="password"
+                  secureTextEntry={true}
+                  autoCapitalize="none"
+                />
+                <LoginErrorNotification>
+                  {this.props.auth.authError}
+                </LoginErrorNotification>
+                <Button
+                  onPress={() => this.handleLogin()}
+                  disabled={!this.allFieldsFilled()}
+                >
+                  Sign In
               </Button>
-              <Button onPress={() => this.props.loginFacebook()}>
-                Facebook Login
+                <Button onPress={() => this.props.loginFacebook()}>
+                  Facebook Login
               </Button>
-              <Button
-                onPress={() => this.setState({ showGithubWebview: true })}
-              >
-                Github Login
+                <Button
+                  onPress={() => this.setState({ showGithubWebview: true })}
+                >
+                  Github Login
               </Button>
-              <Link
-                color={BLACK_COLOR}
-                onPress={() => {
-                  Navigation.push("SignIn", {
-                    component: {
-                      name: "SignUp"
-                    }
-                  });
-                }}
-                title="Sign Up"
-              />
-              <Link
-                color={BLACK_COLOR}
-                onPress={() => {
-                  Navigation.push("SignIn", {
-                    component: {
-                      name: "ForgotPassword"
-                    }
-                  });
-                }}
-                title="Forgot Password"
-              />
-            </Body>
-          </View>
-        </KeyboardAwareScrollView>
-      </Animated.View>
-    );
+                <Link
+                  color={BLACK_COLOR}
+                  onPress={() => {
+                    Navigation.push("SignIn", {
+                      component: {
+                        name: "SignUp"
+                      }
+                    });
+                  }}
+                  title="Sign Up"
+                />
+                <Link
+                  color={BLACK_COLOR}
+                  onPress={() => {
+                    Navigation.push("SignIn", {
+                      component: {
+                        name: "ForgotPassword"
+                      }
+                    });
+                  }}
+                  title="Forgot Password"
+                />
+              </Body>
+            </View>
+          </KeyboardAwareScrollView>
+        </Animated.View>
+      );
   }
 
   public componentDidMount() {

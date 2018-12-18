@@ -7,6 +7,7 @@ import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
+import com.wix.reactnativenotifications.RNNotificationsPackage;
 import com.facebook.appevents.AppEventsLogger;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
@@ -66,7 +67,8 @@ public class MainApplication extends NavigationApplication {
             new RNFirebaseAuthPackage(),
             new RNFetchBlobPackage(),
             new PickerPackage(),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new RNNotificationsPackage(MainApplication.this)
     );
   }
 
