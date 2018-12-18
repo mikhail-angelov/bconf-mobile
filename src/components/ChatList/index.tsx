@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 import React from "react";
 import { ChatListItem } from "./ChatItem";
 import { connect } from "react-redux";
@@ -15,24 +15,6 @@ import Header from "../Header";
 import AppearedButton from "../CommonUIElements/AppearedButton";
 import selector from "./selector";
 import { NotificationsAndroid } from 'react-native-notifications';
-=======
-import React from 'react'
-import { ChatListItem } from './ChatItem'
-import { connect } from 'react-redux'
-import _ from 'lodash'
-import { ScrollView, Animated, Dimensions, View, RefreshControl } from 'react-native'
-import styled from 'styled-components'
-import { logout, saveFcmToken } from '../../actions/auth'
-import { cleanFindMessagesInputValue } from '../../actions/messages'
-import { WHITE_COLOR } from '../../helpers/styleConstants'
-import { getMessages, setActiveChat, getChats, refreshChatList, closeSearchBar } from '../../actions/chat'
-import { Navigation } from 'react-native-navigation'
-import ChatMenu from '../ChatMenu'
-import Header from '../Header'
-import AppearedButton from '../CommonUIElements/AppearedButton'
-import selector from './selector'
-import { NotificationsAndroid } from 'react-native-notifications'
->>>>>>> Stashed changes
 
 const { width } = Dimensions.get('window')
 interface IProps {
@@ -70,11 +52,9 @@ NotificationsAndroid.setNotificationReceivedListener(onNotificationReceived)
 
 let mainscreen
 
-<<<<<<< Updated upstream
+
 console.log("mainscreen", NotificationsAndroid)
 
-=======
->>>>>>> Stashed changes
 function onPushRegistered(deviceToken) {
     console.log('DEVICE TOKEN:', deviceToken)
     if (mainscreen) {
@@ -104,6 +84,7 @@ class ChatList extends React.Component<IProps, IState> {
       refreshing: false,
     };
     mainscreen = this
+    NotificationsAndroid.refreshToken()
   }
 
   public onPushRegistered = (deviceToken) => {
@@ -120,9 +101,9 @@ class ChatList extends React.Component<IProps, IState> {
   async onCheckPermissions() {
     const hasPermissions = await NotificationsAndroid.isRegisteredForRemoteNotifications();
     if (hasPermissions) {
-      alert('Yay! You have permissions');
+      console.log('Yay! You have permissions');
     } else {
-      alert('Boo! You don\'t have permissions');
+      console.log('Boo! You don\'t have permissions');
     }
 
     public showChatMenu = () => {
