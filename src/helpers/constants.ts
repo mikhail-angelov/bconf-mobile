@@ -1,1 +1,1 @@
-export const MESSAGE_TIMESTAMP_FORMAT = "MM/DD/YYYY hh:mm";
+export const MESSAGE_TIMESTAMP_FORMAT = 'MM/DD/YYYY hh:mm'
