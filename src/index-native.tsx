@@ -1,23 +1,21 @@
-import { Navigation } from "react-native-navigation";
-import "./helpers/eventBus";
-import { registerScreens } from "./screens";
-import "./navigation/navigation-native";
+import { Navigation } from 'react-native-navigation'
+import './helpers/eventBus'
+import { registerScreens } from './screens'
+import './navigation/navigation-native'
 
 // This is to see network requests in Chrome Dev Tools
-XMLHttpRequest = GLOBAL.originalXMLHttpRequest
-  ? GLOBAL.originalXMLHttpRequest
-  : GLOBAL.XMLHttpRequest;
+XMLHttpRequest = GLOBAL.originalXMLHttpRequest ? GLOBAL.originalXMLHttpRequest : GLOBAL.XMLHttpRequest
 //
 
-registerScreens(Navigation);
+registerScreens(Navigation)
 
 Navigation.events().registerAppLaunchedListener(() => {
-  Navigation.setRoot({
-    root: {
-      component: {
-        id: "root",
-        name: "MobileDemo"
-      }
-    }
-  });
-});
+    Navigation.setRoot({
+        root: {
+            component: {
+                id: 'root',
+                name: 'MobileDemo',
+            },
+        },
+    })
+})

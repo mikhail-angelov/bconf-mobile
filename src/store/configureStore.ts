@@ -1,19 +1,26 @@
-import { createStore, applyMiddleware, compose } from "redux";
-import { offline } from '@redux-offline/redux-offline';
-import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
-import thunk from "redux-thunk";
-import logger from "redux-logger";
-import rootReducer from "../reducers/rootReducer";
-import socketEvents from "../middleware/socketEvents";
+import { createStore, applyMiddleware, compose } from 'redux'
+import { offline } from '@redux-offline/redux-offline'
+import offlineConfig from '@redux-offline/redux-offline/lib/defaults'
+import thunk from 'redux-thunk'
+import logger from 'redux-logger'
+import rootReducer from '../reducers/rootReducer'
+import socketEvents from '../middleware/socketEvents'
 
-let middleware = [thunk, socketEvents];
+let middleware = [thunk, socketEvents]
 
 if (true) {
-  middleware = [...middleware, logger];
+    middleware = [...middleware, logger]
 } else {
-  middleware = [...middleware];
+    middleware = [...middleware]
 }
 
 export default function configureStore(initialState) {
-  return createStore(rootReducer, initialState, compose(applyMiddleware(...middleware), offline(offlineConfig)));
+    return createStore(
+        rootReducer,
+        initialState,
+        compose(
+            applyMiddleware(...middleware),
+            offline(offlineConfig)
+        )
+    )
 }

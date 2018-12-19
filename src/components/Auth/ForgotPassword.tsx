@@ -1,71 +1,65 @@
-import React from "react";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { connect } from "react-redux";
+import React from 'react'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { connect } from 'react-redux'
 
-import { Header, Title, Annotation, Body, ErrorText } from "./styled";
-import ValidatedInput from "./ValidatedInput";
-import Button from "../CommonUIElements/Button";
-import { remindPassword } from "../../actions/auth";
-import { validate } from "../../helpers/validator";
+import { Header, Title, Annotation, Body, ErrorText } from './styled'
+import ValidatedInput from './ValidatedInput'
+import Button from '../CommonUIElements/Button'
+import { remindPassword } from '../../actions/auth'
+import { validate } from '../../helpers/validator'
 
 interface IProps {
-  remindPassword: ({ username, password }) => void;
+    remindPassword: ({ username, password }) => void
 }
 interface IState {
-  email: string;
+    email: string
 }
 class ForgotPassword extends React.Component<IProps, IState> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: ""
-    };
-    this.handleRemindPassword = this.handleRemindPassword.bind(this);
-  }
-
-  public handleRemindPassword() {
-    if (validate.email(this.state.email).result) {
-      this.props.remindPassword(this.state.email);
+    constructor(props) {
+        super(props)
+        this.state = {
+            email: '',
+        }
+        this.handleRemindPassword = this.handleRemindPassword.bind(this)
     }
-  }
-  public render() {
-    const { auth } = this.props;
-    return (
-      <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
-        <Header>
-          <Title>FORGOT PASSWORD</Title>
-          <Annotation>Secret chat</Annotation>
-        </Header>
-        <Body>
-          <ValidatedInput
-            placeholder="Email"
-            onChangeText={email => this.setState({ email })}
-            value={this.state.email}
-            rule={validate.email}
-          />
-          <Button
-            disabled={!validate.email(this.state.email).result}
-            onPress={this.handleRemindPassword}
-          >
-            Send password
-          </Button>
-          {auth.remindPasswordError.length > 0 && (
-            <ErrorText>{auth.remindPasswordError}</ErrorText>
-          )}
-        </Body>
-      </KeyboardAwareScrollView>
-    );
-  }
+
+    public handleRemindPassword() {
+        if (validate.email(this.state.email).result) {
+            this.props.remindPassword(this.state.email)
+        }
+    }
+    public render() {
+        const { auth } = this.props
+        return (
+            <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+                <Header>
+                    <Title>FORGOT PASSWORD</Title>
+                    <Annotation>Secret chat</Annotation>
+                </Header>
+                <Body>
+                    <ValidatedInput
+                        placeholder="Email"
+                        onChangeText={email => this.setState({ email })}
+                        value={this.state.email}
+                        rule={validate.email}
+                    />
+                    <Button disabled={!validate.email(this.state.email).result} onPress={this.handleRemindPassword}>
+                        Send password
+                    </Button>
+                    {auth.remindPasswordError.length > 0 && <ErrorText>{auth.remindPasswordError}</ErrorText>}
+                </Body>
+            </KeyboardAwareScrollView>
+        )
+    }
 }
 
 const mapDispatchToProps = {
-  remindPassword
-};
+    remindPassword,
+}
 
-const mapStateToProps = state => ({ auth: state.auth });
+const mapStateToProps = state => ({ auth: state.auth })
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ForgotPassword);
-
+    mapStateToProps,
+    mapDispatchToProps
+)(ForgotPassword)

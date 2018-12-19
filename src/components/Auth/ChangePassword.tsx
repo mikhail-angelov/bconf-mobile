@@ -1,63 +1,57 @@
-import React from "react";
-import { View } from "react-native";
-import { Header, Title, Annotation, Body } from "./styled";
-import Input from "../CommonUIElements/Input";
-import Button from "../CommonUIElements/Button";
-import { changePassword } from "../../actions/auth";
-import { connect } from "react-redux";
+import React from 'react'
+import { View } from 'react-native'
+import { Header, Title, Annotation, Body } from './styled'
+import Input from '../CommonUIElements/Input'
+import Button from '../CommonUIElements/Button'
+import { changePassword } from '../../actions/auth'
+import { connect } from 'react-redux'
 
 interface IProps {
-  changePassword: (newPassword: string) => void;
+    changePassword: (newPassword: string) => void
 }
 class ChangePassword extends React.Component<IProps> {
-  public state = {
-    newPassword: "",
-    repeatNewPassword: ""
-  };
-  public render() {
-    return (
-      <View>
-        <Header>
-          <Title>CHANGE PASSWORD</Title>
-          <Annotation>Secret chat</Annotation>
-        </Header>
-        <Body>
-          <Input
-            placeholder="New password"
-            onChangeText={newPassword => this.setState({ newPassword })}
-            value={this.state.newPassword}
-            error=""
-            autoCapitalize={false}
-            secureTextEntry={true}
-          />
-          <Input
-            placeholder="Repeat new password"
-            onChangeText={repeatNewPassword =>
-              this.setState({ repeatNewPassword })
-            }
-            value={this.state.repeatNewPassword}
-            error=""
-            autoCapitalize="none"
-            secureTextEntry={true}
-          />
-          <Button
-            onPress={() => this.props.changePassword(this.state.newPassword)}
-          >
-            Change Password
-          </Button>
-        </Body>
-      </View>
-    );
-  }
+    public state = {
+        newPassword: '',
+        repeatNewPassword: '',
+    }
+    public render() {
+        return (
+            <View>
+                <Header>
+                    <Title>CHANGE PASSWORD</Title>
+                    <Annotation>Secret chat</Annotation>
+                </Header>
+                <Body>
+                    <Input
+                        placeholder="New password"
+                        onChangeText={newPassword => this.setState({ newPassword })}
+                        value={this.state.newPassword}
+                        error=""
+                        autoCapitalize={false}
+                        secureTextEntry={true}
+                    />
+                    <Input
+                        placeholder="Repeat new password"
+                        onChangeText={repeatNewPassword => this.setState({ repeatNewPassword })}
+                        value={this.state.repeatNewPassword}
+                        error=""
+                        autoCapitalize="none"
+                        secureTextEntry={true}
+                    />
+                    <Button onPress={() => this.props.changePassword(this.state.newPassword)}>Change Password</Button>
+                </Body>
+            </View>
+        )
+    }
 }
 
 const mapDispatchToProps = {
-  changePassword
-};
+    changePassword,
+}
 
-const mapStateToProps = state => ({ auth: state.auth });
+const mapStateToProps = state => ({ auth: state.auth })
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChangePassword);
+    mapStateToProps,
+    mapDispatchToProps
+)(ChangePassword)
