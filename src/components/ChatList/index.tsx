@@ -1,26 +1,8 @@
-<<<<<<< Updated upstream
-import React from "react";
-import { ChatListItem } from "./ChatItem";
-import { connect } from "react-redux";
-import _ from "lodash"
-import { ScrollView, Animated, Dimensions, View, RefreshControl, Text } from "react-native";
-import styled from "styled-components";
-import { logout, saveFcmToken } from "../../actions/auth";
-import { cleanFindMessagesInputValue } from "../../actions/messages";
-import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR } from "../../helpers/styleConstants";
-import { getMessages, setActiveChat, getChats, refreshChatList, closeSearchBar } from "../../actions/chat";
-import { Navigation } from "react-native-navigation";
-import ChatMenu from "../ChatMenu";
-import Header from "../Header";
-import AppearedButton from "../CommonUIElements/AppearedButton";
-import selector from "./selector";
-import { NotificationsAndroid } from 'react-native-notifications';
-=======
 import React from 'react'
 import { ChatListItem } from './ChatItem'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { ScrollView, Animated, Dimensions, View, RefreshControl } from 'react-native'
+import { ScrollView, Animated, Dimensions, View, RefreshControl, Platform } from 'react-native'
 import styled from 'styled-components'
 import { logout, saveFcmToken } from '../../actions/auth'
 import { cleanFindMessagesInputValue } from '../../actions/messages'
@@ -32,7 +14,6 @@ import Header from '../Header'
 import AppearedButton from '../CommonUIElements/AppearedButton'
 import selector from './selector'
 import { NotificationsAndroid } from 'react-native-notifications'
->>>>>>> Stashed changes
 
 const { width } = Dimensions.get('window')
 interface IProps {
@@ -64,17 +45,17 @@ interface IState {
     animated: any
     currentChatMenuScrollPosition: number
 }
-NotificationsAndroid.setRegistrationTokenUpdateListener(onPushRegistered)
-NotificationsAndroid.setNotificationOpenedListener(onNotificationOpened)
-NotificationsAndroid.setNotificationReceivedListener(onNotificationReceived)
+
+if (Platform.OS === 'android') {
+    NotificationsAndroid.setRegistrationTokenUpdateListener(onPushRegistered)
+    NotificationsAndroid.setNotificationOpenedListener(onNotificationOpened)
+    NotificationsAndroid.setNotificationReceivedListener(onNotificationReceived)
+}
 
 let mainscreen
 
-<<<<<<< Updated upstream
-console.log("mainscreen", NotificationsAndroid)
+console.log('mainscreen', NotificationsAndroid)
 
-=======
->>>>>>> Stashed changes
 function onPushRegistered(deviceToken) {
     console.log('DEVICE TOKEN:', deviceToken)
     if (mainscreen) {
@@ -94,35 +75,30 @@ function onNotificationReceived(notification) {
     }
 }
 class ChatList extends React.Component<IProps, IState> {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isMenuOpen: false,
-      animated: new Animated.Value(0),
-      isAddChatButtonVisible: true,
-      currentChatMenuScrollPosition: 0,
-      refreshing: false,
-    };
-    mainscreen = this
-  }
+    constructor(props) {
+        super(props)
+        this.state = {
+            isMenuOpen: false,
+            animated: new Animated.Value(0),
+            isAddChatButtonVisible: true,
+            currentChatMenuScrollPosition: 0,
+            refreshing: false,
+        }
+        mainscreen = this
+        if (Platform.OS === 'android') {
+            NotificationsAndroid.refreshToken()
+        }
+    }
 
-  public onPushRegistered = (deviceToken) => {
-    this.props.saveFcmToken(deviceToken)
-  }
-  public onNotificationReceived(notification) {
-    console.log("onNotificationReceived: ", notification);
-  }
-  onNotificationOpened(notification) {
-    console.log("onNotificationOpened: ", notification);
-    this.props.setActiveChat(notification.data.chatId)
-  }
-
-  async onCheckPermissions() {
-    const hasPermissions = await NotificationsAndroid.isRegisteredForRemoteNotifications();
-    if (hasPermissions) {
-      alert('Yay! You have permissions');
-    } else {
-      alert('Boo! You don\'t have permissions');
+    public onPushRegistered = deviceToken => {
+        this.props.saveFcmToken(deviceToken)
+    }
+    public onNotificationReceived(notification) {
+        console.log('onNotificationReceived: ', notification)
+    }
+    public onNotificationOpened(notification) {
+        console.log('onNotificationOpened: ', notification)
+        this.props.setActiveChat(notification.data.chatId)
     }
 
     public showChatMenu = () => {
@@ -158,10 +134,7 @@ class ChatList extends React.Component<IProps, IState> {
                     closeMenu={this.closeChatMenu}
                     isMenuOpen={this.state.isMenuOpen}
                     animated={this.state.animated}
-                    chatMenuItems={[
-                        { title: 'Chats', handler: this.closeChatMenu, key: 'chats' },
-                        { title: 'Logout', handler: this.props.logout, key: 'logout' },
-                    ]}
+                    chatMenuItems={[{ title: 'Chats', handler: this.closeChatMenu, key: 'chats' }, { title: 'Logout', handler: this.props.logout, key: 'logout' }]}
                 />
                 <ChatListWrapper width={width} style={{ zIndex: 0 }}>
                     <Header
@@ -185,12 +158,7 @@ class ChatList extends React.Component<IProps, IState> {
                         rightIconName="user"
                     />
                     <ScrollView
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={this.props.chat.refreshingChatList}
-                                onRefresh={() => this.props.refreshChatList()}
-                            />
-                        }
+                        refreshControl={<RefreshControl refreshing={this.props.chat.refreshingChatList} onRefresh={() => this.props.refreshChatList()} />}
                         onScrollBeginDrag={event => this.toggleAddChatButton(event)}
                     >
                         {_.map(this.props.sortedChats, chat => (
@@ -210,8 +178,7 @@ class ChatList extends React.Component<IProps, IState> {
                                 haveNewMessages={
                                     !!(
                                         this.props.chat.lastChatsTimestamp &&
-                                        chat.lastMessageTimestamp - this.props.chat.lastChatsTimestamp[chat.chatId] >
-                                            0 &&
+                                        chat.lastMessageTimestamp - this.props.chat.lastChatsTimestamp[chat.chatId] > 0 &&
                                         chat.lastMessageAuthorId !== this.props.auth.id
                                     )
                                 }
