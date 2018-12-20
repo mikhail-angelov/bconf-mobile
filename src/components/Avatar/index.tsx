@@ -5,30 +5,31 @@ import { View, Text, Image } from 'react-native'
 
 export const Avatar = ({ style, size, srcImg, name, avatarColor }: IAvatarProps) => {
     return (
-        <AvatarWrapper style={style} avatarColor={avatarColor}>
-            {srcImg ? (
-                <AvaImg source={{ uri: srcImg }} />
-            ) : (
-                <AvaText size={size}>{name ? name[0].toUpperCase() : ''}</AvaText>
-            )}
+        <AvatarWrapper
+            style={{ ...style, aspectRatio: 1, elevation: 3, shadowRadius: '5', shadowOpacity: '0.3', shadowOffset: { width: 2, height: 2 }, shadowColor: 'black' }}
+            avatarColor={avatarColor}
+        >
+            {srcImg ? <AvaImg source={{ uri: srcImg }} /> : <AvaText size={size}>{name ? name[0].toUpperCase() : ''}</AvaText>}
         </AvatarWrapper>
     )
 }
 
 interface IAvatarProps {
-    size: string | undefined
+    size?: string | undefined
     name: string
     srcImg: string | undefined
     avatarColor: string
-    style: object | undefined
+    style?: object | undefined
+}
+
+interface IAvaTextProps {
+    size?: string
 }
 
 const AvatarWrapper = styled(View).attrs({})`
     overflow: hidden;
     height: 100%;
-    width: 100%;
     border-radius: 45;
-    border-width: 3;
     border-color: ${WHITE_COLOR};
     display: flex;
     align-items: center;
@@ -42,6 +43,6 @@ const AvaImg = styled(Image)`
 `
 
 const AvaText = styled(Text)`
-    font-size: ${(props: IAvatarProps) => (props.size === 'small' ? '12px' : '24px')};
+    font-size: ${(props: IAvaTextProps) => (props.size === 'small' ? '12px' : '24px')};
     color: ${WHITE_COLOR};
 `

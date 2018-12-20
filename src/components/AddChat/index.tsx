@@ -5,15 +5,7 @@ import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import styled from 'styled-components'
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR, GRAY_COLOR } from '../../helpers/styleConstants'
-import {
-    addUserToChatLocaly,
-    deleteUserFromChatLocaly,
-    findUsers,
-    deleteAllUsersFromChatLocaly,
-    createNewChat,
-    openSearchBar,
-    closeSearchBar,
-} from '../../actions/chat'
+import { addUserToChatLocaly, deleteUserFromChatLocaly, findUsers, deleteAllUsersFromChatLocaly, createNewChat, openSearchBar, closeSearchBar } from '../../actions/chat'
 import { Avatar } from '../Avatar'
 import Header from '../Header'
 import AppearedButton from '../CommonUIElements/AppearedButton'
@@ -59,9 +51,7 @@ class AddChat extends React.Component<IProps> {
                     isSearchResultEmpty={chat.usersInNewChat.length > 0}
                     isSearchBarActive={chat.isSearchBarActive}
                     whatSearch="Username"
-                    rightIconFunction={
-                        chat.isSearchBarActive ? () => this.props.closeSearchBar() : () => this.props.openSearchBar()
-                    }
+                    rightIconFunction={chat.isSearchBarActive ? () => this.props.closeSearchBar() : () => this.props.openSearchBar()}
                     rightIconName={chat.isSearchBarActive ? 'times' : 'search'}
                     inputHandler={this.props.findUsers}
                     title="Add Chat"
@@ -95,12 +85,7 @@ class AddChat extends React.Component<IProps> {
                                     <Avatar name={item.name} srcImg={item.srcAvatar} avatarColor={item.userColor} />
                                 </AvatarSide>
                                 <UserName>{item.name}</UserName>
-                                <Icon
-                                    size={18}
-                                    name="check-circle"
-                                    backgroundColor={WHITE_COLOR}
-                                    color={SOFT_BLUE_COLOR}
-                                />
+                                <Icon size={18} name="check-circle" backgroundColor={WHITE_COLOR} color={SOFT_BLUE_COLOR} />
                             </UserItem>
                         ))}
                         {chat.users.length > 0 && (
@@ -118,7 +103,7 @@ class AddChat extends React.Component<IProps> {
                         {_.map(chat.users, item => (
                             <UserItem onPress={() => this.props.addUserToChatLocaly(item)}>
                                 <AvatarSide>
-                                    <Avatar name={item.name} srcImg={item.srcAvatar} avatarColor={item.userColor} />
+                                    <Avatar name={item.name} srcImg={item.srcAvatar} avatarColor={item.userColor} size={''} />
                                 </AvatarSide>
                                 <UserName>{item.name}</UserName>
                             </UserItem>
@@ -194,35 +179,13 @@ const UserList = styled(ScrollView)`
     width: 100%;
 `
 
-const CreateChatButtonWrap = styled(TouchableOpacity)`
-    position: absolute;
-    right: 20;
-    bottom: 20;
-`
-
-const CreateChatButton = styled(Animated.View)`
-    padding: 13px;
-    background-color: ${SOFT_BLUE_COLOR};
-    border-radius: 50;
-    shadow-radius: 3; 
-    shadow-opacity: 0.2; 
-    shadow-offset: {width: 1, height: 1}; 
-    shadow-color: ${BLACK_COLOR};
-    flex-direction: row;
-    display: flex;
-    `
-
 const AvatarSide = styled(View)`
     width: 20%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    shadow-radius: 5;
-    shadow-opacity: 0.3;
-    shadow-offset: {width: 2, height: 2};
-    shadow-color: ${BLACK_COLOR};
-    `
+`
 
 const UserItem = styled(TouchableOpacity)`
     width: ${width};

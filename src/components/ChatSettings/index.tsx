@@ -86,16 +86,19 @@ class ChatSettings extends React.Component<IProps, IState> {
                     width={width}
                     leftIconName="arrow-left"
                     leftIconFunction={() => Navigation.pop('ChatSettings')}
-                    rightIconFunction={
-                        isChatEdit ? () => this.updateChatSettings() : () => this.setState({ isChatEdit: true })
-                    }
+                    rightIconFunction={isChatEdit ? () => this.updateChatSettings() : () => this.setState({ isChatEdit: true })}
                     rightIconName={isChatEdit ? 'check' : 'pencil'}
                 />
                 <ChatSettingsView>
                     <AvatarSide onPress={() => this.setState({ isUploadPhotoButtonVisible: true })}>
                         <Avatar
                             srcImg={chat.activeChat.chatImage}
-                            style={{ width: 100, height: 100, borderRadius: 100 }}
+                            style={{
+                                width: 100,
+                                height: 100,
+                                elevation: 3,
+                                borderRadius: 100,
+                            }}
                             name={chat.activeChat.chatName}
                             size="big"
                             avatarColor={chat.activeChat.chatColor}
@@ -114,8 +117,7 @@ class ChatSettings extends React.Component<IProps, IState> {
                                     />
                                 ) : (
                                     <Text style={{ fontSize: 24, marginTop: 6, marginBottom: 6, maxHeight: 60 }}>
-                                        {this.state[item.fieldName] &&
-                                        this.state[item.fieldName].length > maxStringLength
+                                        {this.state[item.fieldName] && this.state[item.fieldName].length > maxStringLength
                                             ? this.state[item.fieldName].substring(0, maxStringLength - 3) + '...'
                                             : this.state[item.fieldName] || 'Empty'}
                                     </Text>
@@ -136,10 +138,7 @@ class ChatSettings extends React.Component<IProps, IState> {
                             >
                                 Choose photo
                             </Button>
-                            <Button
-                                style={{ width: '100%' }}
-                                onPress={() => this.setState({ isUploadPhotoButtonVisible: false })}
-                            >
+                            <Button style={{ width: '100%' }} onPress={() => this.setState({ isUploadPhotoButtonVisible: false })}>
                                 Cancel
                             </Button>
                         </View>
@@ -147,16 +146,8 @@ class ChatSettings extends React.Component<IProps, IState> {
                 </View>
                 {chat.uploadingChatPhoto && (
                     <UploadSection>
-                        {chat.uploadingChatPhoto && chat.uploadingChatPhotoProgress === 0 && (
-                            <Progress.Circle color={SOFT_BLUE_COLOR} size={100} indeterminate={true} />
-                        )}
-                        {chat.uploadingChatPhotoProgress !== 0 && (
-                            <Progress.Pie
-                                color={SOFT_BLUE_COLOR}
-                                progress={chat.uploadingChatPhotoProgress}
-                                size={100}
-                            />
-                        )}
+                        {chat.uploadingChatPhoto && chat.uploadingChatPhotoProgress === 0 && <Progress.Circle color={SOFT_BLUE_COLOR} size={100} indeterminate={true} />}
+                        {chat.uploadingChatPhotoProgress !== 0 && <Progress.Pie color={SOFT_BLUE_COLOR} progress={chat.uploadingChatPhotoProgress} size={100} />}
                     </UploadSection>
                 )}
             </ChatSettingsWrap>
@@ -166,9 +157,9 @@ class ChatSettings extends React.Component<IProps, IState> {
 
 const UploadSection = styled(View)`
     display: flex;
-    justifycontent: center;
-    alignitems: center;
-    backgroundcolor: rgba(255, 255, 255, 0.7);
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.7);
     position: absolute;
     top: 0;
     left: 0;
@@ -178,34 +169,30 @@ const UploadSection = styled(View)`
 
 const ChatSettingsWrap = styled(View)`
     display: flex;
-    flexdirection: column;
+    flex-direction: column;
     height: 100%;
 `
 
 const ChatSettingsItemsWrap = styled(View)`
     display: flex;
-    flexdirection: column;
+    flex-direction: column;
     width: 70%;
-    justifycontent: center;
+    justify-content: center;
 `
 
 const ChatSettingsItem = styled(View)``
 
 const ChatSettingsView = styled(View)`
     display: flex;
-    flexdirection: row;
+    flex-direction: row;
     height: 20%;
-    alignitems: center;
+    align-items: center;
 `
 
 const AvatarSide = styled(TouchableOpacity)`
-            display: flex;
-            margin: 15px;
-            shadowRadius: 5;
-            shadowOpacity: 0.2;
-        shadowOffset: {width: 1, height: 1 };
-        shadowColor: #000
-      `
+    display: flex;
+    margin: 15px;
+`
 
 const mapDispatchToProps = {
     updateChatSettings,

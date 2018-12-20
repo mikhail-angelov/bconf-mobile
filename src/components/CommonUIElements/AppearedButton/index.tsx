@@ -46,6 +46,11 @@ class UIAppearedButton extends React.Component<IProps> {
                 <AppearedButton
                     buttonText={buttonText}
                     style={{
+                        elevation: 3,
+                        shadowRadius: '5',
+                        shadowOpacity: '0.3',
+                        shadowOffset: { width: 2, height: 2 },
+                        shadowColor: 'black',
                         transform: [
                             {
                                 translateY: this.state.buttonAnimate.interpolate({
@@ -74,16 +79,12 @@ const AppearedButtonWrap = styled(Platform.OS === 'android' ? TouchableNativeFee
 `
 
 const AppearedButton = styled(Animated.View)`
-        padding: ${props => (props.buttonText ? '10px' : '20px')};
-        position: absolute;
-        right: 10;
-        bottom: 10;
-        background-color: ${SOFT_BLUE_COLOR};
-        border-radius: 50;
-        shadow-radius: 3; 
-        shadow-opacity: 0.2; 
-        shadow-offset: {width: 1, height: 1}; 
-        shadow-color: ${BLACK_COLOR};
-        flex-direction: row;
-        display: flex;
-      `
+    padding: ${props => (props.buttonText ? '10px' : '20px')};
+    position: absolute;
+    right: 10;
+    bottom: 10;
+    background-color: ${SOFT_BLUE_COLOR};
+    border-radius: 50;
+    flex-direction: row;
+    display: flex;
+`
