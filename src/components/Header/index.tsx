@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Text, View, TouchableOpacity, Dimensions } from 'react-native'
+import { Text, View, TouchableOpacity, Dimensions, Platform } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import styled from 'styled-components'
 import Input from '../CommonUIElements/Input'
@@ -70,31 +70,23 @@ class Header extends React.Component<IProps, IState> {
         const { inputValue } = this.state
         return (
             <HeaderWrapper style={{ width }}>
-                <Overlay />
+                {Platform.OS === 'ios' && <Overlay />}
                 <Head>
                     <LeftSide>
-                        <Icon.Button
-                            size={16}
-                            onPress={() => leftIconFunction()}
-                            name={leftIconName}
-                            backgroundColor={WHITE_COLOR}
-                            color={SOFT_BLUE_COLOR}
-                        />
+                        <Icon.Button size={16} onPress={() => leftIconFunction()} name={leftIconName} backgroundColor={WHITE_COLOR} color={SOFT_BLUE_COLOR} />
                     </LeftSide>
                     {isSearchBarActive ? (
-                        <Input
-                            placeholder={whatSearch}
-                            onChangeText={value => this.inputValueChange(value)}
-                            value={inputValue}
-                            type={whatSearch}
-                            textContentType={whatSearch}
-                            autoCapitalize="none"
-                        />
+                        <Input placeholder={whatSearch} onChangeText={value => this.inputValueChange(value)} value={inputValue} type={whatSearch} textContentType={whatSearch} autoCapitalize="none" />
                     ) : (
                         <TitleWrap onPress={headerTitleFunction}>
                             {isAvatarVisible && (
                                 <AvatarWrap>
-                                    <Avatar srcImg={chatImage} name={title} size="small" avatarColor={chatColor} />
+                                    <Avatar
+                                        srcImg={chatImage}
+                                        name={title}
+                                        size="small"
+                                        avatarColor={chatColor}
+                                    />
                                 </AvatarWrap>
                             )}
                             <Title>
@@ -148,14 +140,10 @@ const IconWrap = styled(TouchableOpacity)`
 `
 
 const AvatarWrap = styled(View)`
-      width: 35px;
-      height: 35px;
-      margin-right: 10px;
-      shadow-radius: 5;
-      shadow-opacity: 0.2;
-    shadow-offset: {width: 1, height: 1 };
-    shadow-color: ${BLACK_COLOR}
-        `
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+`
 
 const HeaderWrapper = styled(View)`
     align-items: center;

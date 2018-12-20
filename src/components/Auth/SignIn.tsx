@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Dimensions, Animated, Easing, View, TouchableOpacity, Text, WebView, StyleSheet, Platform } from 'react-native'
+import { Dimensions, Animated, Easing, View, WebView, StyleSheet, Platform } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { goHome } from '../../navigation/navigation'
 import { login, loginGithub, loginFacebook } from '../../actions/auth'
@@ -9,11 +9,13 @@ import { BLACK_COLOR } from '../../helpers/styleConstants'
 import Input from '../CommonUIElements/Input'
 import Button from '../CommonUIElements/Button'
 import Link from '../CommonUIElements/Link'
+import { default as DialogHeader } from '../Header'
 import { Navigation } from 'react-native-navigation'
 import Config from 'react-native-config'
 
 import { Header, Title, Annotation, Body, LoginErrorNotification } from './styled'
 
+const { width } = Dimensions.get('window')
 interface IProps {
     login: ({ email, password }) => void
     auth: { authError: any }
@@ -55,11 +57,7 @@ class SignIn extends React.Component<IProps, IState> {
     public render() {
         return this.state.showGithubWebview ? (
             <View style={styles.container}>
-                <View style={styles.topbar}>
-                    <TouchableOpacity onPress={this.hide.bind(this)}>
-                        <Text>Go Back</Text>
-                    </TouchableOpacity>
-                </View>
+                <DialogHeader title="Login via Github" width={width} leftIconName="arrow-left" leftIconFunction={this.hide.bind(this)} />
                 <WebView
                     originWhitelist={['*']}
                     onNavigationStateChange={this.onLoad.bind(this)}
@@ -70,8 +68,8 @@ class SignIn extends React.Component<IProps, IState> {
             </View>
         ) : (
             <Animated.View style={{ transform: [{ translateX: this.state.xPosition }], flex: 1 }}>
-                <KeyboardAwareScrollView>
-                    <View style={{ flex: 1 }}>
+                <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <Header style={{ height: 50 }}>
                             <Title>SIGN IN</Title>
                             <Annotation>Secret chat</Annotation>
@@ -163,11 +161,10 @@ class SignIn extends React.Component<IProps, IState> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 15,
         backgroundColor: '#F5FCFF',
     },
     topbar: {
-        height: 30,
+        height: 80,
         justifyContent: 'center',
         alignItems: 'center',
     },

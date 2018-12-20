@@ -83,20 +83,12 @@ class ProfileSettings extends React.Component<IProps, IState> {
                     width={width}
                     leftIconName="arrow-left"
                     leftIconFunction={() => Navigation.popToRoot('ChatList')}
-                    rightIconFunction={
-                        isProfileEdit ? () => this.saveProfileSettings() : () => this.setState({ isProfileEdit: true })
-                    }
+                    rightIconFunction={isProfileEdit ? () => this.saveProfileSettings() : () => this.setState({ isProfileEdit: true })}
                     rightIconName={isProfileEdit ? 'check' : 'pencil'}
                 />
                 <ProfileSettingsView>
                     <AvatarSide onPress={() => this.setState({ isUploadPhotoButtonVisible: true })}>
-                        <Avatar
-                            srcImg={auth.srcAvatar}
-                            style={{ width: 100, height: 100, borderRadius: 100 }}
-                            name={auth.name}
-                            size="big"
-                            avatarColor="#996699"
-                        />
+                        <Avatar srcImg={auth.srcAvatar} style={{ width: 100, height: 100, borderRadius: 100 }} name={auth.name} size="big" avatarColor="#996699" />
                     </AvatarSide>
                     {_.map(profileSettingsItems, item => (
                         <ProfileSettingsItem>
@@ -123,10 +115,7 @@ class ProfileSettings extends React.Component<IProps, IState> {
                             <Button onPress={() => this.getPhotos()} style={{ width: '100%' }}>
                                 Choose photo
                             </Button>
-                            <Button
-                                style={{ width: '100%' }}
-                                onPress={() => this.setState({ isUploadPhotoButtonVisible: false })}
-                            >
+                            <Button style={{ width: '100%' }} onPress={() => this.setState({ isUploadPhotoButtonVisible: false })}>
                                 Cancel
                             </Button>
                         </View>
@@ -134,16 +123,8 @@ class ProfileSettings extends React.Component<IProps, IState> {
                 </View>
                 {auth.uploadingUserPhoto && (
                     <UploadSection>
-                        {auth.uploadingUserPhoto && auth.uploadingUserPhotoProgress === 0 && (
-                            <Progress.Circle color={SOFT_BLUE_COLOR} size={100} indeterminate={true} />
-                        )}
-                        {auth.uploadingUserPhotoProgress !== 0 && (
-                            <Progress.Pie
-                                color={SOFT_BLUE_COLOR}
-                                progress={auth.uploadingUserPhotoProgress}
-                                size={100}
-                            />
-                        )}
+                        {auth.uploadingUserPhoto && auth.uploadingUserPhotoProgress === 0 && <Progress.Circle color={SOFT_BLUE_COLOR} size={100} indeterminate={true} />}
+                        {auth.uploadingUserPhotoProgress !== 0 && <Progress.Pie color={SOFT_BLUE_COLOR} progress={auth.uploadingUserPhotoProgress} size={100} />}
                     </UploadSection>
                 )}
             </ProfileSettingsWrap>
@@ -153,9 +134,9 @@ class ProfileSettings extends React.Component<IProps, IState> {
 
 const UploadSection = styled(View)`
     display: flex;
-    justifycontent: center;
-    alignitems: center;
-    backgroundcolor: rgba(255, 255, 255, 0.7);
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.7);
     position: absolute;
     top: 0;
     left: 0;
@@ -165,29 +146,29 @@ const UploadSection = styled(View)`
 
 const ProfileSettingsWrap = styled(View)`
     display: flex;
-    flexdirection: column;
+    flex-direction: column;
     height: 100%;
 `
 
 const ProfileSettingsItem = styled(View)`
     display: flex;
-    flexdirection: column;
-    alignitems: center;
-    justifycontent: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `
 
 const ProfileSettingsView = styled(View)`
     display: flex;
-    flexdirection: column;
+    flex-direction: column;
     height: 100%;
-    alignitems: center;
+    align-items: center;
 `
 
 const AvatarSide = styled(TouchableOpacity)`
     width: 100%;
     display: flex;
-    alignitems: center;
-    justifycontent: center;
+    align-items: center;
+    justify-content: center;
     margin: 15px 0;
 `
 

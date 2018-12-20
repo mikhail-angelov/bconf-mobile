@@ -20,15 +20,13 @@ export const Header = styled(View)`
     justify-content: center;
     align-items: center;
     margin-top: ${headerMargin};
-    height: 30%;
+    height: 100;
 `
 export const Body = styled(View)`
-    flex: 1;
     padding-top: 30;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 70%;
 `
 export const LoginErrorNotification = styled(Text)`
     font-size: 12px;

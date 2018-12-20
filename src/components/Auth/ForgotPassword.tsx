@@ -31,18 +31,13 @@ class ForgotPassword extends React.Component<IProps, IState> {
     public render() {
         const { auth } = this.props
         return (
-            <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+            <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Header>
                     <Title>FORGOT PASSWORD</Title>
                     <Annotation>Secret chat</Annotation>
                 </Header>
                 <Body>
-                    <ValidatedInput
-                        placeholder="Email"
-                        onChangeText={email => this.setState({ email })}
-                        value={this.state.email}
-                        rule={validate.email}
-                    />
+                    <ValidatedInput placeholder="Email" onChangeText={email => this.setState({ email })} value={this.state.email} rule={validate.email} />
                     <Button disabled={!validate.email(this.state.email).result} onPress={this.handleRemindPassword}>
                         Send password
                     </Button>

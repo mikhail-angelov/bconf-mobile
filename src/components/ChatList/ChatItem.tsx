@@ -41,7 +41,11 @@ export const ChatListItem = ({
             }}
         >
             <AvatarSide>
-                <Avatar name={name} srcImg={chatImage} avatarColor={chatColor} />
+                <Avatar
+                    name={name}
+                    srcImg={chatImage}
+                    avatarColor={chatColor}
+                />
             </AvatarSide>
             <LastMessageArea>
                 <ChatName>
@@ -55,9 +59,7 @@ export const ChatListItem = ({
                     <LastMessageText>{lastMessageAuthor ? lastMessageText : 'Empty chat'}</LastMessageText>
                 </LastMessage>
             </LastMessageArea>
-            <Timestamp>
-                {lastMessageTimestamp ? moment(lastMessageTimestamp).format(MESSAGE_TIMESTAMP_FORMAT) : ''}
-            </Timestamp>
+            <Timestamp>{lastMessageTimestamp ? moment(lastMessageTimestamp).format(MESSAGE_TIMESTAMP_FORMAT) : ''}</Timestamp>
         </ChatListItemWrapper>
     )
 }
@@ -75,16 +77,12 @@ const ChatListItemWrapper = styled(TouchableOpacity)`
 `
 
 const AvatarSide = styled(View)`
-  width: 25%;
-  padding: 10px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  shadow-radius: 5;
-  shadow-opacity: 0.3;
-  shadow-offset: {width: 2, height: 2};
-  shadow-color: ${BLACK_COLOR};
+    width: 25%;
+    padding: 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 
 const LastMessageArea = styled(View)`
