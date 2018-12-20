@@ -17,7 +17,7 @@ const socketEvents = store => next => action => {
                 message: action.payload.message,
             })
         )
-    } else if (action.type === BACKGROUND) {
+    } else if (action.type === BACKGROUND && ws && ws.readyState === 1) {
         ws.close()
         console.log('socket closed', ws)
     } else if (action.type === FOREGROUND && store.getState().auth.authenticated) {
