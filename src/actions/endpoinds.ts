@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://192.168.0.103:4000/'
+export const BASE_URL = 'https://bconf.xyz/'
 export const AUTH_URL = `${BASE_URL}auth/login`
 export const AUTH_SOCIAL_URL = `${BASE_URL}auth/login-profile`
 export const AUTH_CHECK_URL = `${BASE_URL}auth/check`
