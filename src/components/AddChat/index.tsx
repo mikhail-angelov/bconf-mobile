@@ -5,7 +5,7 @@ import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import styled from 'styled-components'
 import { WHITE_COLOR, SOFT_BLUE_COLOR, BLACK_COLOR, GRAY_COLOR } from '../../helpers/styleConstants'
-import { addUserToChatLocaly, deleteUserFromChatLocaly, findUsers, deleteAllUsersFromChatLocaly, createNewChat, openSearchBar, closeSearchBar } from '../../actions/chat'
+import { addUserToChatLocaly, deleteUserFromChatLocaly, findUsers, deleteAllUsersFromChatLocaly, createNewChat, openSearchBar, closeSearchBar, clearUsersSearchResult } from '../../actions/chat'
 import { Avatar } from '../Avatar'
 import Header from '../Header'
 import AppearedButton from '../CommonUIElements/AppearedButton'
@@ -25,6 +25,7 @@ interface IProps {
     deleteAllUsersFromChatLocaly: () => void
     openSearchBar: () => void
     closeSearchBar: () => void
+    clearUsersSearchResult: () => void
 }
 class AddChat extends React.Component<IProps> {
     constructor(props) {
@@ -59,6 +60,7 @@ class AddChat extends React.Component<IProps> {
                     leftIconName="arrow-left"
                     leftIconFunction={() => {
                         this.props.deleteAllUsersFromChatLocaly()
+                        this.props.clearUsersSearchResult()
                         Navigation.popToRoot('ChatList')
                         if (chat.isSearchBarActive) {
                             this.props.closeSearchBar()
@@ -88,7 +90,7 @@ class AddChat extends React.Component<IProps> {
                                 <Icon size={18} name="check-circle" backgroundColor={WHITE_COLOR} color={SOFT_BLUE_COLOR} />
                             </UserItem>
                         ))}
-                        {chat.users.length > 0 && (
+                        {chat.usersSearchResult.length > 0 && (
                             <Text
                                 style={{
                                     width: '100%',
@@ -100,7 +102,7 @@ class AddChat extends React.Component<IProps> {
                                 Search
                             </Text>
                         )}
-                        {_.map(chat.users, item => (
+                        {_.map(chat.usersSearchResult, item => (
                             <UserItem onPress={() => this.props.addUserToChatLocaly(item)}>
                                 <AvatarSide>
                                     <Avatar name={item.name} srcImg={item.srcAvatar} avatarColor={item.userColor} size={''} />
@@ -145,6 +147,7 @@ const mapDispatchToProps = {
     deleteAllUsersFromChatLocaly,
     openSearchBar,
     closeSearchBar,
+    clearUsersSearchResult,
 }
 
 const mapStateToProps = state => ({ auth: state.auth, chat: state.chat })
