@@ -81,12 +81,7 @@ class Header extends React.Component<IProps, IState> {
                         <TitleWrap onPress={headerTitleFunction}>
                             {isAvatarVisible && (
                                 <AvatarWrap>
-                                    <Avatar
-                                        srcImg={chatImage}
-                                        name={title}
-                                        size="small"
-                                        avatarColor={chatColor}
-                                    />
+                                    <Avatar srcImg={chatImage} name={title} size="small" avatarColor={chatColor} />
                                 </AvatarWrap>
                             )}
                             <Title>
@@ -99,9 +94,9 @@ class Header extends React.Component<IProps, IState> {
                         <IconWrap onPress={rightIconFunction}>
                             <Icon.Button
                                 name={rightIconName}
-                                backgroundColor="transparent"
+                                backgroundColor={WHITE_COLOR}
                                 color={SOFT_BLUE_COLOR}
-                                style={{ marginRight: 0 }}
+                                iconStyle={{ marginRight: 0 }}
                                 size={20}
                                 onPress={() => {
                                     this.setState({ inputValue: '' })
@@ -133,16 +128,21 @@ const SubtitleText = styled(Text)`
     margin-top: 3;
 `
 const IconWrap = styled(TouchableOpacity)`
-    display: flex;
-    width: 35px;
     height: 35px;
-    align-items: flex-end;
+    width: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 const AvatarWrap = styled(View)`
-    width: 35px;
-    height: 35px;
-    margin-right: 10px;
+      width: 35px;
+      height: 35px;
+      margin-right: 10px;
+      shadow-radius: 5;
+      shadow-opacity: 0.2;
+      shadow-offset: {width: 1, height: 1 };
+      shadow-color: ${BLACK_COLOR}
 `
 
 const HeaderWrapper = styled(View)`
@@ -178,6 +178,7 @@ const LeftSide = styled(TouchableOpacity)`
 const RightSide = styled(View)`
     display: flex;
     flex-direction: row;
+    padding-right: 5px;
 `
 
 const Head = styled(View)`
