@@ -23,6 +23,7 @@ import {
     OPEN_SEARCH_BAR,
     CLOSE_SEARCH_BAR,
     CLEAR_USERS_SEARCH_RESULT,
+    DEAUTH_USER,
 } from '../constants/actions'
 import _ from 'lodash'
 
@@ -138,6 +139,9 @@ const chat = (state = initialState, action) => {
         }
         case CLOSE_SEARCH_BAR: {
             return { ...state, isSearchBarActive: false }
+        }
+        case DEAUTH_USER: {
+            return { ...initialState }
         }
         default: {
             return state
