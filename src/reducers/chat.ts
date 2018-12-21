@@ -22,6 +22,7 @@ import {
     CLEAN_PICTURE_IN_MESSAGE_LOCALY,
     OPEN_SEARCH_BAR,
     CLOSE_SEARCH_BAR,
+    CLEAR_USERS_SEARCH_RESULT,
 } from '../constants/actions'
 import _ from 'lodash'
 
@@ -29,7 +30,7 @@ export const initialState = {
     chats: [],
     usersInNewChat: [],
     getChatsError: false,
-    users: [],
+    usersSearchResult: [],
     activeChat: {
         chatImage: '',
         chatName: '',
@@ -72,19 +73,22 @@ const chat = (state = initialState, action) => {
         case DELETE_ALL_USERS_FROM_CHAT_LOCALY: {
             return { ...state, usersInNewChat: [] }
         }
+        case CLEAR_USERS_SEARCH_RESULT: {
+            return { ...state, usersSearchResult: [] }
+        }
         case FIND_USERS: {
             return {
                 ...state,
-                users: action.payload,
+                usersSearchResult: action.payload,
             }
         }
         case ADD_USER_TO_CHAT_LOCALY: {
             const updateUsersInNewChat = [...state.usersInNewChat, action.payload]
-            const updateUsers = _.filter(state.users, user => user._id !== action.payload._id)
+            const updateUsers = _.filter(state.usersSearchResult, user => user._id !== action.payload._id)
             return { ...state, usersInNewChat: updateUsersInNewChat, users: updateUsers }
         }
         case DELETE_USER_FROM_CHAT_LOCALY: {
-            const updateUsers = [...state.users, action.payload]
+            const updateUsers = [...state.usersSearchResult, action.payload]
             const updateUsersInNewChat = _.filter(state.usersInNewChat, user => user._id !== action.payload._id)
             return { ...state, usersInNewChat: updateUsersInNewChat, users: updateUsers }
         }
@@ -126,10 +130,7 @@ const chat = (state = initialState, action) => {
             return { ...state, imagesInCurrentMessage: [] }
         }
         case DELETE_PICTURE_IN_MESSAGE_LOCALY: {
-            const newImagesInCurrentMessage = _.filter(
-                state.imagesInCurrentMessage,
-                imageUrl => imageUrl !== action.payload
-            )
+            const newImagesInCurrentMessage = _.filter(state.imagesInCurrentMessage, imageUrl => imageUrl !== action.payload)
             return { ...state, imagesInCurrentMessage: newImagesInCurrentMessage }
         }
         case OPEN_SEARCH_BAR: {

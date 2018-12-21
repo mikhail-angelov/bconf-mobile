@@ -25,6 +25,7 @@ import {
     CLEAN_PICTURE_IN_MESSAGE_LOCALY,
     OPEN_SEARCH_BAR,
     CLOSE_SEARCH_BAR,
+    CLEAR_USERS_SEARCH_RESULT,
 } from '../constants/actions'
 import _ from 'lodash'
 import RNFetchBlob from 'rn-fetch-blob'
@@ -145,6 +146,10 @@ export const deleteUserFromChatLocaly = user => ({
 
 export const deleteAllUsersFromChatLocaly = () => ({
     type: DELETE_ALL_USERS_FROM_CHAT_LOCALY,
+})
+
+export const clearUsersSearchResult = () => ({
+    type: CLEAR_USERS_SEARCH_RESULT,
 })
 
 export const createNewChat = users => async dispatch => {
