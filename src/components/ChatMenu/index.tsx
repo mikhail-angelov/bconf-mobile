@@ -100,7 +100,6 @@ const ChatMenuView = styled(Animated.View)`
     flex-direction: column;
     height: 100%;
     width: 70%;
-    padding-top: 40px;
     position: absolute;
     top: 0;
     left: 0;
@@ -114,8 +113,10 @@ const ChatMenuHeader = styled(TouchableOpacity)`
     flex-direction: row;
     border-bottom-width: 3;
     border-color: rgba(0, 0, 0, 0.05);
-    height: 70px;
+    height: 80px;
     padding: 0 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
     width: 100%;
 `
 

@@ -201,7 +201,7 @@ export const signUp = ({ name, email, password }) => async dispatch => {
         setAuth({ token: resp.token, userId: resp._id })
         dispatch({
             type: SIGN_UP_USER,
-            payload: { token: resp.token, userId: resp._id },
+            payload: { token: resp.token, userId: resp.user._id, name: resp.user.name, email: resp.user.email, },
         })
         goHome()
     } catch (e) {
