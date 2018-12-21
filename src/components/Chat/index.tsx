@@ -1,17 +1,17 @@
-import React from "react";
-import { connect } from "react-redux";
-import { KeyboardAvoidingView, Dimensions, TouchableOpacity, Text, View } from "react-native";
-import styled from "styled-components";
-import Header from "../Header";
-import { Navigation } from "react-native-navigation";
-import MessageInput from "./MessageInput";
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { MessagesList } from "./MessagesList";
-import { goToAuth } from "../../navigation/navigation";
-import { WHITE_COLOR, SOFT_BLUE_COLOR } from "../../helpers/styleConstants";
-import { setFindMessagesInputValue, cleanFindMessagesInputValue, togglePlayer, downloadPlayer } from "../../actions/messages";
-import { sendMessage, unsetActiveChat, getChatlistTimestamp, openSearchBar, closeSearchBar } from "../../actions/chat";
-import _ from "lodash";
+import React from 'react'
+import { connect } from 'react-redux'
+import { KeyboardAvoidingView, Dimensions, Text, View } from 'react-native'
+import styled from 'styled-components'
+import Header from '../Header'
+import { Navigation } from 'react-native-navigation'
+import MessageInput from './MessageInput'
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import { MessagesList } from './MessagesList'
+import { goToAuth } from '../../navigation/navigation'
+import { WHITE_COLOR, SOFT_BLUE_COLOR } from '../../helpers/styleConstants'
+import { setFindMessagesInputValue, cleanFindMessagesInputValue, togglePlayer, downloadPlayer } from "../../actions/messages"
+import { sendMessage, unsetActiveChat, getChatlistTimestamp, openSearchBar, closeSearchBar, getMessages } from '../../actions/chat'
+import _ from 'lodash'
 
 const { height } = Dimensions.get('window') // it's for IphoneX
 
@@ -135,7 +135,10 @@ class Chat extends React.PureComponent<IProps, IState> {
           filteredMessages={filteredMessages}
           messages={messagesByUserId}
           userEmail={auth.email}
-          currentSelectedMessage={currentSelectedMessage} />
+          currentSelectedMessage={currentSelectedMessage}
+          getMessages={this.props.getMessages}
+          chatId={chat.activeChat.chatId}
+          refreshing={chat.chatRefreshing} />
         {chat.isSearchBarActive ?
           <SearchMessagesBar>
             <Icon.Button
@@ -151,18 +154,10 @@ class Chat extends React.PureComponent<IProps, IState> {
                             {/* to do: refactor this code */}
                             {filteredMessages.length} / {filteredMessages.length ? currentMessageNumber + 1 : 0}
                         </Text>
-                        <Icon.Button
-                            size={20}
-                            onPress={() => this.prevMessage(currentMessageNumber)}
-                            name="arrow-down"
-                            backgroundColor="d6efef"
-                            color={SOFT_BLUE_COLOR}
-                        />
+                        <Icon.Button size={20} onPress={() => this.prevMessage(currentMessageNumber)} name="arrow-down" backgroundColor="d6efef" color={SOFT_BLUE_COLOR} />
                     </SearchMessagesBar>
                 ) : (
-                    <MessageInput
-                        handleSendMessage={message => this.props.sendMessage(chat.activeChat.chatId, message)}
-                    />
+                    <MessageInput handleSendMessage={message => this.props.sendMessage(chat.activeChat.chatId, message)} />
                 )}
             </ChatView>
         )
@@ -201,7 +196,8 @@ const mapDispatchToProps = {
   setFindMessagesInputValue,
   cleanFindMessagesInputValue,
   togglePlayer,
-  downloadPlayer
+  downloadPlayer,
+  getMessages,
 }
 
 const selector = (state) => {
