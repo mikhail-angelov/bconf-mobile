@@ -4,14 +4,15 @@ import {
     CLEAN_FIND_MESSAGES_INPUT_VALUE,
     SET_FIND_MESSAGES_INPUT_VALUE,
     TOGGLE_VOICE_MESSAGE_STATUS,
-    DOWNLOAD_PLAYER
-} from "../constants/actions";
-import _ from "lodash"
+    DOWNLOAD_PLAYER,
+    CLEAN_CHAT,
+    GET_CURRENT_TIME,
+} from '../constants/actions'
+import _ from 'lodash'
 
 export const initialState = {
     findMessagesInputValue: '',
     allMessages: [],
-    isDownloaded: false
 }
 
 const messages = (state = initialState, action) => {
@@ -49,14 +50,46 @@ const messages = (state = initialState, action) => {
             return { ...state, findMessagesInputValue: '' }
         }
         case TOGGLE_VOICE_MESSAGE_STATUS: {
-            return { ...state, voiceMessagePlayers: { [action.payload.playerUrl]: { playStatus: action.payload.playStatus, isDownloaded: true } } };
+            return {
+                ...state,
+                voiceMessagePlayers: {
+                    [action.payload.playerUrl]: {
+                        ...state.voiceMessagePlayers[action.payload.playerUrl],
+                        playStatus: action.payload.playStatus,
+                    },
+                },
+            }
         }
         case DOWNLOAD_PLAYER: {
-            return { ...state, voiceMessagePlayers: { [action.payload.playerUrl]: { isDownloaded: action.payload.isDownloaded } } };
+            return {
+                ...state,
+                voiceMessagePlayers: {
+                    [action.payload.playerUrl]: {
+                        ...state.voiceMessagePlayers[action.payload.playerUrl],
+                        isDownloaded: action.payload.isDownloaded,
+                        audioDuration: action.payload.audioDuration,
+                        playStatus: false,
+                    },
+                },
+            }
+        }
+        case CLEAN_CHAT: {
+            return { ...state, voiceMessagePlayers: {} }
+        }
+        case GET_CURRENT_TIME: {
+            return {
+                ...state,
+                voiceMessagePlayers: {
+                    [action.payload.playerUrl]: {
+                        ...state.voiceMessagePlayers[action.payload.playerUrl],
+                        currentTime: action.payload.currentTime,
+                    },
+                },
+            }
         }
         default:
             return state
     }
 }
 
-export default messages;
+export default messages

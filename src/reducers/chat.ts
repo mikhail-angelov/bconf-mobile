@@ -30,6 +30,7 @@ import {
     ADD_AUDIO_IN_MESSAGE_LOCALY,
     DELETE_AUDIO_IN_MESSAGE_LOCALY,
     CLEAN_AUDIO_IN_MESSAGE_LOCALY,
+    CLEAN_CHAT,
 } from '../constants/actions'
 import _ from 'lodash'
 
@@ -49,7 +50,7 @@ export const initialState = {
     refreshingChatList: false,
     lastChatsTimestamp: {},
     imagesInCurrentMessage: [],
-    audiosInCurrentMessage: []
+    audiosInCurrentMessage: [],
 }
 
 const chat = (state = initialState, action) => {
@@ -138,7 +139,10 @@ const chat = (state = initialState, action) => {
             return { ...state, imagesInCurrentMessage: [] }
         }
         case DELETE_PICTURE_IN_MESSAGE_LOCALY: {
-            const newImagesInCurrentMessage = _.filter(state.imagesInCurrentMessage, imageUrl => imageUrl !== action.payload)
+            const newImagesInCurrentMessage = _.filter(
+                state.imagesInCurrentMessage,
+                imageUrl => imageUrl !== action.payload
+            )
             return { ...state, imagesInCurrentMessage: newImagesInCurrentMessage }
         }
         case OPEN_SEARCH_BAR: {
@@ -151,26 +155,32 @@ const chat = (state = initialState, action) => {
             return { ...initialState }
         }
         case UPLOAD_AUDIO_IN_CHAT_PROGRESS: {
-          return { ...state, uploadingAudioInChatProgress: action.payload };
+            return { ...state, uploadingAudioInChatProgress: action.payload }
         }
         case UPLOAD_AUDIO_IN_CHAT_START: {
-          return { ...state, uploadingChatAudio: true };
+            return { ...state, uploadingChatAudio: true }
         }
         case UPLOAD_AUDIO_IN_CHAT_END: {
-          return { ...state, uploadingChatAudio: false, uploadingChatAudioProgress: 0 };
+            return { ...state, uploadingChatAudio: false, uploadingChatAudioProgress: 0 }
         }
         case ADD_AUDIO_IN_MESSAGE_LOCALY: {
-          return { ...state, audiosInCurrentMessage: [...state.audiosInCurrentMessage, action.payload] };
+            return { ...state, audiosInCurrentMessage: [...state.audiosInCurrentMessage, action.payload] }
         }
         case CLEAN_AUDIO_IN_MESSAGE_LOCALY: {
-          return { ...state, audiosInCurrentMessage: [] };
+            return { ...state, audiosInCurrentMessage: [] }
         }
         case DELETE_AUDIO_IN_MESSAGE_LOCALY: {
-          const newAudiosInCurrentMessage = _.filter(state.audiosInCurrentMessage, audioUrl => audioUrl !== action.payload)
-          return { ...state, audiosInCurrentMessage: newAudiosInCurrentMessage };
+            const newAudiosInCurrentMessage = _.filter(
+                state.audiosInCurrentMessage,
+                audioUrl => audioUrl !== action.payload
+            )
+            return { ...state, audiosInCurrentMessage: newAudiosInCurrentMessage }
+        }
+        case CLEAN_CHAT: {
+            return { ...state, audiosInCurrentMessage: [], imagesInCurrentMessage: [] }
         }
         default: {
-          return state;
+            return state
         }
     }
 }
