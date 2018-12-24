@@ -234,7 +234,7 @@ export const changePassword = ({ password, oldPassword }) => ({
 export const saveProfileSettings = ({ name, email, srcAvatar }) => async dispatch => {
     try {
         const resp = await doJsonAuthRequest({
-            url: CHANGE_USER_SETTINGS_URL,
+            url: UPDATE_USER_URL,
             method: 'post',
             data: { name, email, srcAvatar },
         })
@@ -280,7 +280,7 @@ export const changeUserPicture = (image, user) => async dispatch => {
     })
     const newUrl = JSON.parse(resp.data)
     const updateUser = await doJsonAuthRequest({
-        url: CHANGE_USER_SETTINGS_URL,
+        url: UPDATE_USER_URL,
         method: 'post',
         data: { ...user, srcAvatar: newUrl[Platform.OS === 'ios' ? image.filename : filenameForAndroid].url },
     })

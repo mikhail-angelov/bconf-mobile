@@ -1,26 +1,60 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BLACK_COLOR, WHITE_COLOR, SOFT_BLUE_COLOR } from '../../helpers/styleConstants'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import { View, Text, Image, Dimensions } from 'react-native'
 import _ from 'lodash'
 import moment from 'moment'
-
+import { MessageVoice } from './MessageVoice'
 import { MESSAGE_TIMESTAMP_FORMAT } from '../../helpers/constants'
 
 const { width } = Dimensions.get('window')
 
-export const Message = ({ text, files, idx, isMyMessage, timestamp, selectedMessage }) => {
-    return (
-        <View style={{ backgroundColor: selectedMessage ? SOFT_BLUE_COLOR : 'transparent', borderRadius: 10 }}>
-            <MessageWrapper isMyMessage={isMyMessage}>
-                {_.map(files, fileUrl => (
-                    <MessageImage source={{ uri: fileUrl }} />
-                ))}
-                <MessageText isMyMessage={isMyMessage}>{text}</MessageText>
-                <DateText isMyMessage={isMyMessage}>{moment(timestamp).format(MESSAGE_TIMESTAMP_FORMAT)}</DateText>
-            </MessageWrapper>
-        </View>
-    )
+interface IProps {
+    text: string
+    files: object
+    audioFiles: object
+    idx: string
+    isMyMessage: boolean
+    timestamp: number
+    selectedMessage: object
+    voiceMessagePlayers: object | null
+    downloadPlayer: (url) => void
+    togglePlayer: () => void
+}
+
+export default class Message extends React.Component<IProps> {
+    constructor(props) {
+        super(props)
+        this.state = {
+            duration: {},
+            stateAudioFiles: {},
+            isPlayning: false,
+        }
+    }
+
+    public render() {
+        const { text, files, audioFiles, isMyMessage, timestamp, selectedMessage, voiceMessagePlayers } = this.props
+        return (
+            <View style={{ backgroundColor: selectedMessage ? SOFT_BLUE_COLOR : 'transparent', borderRadius: 10 }}>
+                <MessageWrapper isMyMessage={isMyMessage}>
+                    {_.map(files, fileUrl => (
+                        <MessageImage source={{ uri: fileUrl }} />
+                    ))}
+                    {_.map(audioFiles, fileUrl => (
+                        <MessageVoice
+                            fileUrl={fileUrl}
+                            togglePlayer={this.props.togglePlayer}
+                            downloadPlayer={this.props.downloadPlayer}
+                            voiceMessagePlayers={voiceMessagePlayers ? voiceMessagePlayers[fileUrl] : null}
+                        />
+                    ))}
+                    <MessageText isMyMessage={isMyMessage}>{text}</MessageText>
+                    <DateText isMyMessage={isMyMessage}>{moment(timestamp).format(MESSAGE_TIMESTAMP_FORMAT)}</DateText>
+                </MessageWrapper>
+            </View>
+        )
+    }
 }
 
 interface IMessageProps {
@@ -35,6 +69,8 @@ const MessageWrapper = styled(View).attrs({})`
     margin: 5px;
     flex: none;
     align-self: ${(props: IMessageProps) => (props.isMyMessage ? 'flex-end' : 'flex-start')};
+    justify-content: ${(props: IMessageProps) => (props.isMyMessage ? 'flex-end' : 'flex-start')};
+    align-items: ${(props: IMessageProps) => (props.isMyMessage ? 'flex-end' : 'flex-start')};
     max-width: 90%;
     text-align: ${(props: IMessageProps) => (props.isMyMessage ? 'right' : 'left')};
 `

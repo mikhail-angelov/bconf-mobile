@@ -24,6 +24,12 @@ import {
     CLOSE_SEARCH_BAR,
     CLEAR_USERS_SEARCH_RESULT,
     DEAUTH_USER,
+    UPLOAD_AUDIO_IN_CHAT_START,
+    UPLOAD_AUDIO_IN_CHAT_PROGRESS,
+    UPLOAD_AUDIO_IN_CHAT_END,
+    ADD_AUDIO_IN_MESSAGE_LOCALY,
+    DELETE_AUDIO_IN_MESSAGE_LOCALY,
+    CLEAN_AUDIO_IN_MESSAGE_LOCALY,
 } from '../constants/actions'
 import _ from 'lodash'
 
@@ -43,6 +49,7 @@ export const initialState = {
     refreshingChatList: false,
     lastChatsTimestamp: {},
     imagesInCurrentMessage: [],
+    audiosInCurrentMessage: []
 }
 
 const chat = (state = initialState, action) => {
@@ -143,8 +150,27 @@ const chat = (state = initialState, action) => {
         case DEAUTH_USER: {
             return { ...initialState }
         }
+        case UPLOAD_AUDIO_IN_CHAT_PROGRESS: {
+          return { ...state, uploadingAudioInChatProgress: action.payload };
+        }
+        case UPLOAD_AUDIO_IN_CHAT_START: {
+          return { ...state, uploadingChatAudio: true };
+        }
+        case UPLOAD_AUDIO_IN_CHAT_END: {
+          return { ...state, uploadingChatAudio: false, uploadingChatAudioProgress: 0 };
+        }
+        case ADD_AUDIO_IN_MESSAGE_LOCALY: {
+          return { ...state, audiosInCurrentMessage: [...state.audiosInCurrentMessage, action.payload] };
+        }
+        case CLEAN_AUDIO_IN_MESSAGE_LOCALY: {
+          return { ...state, audiosInCurrentMessage: [] };
+        }
+        case DELETE_AUDIO_IN_MESSAGE_LOCALY: {
+          const newAudiosInCurrentMessage = _.filter(state.audiosInCurrentMessage, audioUrl => audioUrl !== action.payload)
+          return { ...state, audiosInCurrentMessage: newAudiosInCurrentMessage };
+        }
         default: {
-            return state
+          return state;
         }
     }
 }
