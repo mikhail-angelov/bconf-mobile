@@ -147,7 +147,10 @@ const chat = (state = initialState, action) => {
             return { ...state, imagesInCurrentMessage: [] }
         }
         case DELETE_PICTURE_IN_MESSAGE_LOCALY: {
-            const newImagesInCurrentMessage = _.filter(state.imagesInCurrentMessage, imageUrl => imageUrl !== action.payload)
+            const newImagesInCurrentMessage = _.filter(
+                state.imagesInCurrentMessage,
+                imageUrl => imageUrl !== action.payload
+            )
             return { ...state, imagesInCurrentMessage: newImagesInCurrentMessage }
         }
         case OPEN_SEARCH_BAR: {
@@ -175,7 +178,10 @@ const chat = (state = initialState, action) => {
             return { ...state, audiosInCurrentMessage: [] }
         }
         case DELETE_AUDIO_IN_MESSAGE_LOCALY: {
-            const newAudiosInCurrentMessage = _.filter(state.audiosInCurrentMessage, audioUrl => audioUrl !== action.payload)
+            const newAudiosInCurrentMessage = _.filter(
+                state.audiosInCurrentMessage,
+                audioUrl => audioUrl !== action.payload
+            )
             return { ...state, audiosInCurrentMessage: newAudiosInCurrentMessage }
         }
         default: {

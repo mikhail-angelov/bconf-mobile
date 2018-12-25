@@ -17,7 +17,15 @@ import {
 } from '../constants/actions'
 import RNFetchBlob from 'rn-fetch-blob'
 import { setAuth, doJsonRequest, doJsonAuthRequest, getFilenameForAndroid, getToken } from './helper'
-import { AUTH_URL, AUTH_SOCIAL_URL, SIGN_UP_URL, REMIND_PASSWORD_URL, AUTH_CHECK_URL, UPLOAD_URL, UPDATE_USER_URL } from './endpoinds'
+import {
+    AUTH_URL,
+    AUTH_SOCIAL_URL,
+    SIGN_UP_URL,
+    REMIND_PASSWORD_URL,
+    AUTH_CHECK_URL,
+    UPLOAD_URL,
+    UPDATE_USER_URL,
+} from './endpoinds'
 import { AsyncStorage } from 'react-native'
 import { AUTH } from '../constants/storage'
 import { goHome, goToAuth, goWelcome } from '../navigation/navigation'
@@ -201,7 +209,7 @@ export const signUp = ({ name, email, password }) => async dispatch => {
         setAuth({ token: resp.token, userId: resp._id })
         dispatch({
             type: SIGN_UP_USER,
-            payload: { token: resp.token, userId: resp.user._id, name: resp.user.name, email: resp.user.email, },
+            payload: { token: resp.token, userId: resp.user._id, name: resp.user.name, email: resp.user.email },
         })
         goHome()
     } catch (e) {

@@ -73,10 +73,23 @@ class Header extends React.Component<IProps, IState> {
                 {Platform.OS === 'ios' && <Overlay />}
                 <Head>
                     <LeftSide>
-                        <Icon.Button size={16} onPress={() => leftIconFunction()} name={leftIconName} backgroundColor={WHITE_COLOR} color={SOFT_BLUE_COLOR} />
+                        <Icon.Button
+                            size={16}
+                            onPress={() => leftIconFunction()}
+                            name={leftIconName}
+                            backgroundColor={WHITE_COLOR}
+                            color={SOFT_BLUE_COLOR}
+                        />
                     </LeftSide>
                     {isSearchBarActive ? (
-                        <Input placeholder={whatSearch} onChangeText={value => this.inputValueChange(value)} value={inputValue} type={whatSearch} textContentType={whatSearch} autoCapitalize="none" />
+                        <Input
+                            placeholder={whatSearch}
+                            onChangeText={value => this.inputValueChange(value)}
+                            value={inputValue}
+                            type={whatSearch}
+                            textContentType={whatSearch}
+                            autoCapitalize="none"
+                        />
                     ) : (
                         <TitleWrap onPress={headerTitleFunction}>
                             {isAvatarVisible && (
