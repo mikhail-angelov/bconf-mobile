@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { FlatList, RefreshControl } from 'react-native'
-import { Message } from './Message'
+import Message from './Message'
 import { WHITE_COLOR } from '../../helpers/styleConstants'
 
 interface IProps {
@@ -19,10 +19,7 @@ export class MessagesList extends React.Component<IProps> {
         if (prevProps.messages.length !== this.props.messages.length && this.props.messages.length !== 0) {
             this.flatListRef.scrollToOffset({ animated: true, offset: 0 })
         }
-        if (
-            prevProps.currentSelectedMessage !== this.props.currentSelectedMessage &&
-            this.props.currentSelectedMessage
-        ) {
+        if (prevProps.currentSelectedMessage !== this.props.currentSelectedMessage && this.props.currentSelectedMessage) {
             const indexMessage = _.findIndex(this.props.messages, this.props.currentSelectedMessage)
             this.flatListRef.scrollToIndex({ animated: true, index: indexMessage, viewPosition: 0.5 })
         }
@@ -42,9 +39,7 @@ export class MessagesList extends React.Component<IProps> {
                 text={item.text}
                 isMyMessage={item.author.email === userEmail}
                 timestamp={item.timestamp}
-                selectedMessage={
-                    isSearchBarActive && filteredMessages.length !== 0 ? _.isEqual(currentSelectedMessage, item) : null
-                }
+                selectedMessage={isSearchBarActive && filteredMessages.length !== 0 ? _.isEqual(currentSelectedMessage, item) : null}
             />
         )
     }

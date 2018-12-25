@@ -30,10 +30,12 @@ import {
     ADD_AUDIO_IN_MESSAGE_LOCALY,
     DELETE_AUDIO_IN_MESSAGE_LOCALY,
     CLEAN_AUDIO_IN_MESSAGE_LOCALY,
-    START_MESSAGES_REFRESH,
-    FIHISHED_MESSAGES_REFRESH,
+    MESSAGES_REFRESH_START,
+    MESSAGES_REFRESH_END,
+    UPDATE_CHAT,
 } from '../constants/actions'
 import _ from 'lodash'
+import { stat } from 'fs'
 
 export const initialState = {
     chats: [],
@@ -134,10 +136,10 @@ const chat = (state = initialState, action) => {
         case REFRESH_CHATLIST_END: {
             return { ...state, refreshingChatList: false }
         }
-        case START_MESSAGES_REFRESH: {
+        case MESSAGES_REFRESH_START: {
             return { ...state, chatRefreshing: true }
         }
-        case FIHISHED_MESSAGES_REFRESH: {
+        case MESSAGES_REFRESH_END: {
             return { ...state, chatRefreshing: false }
         }
         case ADD_PICTURE_IN_MESSAGE_LOCALY: {
@@ -147,10 +149,7 @@ const chat = (state = initialState, action) => {
             return { ...state, imagesInCurrentMessage: [] }
         }
         case DELETE_PICTURE_IN_MESSAGE_LOCALY: {
-            const newImagesInCurrentMessage = _.filter(
-                state.imagesInCurrentMessage,
-                imageUrl => imageUrl !== action.payload
-            )
+            const newImagesInCurrentMessage = _.filter(state.imagesInCurrentMessage, imageUrl => imageUrl !== action.payload)
             return { ...state, imagesInCurrentMessage: newImagesInCurrentMessage }
         }
         case OPEN_SEARCH_BAR: {
@@ -178,11 +177,11 @@ const chat = (state = initialState, action) => {
             return { ...state, audiosInCurrentMessage: [] }
         }
         case DELETE_AUDIO_IN_MESSAGE_LOCALY: {
-            const newAudiosInCurrentMessage = _.filter(
-                state.audiosInCurrentMessage,
-                audioUrl => audioUrl !== action.payload
-            )
+            const newAudiosInCurrentMessage = _.filter(state.audiosInCurrentMessage, audioUrl => audioUrl !== action.payload)
             return { ...state, audiosInCurrentMessage: newAudiosInCurrentMessage }
+        }
+        case UPDATE_CHAT: {
+            return { ...state, activeChat: { ...state.activeChat, ...action.payload } }
         }
         default: {
             return state

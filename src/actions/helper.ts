@@ -29,18 +29,8 @@ export const getToken = async () => {
 }
 
 export function getRandomColor(chatId) {
-    const colors = [
-        '#FFCCFF',
-        '#9999FF',
-        '#66CCCC',
-        '#11AAFF',
-        '#22AAAA',
-        '#FFCC00',
-        '#FFCCCC',
-        '#996699',
-        '#66CCFF',
-        '#332244',
-    ]
+    const colors = ['#FFCCFF', '#9999FF', '#66CCCC', '#11AAFF', '#22AAAA', '#FFCC00', '#FFCCCC', '#996699', '#66CCFF', '#332244']
+    console.log(chatId)
     const rand = chatId.charCodeAt(0) % colors.length
     return colors[rand]
 }
