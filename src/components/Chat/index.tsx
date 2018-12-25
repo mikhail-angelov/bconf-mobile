@@ -14,6 +14,7 @@ import {
     cleanFindMessagesInputValue,
     togglePlayer,
     downloadPlayer,
+    setCurrentTime,
 } from '../../actions/messages'
 import { sendMessage, unsetActiveChat, getChatlistTimestamp, openSearchBar, closeSearchBar } from '../../actions/chat'
 import _ from 'lodash'
@@ -31,6 +32,7 @@ interface IProps {
     unsetActiveChat: () => void
     getChatlistTimestamp: () => void
     openSearchBar: () => void
+    setCurrentTime: () => void
     closeSearchBar: () => void
     setFindMessagesInputValue: () => void
     cleanFindMessagesInputValue: () => void
@@ -141,6 +143,7 @@ class Chat extends React.PureComponent<IProps, IState> {
                     messages={messagesByUserId}
                     userEmail={auth.email}
                     currentSelectedMessage={currentSelectedMessage}
+                    setCurrentTime={this.props.setCurrentTime}
                 />
                 {chat.isSearchBarActive ? (
                     <SearchMessagesBar>
@@ -205,6 +208,7 @@ const mapDispatchToProps = {
     cleanFindMessagesInputValue,
     togglePlayer,
     downloadPlayer,
+    setCurrentTime
 }
 
 const selector = state => {

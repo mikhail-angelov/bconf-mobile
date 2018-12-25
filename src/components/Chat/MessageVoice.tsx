@@ -1,7 +1,7 @@
 import React from 'react'
 import { BLACK_COLOR, WHITE_COLOR, SOFT_BLUE_COLOR } from '../../helpers/styleConstants'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity, Slider } from 'react-native'
 import styled from 'styled-components'
 import _ from 'lodash'
 
@@ -10,12 +10,13 @@ interface IProps {
     playStatus: string
     togglePlayer: () => void
     downloadPlayer: (url) => void
+    setCurrentTime: (value) => void
     voiceMessagePlayers: object
     isDownloaded: boolean
 }
 
 interface IState {
-    isPlayning: boolean
+    currentTime: number
 }
 
 export class MessageVoice extends React.Component<IProps, IState> {
@@ -33,7 +34,7 @@ export class MessageVoice extends React.Component<IProps, IState> {
                             ? this.props.downloadPlayer(fileUrl)
                             : this.props.togglePlayer()
                     }
-                    size={50}
+                    size={20}
                     name={
                         !voiceMessagePlayers || !voiceMessagePlayers.isDownloaded
                             ? 'download'
@@ -46,19 +47,33 @@ export class MessageVoice extends React.Component<IProps, IState> {
                     color={WHITE_COLOR}
                 />
                 {voiceMessagePlayers && (
-                    <Text>
-                        {`${voiceMessagePlayers.currentTime || 0} 
-                        / ${voiceMessagePlayers.audioDuration}`}
-                    </Text>
+                    <ProgressiveWrap>
+                        <Progress
+                            style={{ borderRadius: 10 }}
+                            value={+voiceMessagePlayers.currentTime}
+                            maximumValue={+voiceMessagePlayers.audioDuration}
+                            onValueChange={value => this.props.setCurrentTime(Math.floor(value))}
+                        />
+                        <Time>{`${voiceMessagePlayers.currentTime || 0} / ${voiceMessagePlayers.audioDuration}`}</Time>
+                    </ProgressiveWrap>
                 )}
             </MessageVoiceWrap>
         )
     }
 }
 
+const Time = styled(Text)``
+
+const Progress = styled(Slider)`
+    background-color: ${WHITE_COLOR};
+    border-radius: 10;
+    width: 250;
+`
+
+const ProgressiveWrap = styled(View)``
 const MessageVoiceWrap = styled(View)`
-    width: 85;
-    height: 85;
+    width: 285;
+    height: 55;
     border-width: 0.5;
     border-radius: 10;
     margin-bottom: 5;
@@ -67,4 +82,5 @@ const MessageVoiceWrap = styled(View)`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: row;
 `

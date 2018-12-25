@@ -21,6 +21,7 @@ interface IProps {
     voiceMessagePlayers: object | null
     downloadPlayer: (url) => void
     togglePlayer: () => void
+    setCurrentTime: () => void
 }
 
 export default class Message extends React.Component<IProps> {
@@ -43,6 +44,7 @@ export default class Message extends React.Component<IProps> {
                     ))}
                     {_.map(audioFiles, fileUrl => (
                         <MessageVoice
+                            setCurrentTime={this.props.setCurrentTime}
                             fileUrl={fileUrl}
                             togglePlayer={this.props.togglePlayer}
                             downloadPlayer={this.props.downloadPlayer}

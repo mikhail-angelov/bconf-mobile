@@ -3,6 +3,7 @@ import {
     CLEAN_FIND_MESSAGES_INPUT_VALUE,
     TOGGLE_VOICE_MESSAGE_STATUS,
     DOWNLOAD_PLAYER,
+    SET_CURRENT_TIME,
 } from '../constants/actions'
 import _ from 'lodash'
 import Sound from 'react-native-sound'
@@ -25,8 +26,7 @@ export const downloadPlayer = url => async dispatch => {
     playerUrl = url
     player = await getPlayer(url)
     const isDownloaded = player.isLoaded()
-    const duration = player.getDuration()
-    const audioDuration = duration.toString().slice(0, duration.toString().indexOf('.'))
+    const audioDuration = Math.floor(player.getDuration())
     dispatch({
         type: DOWNLOAD_PLAYER,
         payload: { isDownloaded, playerUrl, audioDuration, player },
@@ -67,5 +67,14 @@ function getPlayer(url) {
                 resolve(player)
             }
         })
+    })
+}
+
+export const setCurrentTime = value => dispatch => {
+    player.setCurrentTime(value)
+    dispatch({ type: SET_CURRENT_TIME })
+    dispatch({
+        type: TOGGLE_VOICE_MESSAGE_STATUS,
+        payload: { playStatus, playerUrl, player },
     })
 }
