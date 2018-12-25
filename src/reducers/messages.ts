@@ -68,7 +68,7 @@ const messages = (state = initialState, action) => {
                         ...state.voiceMessagePlayers[action.payload.playerUrl],
                         isDownloaded: action.payload.isDownloaded,
                         audioDuration: action.payload.audioDuration,
-                        playStatus: false,
+                        playStatus: 'pause',
                     },
                 },
             }

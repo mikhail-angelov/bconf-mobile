@@ -119,7 +119,6 @@ class MessageInput extends React.Component<IProps, IState> {
               />
               <CloseIcon
                 onPress={() => {
-                  console.log("click!")
                   this.props.deleteAudioInMessage(audioUrl)
                 }}
                 solid

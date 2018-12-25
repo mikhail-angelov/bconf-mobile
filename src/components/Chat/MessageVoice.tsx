@@ -24,7 +24,6 @@ export class MessageVoice extends React.Component<IProps, IState> {
     }
 
     public render() {
-        console.log(_.has(this.props.voiceMessagePlayers, 'playStatus'))
         const { fileUrl, voiceMessagePlayers } = this.props
         return (
             <MessageVoiceWrap>
@@ -38,9 +37,9 @@ export class MessageVoice extends React.Component<IProps, IState> {
                     name={
                         !voiceMessagePlayers || !voiceMessagePlayers.isDownloaded
                             ? 'download'
-                            : voiceMessagePlayers && voiceMessagePlayers.playStatus !== 'stop'
-                            ? 'play'
-                            : 'stop'
+                            : voiceMessagePlayers && voiceMessagePlayers.playStatus !== 'pause'
+                            ? 'pause'
+                            : 'play'
                     }
                     backgroundColor={WHITE_COLOR}
                     style={{ margin: 8 }}

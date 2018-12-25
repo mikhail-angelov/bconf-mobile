@@ -9,7 +9,7 @@ import Sound from 'react-native-sound'
 
 let player,
     playerUrl,
-    playStatus = 'stop'
+    playStatus = 'pause'
 
 export const setFindMessagesInputValue = inputValue => dispatch => {
     dispatch({
@@ -34,12 +34,21 @@ export const downloadPlayer = url => async dispatch => {
 }
 
 export const togglePlayer = () => dispatch => {
-    if (playStatus === 'stop') {
-        player.play()
+    if (playStatus === 'pause') {
+        player.play(success => {
+            if (success) {
+                dispatch({
+                    type: TOGGLE_VOICE_MESSAGE_STATUS,
+                    payload: { playStatus: 'pause', playerUrl, player },
+                })
+            } else {
+                player.reset()
+            }
+        })
         playStatus = 'play'
     } else if (playStatus === 'play') {
-        player.stop()
-        playStatus = 'stop'
+        player.pause()
+        playStatus = 'pause'
     }
     dispatch({
         type: TOGGLE_VOICE_MESSAGE_STATUS,
