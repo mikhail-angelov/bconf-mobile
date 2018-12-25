@@ -1,39 +1,41 @@
 import {
     CLEAR_USERS_SEARCH_RESULT,
-  GET_CHATS,
-  GET_CHATS_ERROR,
-  LOAD_MESSAGES_ERROR,
-  LOAD_MESSAGES,
-  SET_ACTIVE_CHAT,
-  SEND_MESSAGE,
-  ADD_USER_TO_CHAT_LOCALY,
-  DELETE_USER_FROM_CHAT_LOCALY,
-  FIND_USERS,
-  CREATE_NEW_CHAT,
-  DELETE_ALL_USERS_FROM_CHAT_LOCALY,
-  UPDATE_CHAT,
-  UPLOAD_PICTURES_IN_CHAT_START,
-  UPLOAD_PICTURES_IN_CHAT_PROGRESS,
-  UPLOAD_PICTURES_IN_CHAT_END,
-  UPLOAD_CHAT_PHOTO_START,
-  UPLOAD_CHAT_PHOTO_PROGRESS,
-  UPLOAD_CHAT_PHOTO_END,
-  REFRESH_CHATLIST_END,
-  REFRESH_CHATLIST_START,
-  GET_CHATLIST_TIMESTAMP,
-  ADD_PICTURE_IN_MESSAGE_LOCALY,
-  DELETE_PICTURE_IN_MESSAGE_LOCALY,
-  CLEAN_PICTURE_IN_MESSAGE_LOCALY,
-  OPEN_SEARCH_BAR,
-  CLOSE_SEARCH_BAR,
-  UPLOAD_AUDIO_IN_CHAT_START,
-  UPLOAD_AUDIO_IN_CHAT_PROGRESS,
-  UPLOAD_AUDIO_IN_CHAT_END,
-  ADD_AUDIO_IN_MESSAGE_LOCALY,
-  DELETE_AUDIO_IN_MESSAGE_LOCALY,
-  CLEAN_AUDIO_IN_MESSAGE_LOCALY,
-} from "../constants/actions";
-import _ from "lodash";
+    GET_CHATS,
+    GET_CHATS_ERROR,
+    LOAD_MESSAGES_ERROR,
+    LOAD_MESSAGES,
+    SET_ACTIVE_CHAT,
+    SEND_MESSAGE,
+    ADD_USER_TO_CHAT_LOCALY,
+    DELETE_USER_FROM_CHAT_LOCALY,
+    FIND_USERS,
+    CREATE_NEW_CHAT,
+    DELETE_ALL_USERS_FROM_CHAT_LOCALY,
+    UPDATE_CHAT,
+    UPLOAD_PICTURES_IN_CHAT_START,
+    UPLOAD_PICTURES_IN_CHAT_PROGRESS,
+    UPLOAD_PICTURES_IN_CHAT_END,
+    UPLOAD_CHAT_PHOTO_START,
+    UPLOAD_CHAT_PHOTO_PROGRESS,
+    UPLOAD_CHAT_PHOTO_END,
+    REFRESH_CHATLIST_END,
+    REFRESH_CHATLIST_START,
+    GET_CHATLIST_TIMESTAMP,
+    ADD_PICTURE_IN_MESSAGE_LOCALY,
+    DELETE_PICTURE_IN_MESSAGE_LOCALY,
+    CLEAN_PICTURE_IN_MESSAGE_LOCALY,
+    OPEN_SEARCH_BAR,
+    CLOSE_SEARCH_BAR,
+    UPLOAD_AUDIO_IN_CHAT_START,
+    UPLOAD_AUDIO_IN_CHAT_PROGRESS,
+    UPLOAD_AUDIO_IN_CHAT_END,
+    ADD_AUDIO_IN_MESSAGE_LOCALY,
+    DELETE_AUDIO_IN_MESSAGE_LOCALY,
+    CLEAN_AUDIO_IN_MESSAGE_LOCALY,
+    MESSAGES_REFRESH_START,
+    MESSAGES_REFRESH_END,
+} from '../constants/actions'
+import _ from 'lodash'
 import RNFetchBlob from 'rn-fetch-blob'
 import { AsyncStorage } from 'react-native'
 import { doJsonAuthRequest, getToken, getRandomColor, getFilenameForAndroid } from './helper'
@@ -85,6 +87,7 @@ export const getChats = () => async dispatch => {
 export const getMessages = chatId => async (dispatch, getState) => {
     try {
         const timestamp = getState().chat.lastChatsTimestamp[chatId]
+        dispatch({ type: MESSAGES_REFRESH_START })
         const newMessages = await doJsonAuthRequest({
             url: `${MESSAGE_URL + chatId}?timestamp=${timestamp || 0}`,
             method: 'get',
@@ -93,9 +96,11 @@ export const getMessages = chatId => async (dispatch, getState) => {
             type: LOAD_MESSAGES,
             payload: { newMessages, chatId },
         })
+        dispatch({ type: MESSAGES_REFRESH_END })
     } catch (e) {
         console.log(e)
         dispatch({ type: LOAD_MESSAGES_ERROR })
+        dispatch({ type: MESSAGES_REFRESH_END })
     }
 }
 
@@ -302,15 +307,15 @@ export const deleteAllPhotoInMessageLocaly = () => ({
     type: CLEAN_PICTURE_IN_MESSAGE_LOCALY,
 })
 
-export const deleteAudioInMessage = (audioUrl) => (dispatch) => {
-  dispatch({
-    type: DELETE_AUDIO_IN_MESSAGE_LOCALY,
-    payload: audioUrl
-  })
+export const deleteAudioInMessage = audioUrl => dispatch => {
+    dispatch({
+        type: DELETE_AUDIO_IN_MESSAGE_LOCALY,
+        payload: audioUrl,
+    })
 }
 
 export const deleteAllAudiosInMessageLocaly = () => ({
-  type: CLEAN_AUDIO_IN_MESSAGE_LOCALY
+    type: CLEAN_AUDIO_IN_MESSAGE_LOCALY,
 })
 
 export const openSearchBar = () => ({
@@ -321,35 +326,40 @@ export const closeSearchBar = () => ({
     type: CLOSE_SEARCH_BAR,
 })
 
-export const uploadAudio = (filePath) => async (dispatch) => {
-  const filename = getFilenameForAndroid(filePath)
-  const token = await getToken()
-  dispatch({
-    type: UPLOAD_AUDIO_IN_CHAT_START,
-  })
-  const resp = await RNFetchBlob.fetch('POST', UPLOAD_URL, {
-    Authorization: token,
-    // this is required, otherwise it won't be process as a multipart/form-data request
-    'Content-Type': 'multipart/form-data',
-  }, [
-      {
-        name: filename,
-        filename,
-        data: RNFetchBlob.wrap(filePath),
-        type: 'audio/aac'
-      },
-    ]).uploadProgress({ interval: 50 }, (written, total) => {
-      dispatch({
-        type: UPLOAD_AUDIO_IN_CHAT_PROGRESS,
-        payload: written / total
-      });
+export const uploadAudio = filePath => async dispatch => {
+    const filename = getFilenameForAndroid(filePath)
+    const token = await getToken()
+    dispatch({
+        type: UPLOAD_AUDIO_IN_CHAT_START,
     })
-  dispatch({
-    type: UPLOAD_AUDIO_IN_CHAT_END
-  });
-  const newPicUrl = JSON.parse(resp.data)
-  dispatch({
-    type: ADD_AUDIO_IN_MESSAGE_LOCALY,
-    payload: newPicUrl[filename].url
-  })
+    const resp = await RNFetchBlob.fetch(
+        'POST',
+        UPLOAD_URL,
+        {
+            Authorization: token,
+            // this is required, otherwise it won't be process as a multipart/form-data request
+            'Content-Type': 'multipart/form-data',
+        },
+        [
+            {
+                name: filename,
+                filename,
+                data: RNFetchBlob.wrap(filePath),
+                type: 'audio/aac',
+            },
+        ]
+    ).uploadProgress({ interval: 50 }, (written, total) => {
+        dispatch({
+            type: UPLOAD_AUDIO_IN_CHAT_PROGRESS,
+            payload: written / total,
+        })
+    })
+    dispatch({
+        type: UPLOAD_AUDIO_IN_CHAT_END,
+    })
+    const newPicUrl = JSON.parse(resp.data)
+    dispatch({
+        type: ADD_AUDIO_IN_MESSAGE_LOCALY,
+        payload: newPicUrl[filename].url,
+    })
 }

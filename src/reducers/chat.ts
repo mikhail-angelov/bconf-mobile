@@ -30,6 +30,8 @@ import {
     ADD_AUDIO_IN_MESSAGE_LOCALY,
     DELETE_AUDIO_IN_MESSAGE_LOCALY,
     CLEAN_AUDIO_IN_MESSAGE_LOCALY,
+    START_MESSAGES_REFRESH,
+    FIHISHED_MESSAGES_REFRESH,
 } from '../constants/actions'
 import _ from 'lodash'
 
@@ -49,7 +51,8 @@ export const initialState = {
     refreshingChatList: false,
     lastChatsTimestamp: {},
     imagesInCurrentMessage: [],
-    audiosInCurrentMessage: []
+    audiosInCurrentMessage: [],
+    chatRefreshing: false,
 }
 
 const chat = (state = initialState, action) => {
@@ -131,6 +134,12 @@ const chat = (state = initialState, action) => {
         case REFRESH_CHATLIST_END: {
             return { ...state, refreshingChatList: false }
         }
+        case START_MESSAGES_REFRESH: {
+            return { ...state, chatRefreshing: true }
+        }
+        case FIHISHED_MESSAGES_REFRESH: {
+            return { ...state, chatRefreshing: false }
+        }
         case ADD_PICTURE_IN_MESSAGE_LOCALY: {
             return { ...state, imagesInCurrentMessage: [...state.imagesInCurrentMessage, action.payload] }
         }
@@ -151,26 +160,26 @@ const chat = (state = initialState, action) => {
             return { ...initialState }
         }
         case UPLOAD_AUDIO_IN_CHAT_PROGRESS: {
-          return { ...state, uploadingAudioInChatProgress: action.payload };
+            return { ...state, uploadingAudioInChatProgress: action.payload }
         }
         case UPLOAD_AUDIO_IN_CHAT_START: {
-          return { ...state, uploadingChatAudio: true };
+            return { ...state, uploadingChatAudio: true }
         }
         case UPLOAD_AUDIO_IN_CHAT_END: {
-          return { ...state, uploadingChatAudio: false, uploadingChatAudioProgress: 0 };
+            return { ...state, uploadingChatAudio: false, uploadingChatAudioProgress: 0 }
         }
         case ADD_AUDIO_IN_MESSAGE_LOCALY: {
-          return { ...state, audiosInCurrentMessage: [...state.audiosInCurrentMessage, action.payload] };
+            return { ...state, audiosInCurrentMessage: [...state.audiosInCurrentMessage, action.payload] }
         }
         case CLEAN_AUDIO_IN_MESSAGE_LOCALY: {
-          return { ...state, audiosInCurrentMessage: [] };
+            return { ...state, audiosInCurrentMessage: [] }
         }
         case DELETE_AUDIO_IN_MESSAGE_LOCALY: {
-          const newAudiosInCurrentMessage = _.filter(state.audiosInCurrentMessage, audioUrl => audioUrl !== action.payload)
-          return { ...state, audiosInCurrentMessage: newAudiosInCurrentMessage };
+            const newAudiosInCurrentMessage = _.filter(state.audiosInCurrentMessage, audioUrl => audioUrl !== action.payload)
+            return { ...state, audiosInCurrentMessage: newAudiosInCurrentMessage }
         }
         default: {
-          return state;
+            return state
         }
     }
 }
