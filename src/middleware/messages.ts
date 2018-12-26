@@ -1,4 +1,4 @@
-import { TOGGLE_VOICE_MESSAGE_STATUS, GET_CURRENT_TIME, SET_CURRENT_TIME } from '../constants/actions'
+import { TOGGLE_VOICE_MESSAGE_STATUS, GET_CURRENT_TIME, CLEAR_TIMEOUT } from '../constants/actions'
 
 let currentTime,
     timer = 0
@@ -14,7 +14,7 @@ const messages = store => next => action => {
         } else if (timer) {
             clearInterval(timer)
         }
-    } else if (action.type === SET_CURRENT_TIME && timer) {
+    } else if (action.type === CLEAR_TIMEOUT && timer) {
         clearInterval(timer)
     }
     return next(action)

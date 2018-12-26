@@ -4,6 +4,7 @@ import {
     TOGGLE_VOICE_MESSAGE_STATUS,
     DOWNLOAD_PLAYER,
     SET_CURRENT_TIME,
+    CLEAR_TIMEOUT
 } from '../constants/actions'
 import _ from 'lodash'
 import Sound from 'react-native-sound'
@@ -72,9 +73,12 @@ function getPlayer(url) {
 
 export const setCurrentTime = value => dispatch => {
     player.setCurrentTime(value)
-    dispatch({ type: SET_CURRENT_TIME })
     dispatch({
         type: TOGGLE_VOICE_MESSAGE_STATUS,
         payload: { playStatus, playerUrl, player },
     })
+}
+
+export const clearTimeout = () => dispatch => {
+    dispatch({ type: CLEAR_TIMEOUT })
 }

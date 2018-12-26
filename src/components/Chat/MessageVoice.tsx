@@ -11,6 +11,7 @@ interface IProps {
     togglePlayer: () => void
     downloadPlayer: (url) => void
     setCurrentTime: (value) => void
+    clearTimeout: () => void
     voiceMessagePlayers: object
     isDownloaded: boolean
 }
@@ -22,6 +23,23 @@ interface IState {
 export class MessageVoice extends React.Component<IProps, IState> {
     constructor(props) {
         super(props)
+    }
+
+    public getAudioTimeString(currentTime, duration) {
+        const cm = Math.floor((currentTime % (60 * 60)) / 60)
+        const cs = Math.floor(currentTime % 60)
+        const dm = Math.floor((duration % (60 * 60)) / 60)
+        const ds = Math.floor(duration % 60)
+
+        return (
+            (cm < 10 ? '0' + cm : cm) +
+            ':' +
+            (cs < 10 ? '0' + cs : cs) +
+            '/' +
+            (dm < 10 ? '0' + dm : dm) +
+            ':' +
+            (ds < 10 ? '0' + ds : ds)
+        )
     }
 
     public render() {
@@ -49,12 +67,18 @@ export class MessageVoice extends React.Component<IProps, IState> {
                 {voiceMessagePlayers && (
                     <ProgressiveWrap>
                         <Progress
+                            onTouchStart={() => this.props.clearTimeout()}
                             style={{ borderRadius: 10 }}
                             value={+voiceMessagePlayers.currentTime}
                             maximumValue={+voiceMessagePlayers.audioDuration}
                             onValueChange={value => this.props.setCurrentTime(Math.floor(value))}
                         />
-                        <Time>{`${voiceMessagePlayers.currentTime || 0} / ${voiceMessagePlayers.audioDuration}`}</Time>
+                        <Time>
+                            {this.getAudioTimeString(
+                                voiceMessagePlayers.currentTime || 0,
+                                voiceMessagePlayers.audioDuration
+                            )}
+                        </Time>
                     </ProgressiveWrap>
                 )}
             </MessageVoiceWrap>

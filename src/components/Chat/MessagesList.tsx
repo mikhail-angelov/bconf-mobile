@@ -13,6 +13,7 @@ interface IProps {
   filteredMessages: object;
   voiceMessagePlayers: object;
   togglePlayer: () => void;
+  clearTimeout: () => void;
   setCurrentTime: () => void;
   downloadPlayer: (url) => void;
 }
@@ -37,6 +38,7 @@ export class MessagesList extends React.Component<IProps> {
       downloadPlayer={this.props.downloadPlayer}
       togglePlayer={this.props.togglePlayer}
       setCurrentTime={this.props.setCurrentTime}
+      clearTimeout={this.props.clearTimeout}
       files={item.links}
       audioFiles={item.audioLinks}
       text={item.text} isMyMessage={item.author.email === userEmail}
