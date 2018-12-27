@@ -8,6 +8,7 @@ import _ from 'lodash'
 interface IProps {
     fileUrl: string
     playStatus: string
+    currentTime: number
     togglePlayer: () => void
     downloadPlayer: (url) => void
     setCurrentTime: (value) => void
@@ -43,7 +44,7 @@ export class MessageVoice extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const { fileUrl, voiceMessagePlayers } = this.props
+        const { fileUrl, voiceMessagePlayers, currentTime } = this.props
         return (
             <MessageVoiceWrap>
                 <Icon
@@ -69,16 +70,13 @@ export class MessageVoice extends React.Component<IProps, IState> {
                         <Progress
                             onTouchStart={() => this.props.clearTimeout()}
                             style={{ borderRadius: 10 }}
-                            value={+voiceMessagePlayers.currentTime}
-                            maximumValue={+voiceMessagePlayers.audioDuration}
-                            onValueChange={value => this.props.setCurrentTime(Math.floor(value))}
+                            value={currentTime}
+                            maximumValue={voiceMessagePlayers.audioDuration}
+                            onValueChange={value => {
+                                this.props.setCurrentTime(value)
+                            }}
                         />
-                        <Time>
-                            {this.getAudioTimeString(
-                                voiceMessagePlayers.currentTime || 0,
-                                voiceMessagePlayers.audioDuration
-                            )}
-                        </Time>
+                        <Time>{this.getAudioTimeString(currentTime || 0, voiceMessagePlayers.audioDuration)}</Time>
                     </ProgressiveWrap>
                 )}
             </MessageVoiceWrap>

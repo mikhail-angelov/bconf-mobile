@@ -3,8 +3,8 @@ import {
     NEW_MESSAGE,
     CLEAN_FIND_MESSAGES_INPUT_VALUE,
     SET_FIND_MESSAGES_INPUT_VALUE,
-    TOGGLE_VOICE_MESSAGE_STATUS,
-    DOWNLOAD_PLAYER,
+    TOGGLE_VOICE_MESSAGE_BUTTON,
+    PLAYER_DOWNLOAD_COMPLETE,
     CLEAN_CHAT,
     GET_CURRENT_TIME,
 } from '../constants/actions'
@@ -13,6 +13,7 @@ import _ from 'lodash'
 export const initialState = {
     findMessagesInputValue: '',
     allMessages: [],
+    currentTime: 0,
 }
 
 const messages = (state = initialState, action) => {
@@ -49,7 +50,7 @@ const messages = (state = initialState, action) => {
         case CLEAN_FIND_MESSAGES_INPUT_VALUE: {
             return { ...state, findMessagesInputValue: '' }
         }
-        case TOGGLE_VOICE_MESSAGE_STATUS: {
+        case TOGGLE_VOICE_MESSAGE_BUTTON: {
             return {
                 ...state,
                 voiceMessagePlayers: {
@@ -60,7 +61,7 @@ const messages = (state = initialState, action) => {
                 },
             }
         }
-        case DOWNLOAD_PLAYER: {
+        case PLAYER_DOWNLOAD_COMPLETE: {
             return {
                 ...state,
                 voiceMessagePlayers: {
@@ -79,10 +80,10 @@ const messages = (state = initialState, action) => {
         case GET_CURRENT_TIME: {
             return {
                 ...state,
+                currentTime: action.payload.currentTime,
                 voiceMessagePlayers: {
                     [action.payload.playerUrl]: {
                         ...state.voiceMessagePlayers[action.payload.playerUrl],
-                        currentTime: action.payload.currentTime,
                     },
                 },
             }

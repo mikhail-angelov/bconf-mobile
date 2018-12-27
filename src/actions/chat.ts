@@ -87,7 +87,7 @@ export const getMessages = chatId => async (dispatch, getState) => {
     try {
         const timestamp = getState().chat.lastChatsTimestamp[chatId]
         const newMessages = await doJsonAuthRequest({
-            url: `${MESSAGE_URL + chatId}?timestamp=${timestamp || 0}`,
+            url: `${MESSAGE_URL + chatId}`, // need refactor
             method: 'get',
         })
         dispatch({

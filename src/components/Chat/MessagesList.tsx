@@ -43,6 +43,7 @@ export class MessagesList extends React.Component<IProps> {
       audioFiles={item.audioLinks}
       text={item.text} isMyMessage={item.author.email === userEmail}
       timestamp={item.timestamp}
+      currentTime={this.props.currentTime}
       selectedMessage={isSearchBarActive && filteredMessages.length !== 0 ? _.isEqual(currentSelectedMessage, item) : null} />
     )
   }

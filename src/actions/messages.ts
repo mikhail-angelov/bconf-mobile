@@ -4,14 +4,9 @@ import {
     TOGGLE_VOICE_MESSAGE_STATUS,
     DOWNLOAD_PLAYER,
     SET_CURRENT_TIME,
-    CLEAR_TIMEOUT
+    CLEAR_TIMEOUT,
 } from '../constants/actions'
 import _ from 'lodash'
-import Sound from 'react-native-sound'
-
-let player,
-    playerUrl,
-    playStatus = 'pause'
 
 export const setFindMessagesInputValue = inputValue => dispatch => {
     dispatch({
@@ -23,59 +18,21 @@ export const cleanFindMessagesInputValue = () => ({
     type: CLEAN_FIND_MESSAGES_INPUT_VALUE,
 })
 
-export const downloadPlayer = url => async dispatch => {
-    playerUrl = url
-    player = await getPlayer(url)
-    const isDownloaded = player.isLoaded()
-    const audioDuration = Math.floor(player.getDuration())
+export const downloadPlayer = url => dispatch => {
     dispatch({
         type: DOWNLOAD_PLAYER,
-        payload: { isDownloaded, playerUrl, audioDuration, player },
+        payload: { playerUrl: url },
     })
 }
 
 export const togglePlayer = () => dispatch => {
-    if (playStatus === 'pause') {
-        player.play(success => {
-            if (success) {
-                dispatch({
-                    type: TOGGLE_VOICE_MESSAGE_STATUS,
-                    payload: { playStatus: 'pause', playerUrl, player },
-                })
-            } else {
-                player.reset()
-            }
-        })
-        playStatus = 'play'
-    } else if (playStatus === 'play') {
-        player.pause()
-        playStatus = 'pause'
-    }
-    dispatch({
-        type: TOGGLE_VOICE_MESSAGE_STATUS,
-        payload: { playStatus, playerUrl, player },
-    })
-}
-
-function getPlayer(url) {
-    return new Promise((resolve, reject) => {
-        const player = new Sound(url, '', err => {
-            if (err) {
-                console.log('sound error', err)
-                reject(err)
-            } else {
-                console.log('sound')
-                resolve(player)
-            }
-        })
-    })
+    dispatch({ type: TOGGLE_VOICE_MESSAGE_STATUS })
 }
 
 export const setCurrentTime = value => dispatch => {
-    player.setCurrentTime(value)
     dispatch({
-        type: TOGGLE_VOICE_MESSAGE_STATUS,
-        payload: { playStatus, playerUrl, player },
+        type: SET_CURRENT_TIME,
+        payload: { currentTime: value },
     })
 }
 

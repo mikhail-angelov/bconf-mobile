@@ -45,6 +45,7 @@ export default class Message extends React.Component<IProps> {
                     ))}
                     {_.map(audioFiles, fileUrl => (
                         <MessageVoice
+                            currentTime={this.props.currentTime}
                             setCurrentTime={this.props.setCurrentTime}
                             clearTimeout={this.props.clearTimeout}
                             fileUrl={fileUrl}

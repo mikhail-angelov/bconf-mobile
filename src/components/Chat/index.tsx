@@ -147,6 +147,7 @@ class Chat extends React.PureComponent<IProps, IState> {
                     currentSelectedMessage={currentSelectedMessage}
                     setCurrentTime={this.props.setCurrentTime}
                     clearTimeout={this.props.clearTimeout}
+                    currentTime={this.props.currentTime}
                 />
                 {chat.isSearchBarActive ? (
                     <SearchMessagesBar>
@@ -212,7 +213,7 @@ const mapDispatchToProps = {
     togglePlayer,
     downloadPlayer,
     setCurrentTime,
-    clearTimeout
+    clearTimeout,
 }
 
 const selector = state => {
@@ -226,6 +227,7 @@ const selector = state => {
         messagesByUserId,
         filteredMessages,
         voiceMessagePlayers: state.messages.voiceMessagePlayers,
+        currentTime: state.messages.currentTime,
     }
 }
 
