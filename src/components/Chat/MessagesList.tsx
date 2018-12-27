@@ -1,21 +1,20 @@
-import React from "react";
-import _ from "lodash";
-import { FlatList } from 'react-native';
-import styled from "styled-components";
-import Message from "./Message";
-import { WHITE_COLOR } from "../../helpers/styleConstants";
+import React from 'react'
+import _ from 'lodash'
+import { FlatList } from 'react-native'
+import styled from 'styled-components'
+import Message from './Message'
+import { WHITE_COLOR } from '../../helpers/styleConstants'
 
 interface IProps {
-  userEmail: string;
-  isSearchBarActive: boolean;
-  messages: object;
-  currentSelectedMessage: object;
-  filteredMessages: object;
-  voiceMessagePlayers: object;
-  togglePlayer: () => void;
-  clearTimeout: () => void;
-  setCurrentTime: () => void;
-  downloadPlayer: (url) => void;
+    userEmail: string
+    isSearchBarActive: boolean
+    messages: object
+    currentSelectedMessage: object
+    filteredMessages: object
+    voiceMessagePlayer: object
+    togglePlayer: () => void
+    clearTimeout: () => void
+    setCurrentTime: () => void
 }
 export class MessagesList extends React.Component<IProps> {
     public componentDidUpdate(prevProps) {
@@ -31,22 +30,27 @@ export class MessagesList extends React.Component<IProps> {
         }
     }
 
-  public MessagesItem = ({ item }) => {
-    const { userEmail, currentSelectedMessage, filteredMessages, isSearchBarActive } = this.props
-    return (<Message key={item._id} idx={item._id}
-      voiceMessagePlayers={this.props.voiceMessagePlayers}
-      downloadPlayer={this.props.downloadPlayer}
-      togglePlayer={this.props.togglePlayer}
-      setCurrentTime={this.props.setCurrentTime}
-      clearTimeout={this.props.clearTimeout}
-      files={item.links}
-      audioFiles={item.audioLinks}
-      text={item.text} isMyMessage={item.author.email === userEmail}
-      timestamp={item.timestamp}
-      currentTime={this.props.currentTime}
-      selectedMessage={isSearchBarActive && filteredMessages.length !== 0 ? _.isEqual(currentSelectedMessage, item) : null} />
-    )
-  }
+    public MessagesItem = ({ item }) => {
+        const { userEmail, currentSelectedMessage, filteredMessages, isSearchBarActive } = this.props
+        return (
+            <Message
+                key={item._id}
+                idx={item._id}
+                voiceMessagePlayer={this.props.voiceMessagePlayer}
+                togglePlayer={this.props.togglePlayer}
+                setCurrentTime={this.props.setCurrentTime}
+                clearTimeout={this.props.clearTimeout}
+                files={item.links}
+                audioFiles={item.audioLinks}
+                text={item.text}
+                isMyMessage={item.author.email === userEmail}
+                timestamp={item.timestamp}
+                selectedMessage={
+                    isSearchBarActive && filteredMessages.length !== 0 ? _.isEqual(currentSelectedMessage, item) : null
+                }
+            />
+        )
+    }
 
     public render() {
         const { messages } = this.props

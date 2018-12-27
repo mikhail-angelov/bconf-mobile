@@ -18,15 +18,8 @@ export const cleanFindMessagesInputValue = () => ({
     type: CLEAN_FIND_MESSAGES_INPUT_VALUE,
 })
 
-export const downloadPlayer = url => dispatch => {
-    dispatch({
-        type: DOWNLOAD_PLAYER,
-        payload: { playerUrl: url },
-    })
-}
-
-export const togglePlayer = () => dispatch => {
-    dispatch({ type: TOGGLE_VOICE_MESSAGE_STATUS })
+export const togglePlayer = url => dispatch => {
+    dispatch({ type: TOGGLE_VOICE_MESSAGE_STATUS, payload: { playerUrl: url } })
 }
 
 export const setCurrentTime = value => dispatch => {

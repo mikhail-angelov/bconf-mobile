@@ -8,20 +8,13 @@ import _ from 'lodash'
 interface IProps {
     fileUrl: string
     playStatus: string
-    currentTime: number
-    togglePlayer: () => void
-    downloadPlayer: (url) => void
+    togglePlayer: (fileUrl) => void
     setCurrentTime: (value) => void
     clearTimeout: () => void
-    voiceMessagePlayers: object
-    isDownloaded: boolean
+    voiceMessagePlayer: object
 }
 
-interface IState {
-    currentTime: number
-}
-
-export class MessageVoice extends React.Component<IProps, IState> {
+export class MessageVoice extends React.Component<IProps> {
     constructor(props) {
         super(props)
     }
@@ -44,20 +37,16 @@ export class MessageVoice extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const { fileUrl, voiceMessagePlayers, currentTime } = this.props
+        const { fileUrl, voiceMessagePlayer } = this.props
         return (
             <MessageVoiceWrap>
                 <Icon
-                    onPress={() =>
-                        !voiceMessagePlayers || !voiceMessagePlayers.isDownloaded
-                            ? this.props.downloadPlayer(fileUrl)
-                            : this.props.togglePlayer()
-                    }
+                    onPress={() => this.props.togglePlayer(fileUrl)}
                     size={20}
                     name={
-                        !voiceMessagePlayers || !voiceMessagePlayers.isDownloaded
+                        _.isEmpty(voiceMessagePlayer)
                             ? 'download'
-                            : voiceMessagePlayers && voiceMessagePlayers.playStatus !== 'pause'
+                            : voiceMessagePlayer && voiceMessagePlayer.playStatus !== 'pause'
                             ? 'pause'
                             : 'play'
                     }
@@ -65,18 +54,23 @@ export class MessageVoice extends React.Component<IProps, IState> {
                     style={{ margin: 8 }}
                     color={WHITE_COLOR}
                 />
-                {voiceMessagePlayers && (
+                {!_.isEmpty(voiceMessagePlayer) && (
                     <ProgressiveWrap>
                         <Progress
                             onTouchStart={() => this.props.clearTimeout()}
                             style={{ borderRadius: 10 }}
-                            value={currentTime}
-                            maximumValue={voiceMessagePlayers.audioDuration}
+                            value={voiceMessagePlayer.currentTime}
+                            maximumValue={voiceMessagePlayer.audioDuration}
                             onValueChange={value => {
                                 this.props.setCurrentTime(value)
                             }}
                         />
-                        <Time>{this.getAudioTimeString(currentTime || 0, voiceMessagePlayers.audioDuration)}</Time>
+                        <Time>
+                            {this.getAudioTimeString(
+                                voiceMessagePlayer.currentTime || 0,
+                                voiceMessagePlayer.audioDuration
+                            )}
+                        </Time>
                     </ProgressiveWrap>
                 )}
             </MessageVoiceWrap>

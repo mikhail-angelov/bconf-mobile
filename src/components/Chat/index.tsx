@@ -13,7 +13,6 @@ import {
     setFindMessagesInputValue,
     cleanFindMessagesInputValue,
     togglePlayer,
-    downloadPlayer,
     setCurrentTime,
     clearTimeout,
 } from '../../actions/messages'
@@ -39,7 +38,6 @@ interface IProps {
     cleanFindMessagesInputValue: () => void
     togglePlayer: () => void
     clearTimeout: () => void
-    downloadPlayer: (url) => void
     chatId: string
     chatName: string
     chatImage: string | undefined
@@ -48,7 +46,7 @@ interface IProps {
     messages: any
     messagesByUserId: object
     filteredMessages: object
-    voiceMessagePlayers: object
+    voiceMessagePlayer: object
     isSearchBarActive: boolean
 }
 class Chat extends React.PureComponent<IProps, IState> {
@@ -86,7 +84,7 @@ class Chat extends React.PureComponent<IProps, IState> {
     }
 
     public render() {
-        const { chat, width, auth, messagesByUserId, filteredMessages, voiceMessagePlayers } = this.props
+        const { chat, width, auth, messagesByUserId, filteredMessages, voiceMessagePlayer } = this.props
         const { currentSelectedMessage, currentMessageNumber } = this.state
         return (
             <ChatView style={{ width }}>
@@ -137,8 +135,7 @@ class Chat extends React.PureComponent<IProps, IState> {
                     leftIconName="arrow-left"
                 />
                 <MessagesList
-                    voiceMessagePlayers={voiceMessagePlayers}
-                    downloadPlayer={this.props.downloadPlayer}
+                    voiceMessagePlayer={voiceMessagePlayer}
                     togglePlayer={this.props.togglePlayer}
                     isSearchBarActive={chat.isSearchBarActive}
                     filteredMessages={filteredMessages}
@@ -147,7 +144,6 @@ class Chat extends React.PureComponent<IProps, IState> {
                     currentSelectedMessage={currentSelectedMessage}
                     setCurrentTime={this.props.setCurrentTime}
                     clearTimeout={this.props.clearTimeout}
-                    currentTime={this.props.currentTime}
                 />
                 {chat.isSearchBarActive ? (
                     <SearchMessagesBar>
@@ -211,7 +207,6 @@ const mapDispatchToProps = {
     setFindMessagesInputValue,
     cleanFindMessagesInputValue,
     togglePlayer,
-    downloadPlayer,
     setCurrentTime,
     clearTimeout,
 }
@@ -226,8 +221,7 @@ const selector = state => {
         chat: state.chat,
         messagesByUserId,
         filteredMessages,
-        voiceMessagePlayers: state.messages.voiceMessagePlayers,
-        currentTime: state.messages.currentTime,
+        voiceMessagePlayer: state.messages.voiceMessagePlayer,
     }
 }
 

@@ -53,38 +53,31 @@ const messages = (state = initialState, action) => {
         case TOGGLE_VOICE_MESSAGE_BUTTON: {
             return {
                 ...state,
-                voiceMessagePlayers: {
-                    [action.payload.playerUrl]: {
-                        ...state.voiceMessagePlayers[action.payload.playerUrl],
-                        playStatus: action.payload.playStatus,
-                    },
+                voiceMessagePlayer: {
+                    ...state.voiceMessagePlayer,
+                    playStatus: action.payload.playStatus,
                 },
             }
         }
         case PLAYER_DOWNLOAD_COMPLETE: {
             return {
                 ...state,
-                voiceMessagePlayers: {
-                    [action.payload.playerUrl]: {
-                        ...state.voiceMessagePlayers[action.payload.playerUrl],
-                        isDownloaded: action.payload.isDownloaded,
-                        audioDuration: action.payload.audioDuration,
-                        playStatus: 'pause',
-                    },
+                voiceMessagePlayer: {
+                    ...state.voiceMessagePlayer,
+                    audioDuration: action.payload.audioDuration,
+                    playStatus: 'pause',
                 },
             }
         }
         case CLEAN_CHAT: {
-            return { ...state, voiceMessagePlayers: {} }
+            return { ...state, voiceMessagePlayer: {} }
         }
         case GET_CURRENT_TIME: {
             return {
                 ...state,
-                currentTime: action.payload.currentTime,
-                voiceMessagePlayers: {
-                    [action.payload.playerUrl]: {
-                        ...state.voiceMessagePlayers[action.payload.playerUrl],
-                    },
+                voiceMessagePlayer: {
+                    ...state.voiceMessagePlayer,
+                    currentTime: action.payload.currentTime,
                 },
             }
         }
