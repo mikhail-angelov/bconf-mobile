@@ -4,6 +4,19 @@ import { saveAuth } from './storage'
 import { AsyncStorage } from 'react-native'
 import { AUTH } from '../constants/storage'
 
+const colors = [
+    '#FFCCFF',
+    '#9999FF',
+    '#66CCCC',
+    '#11AAFF',
+    '#22AAAA',
+    '#FFCC00',
+    '#FFCCCC',
+    '#996699',
+    '#66CCFF',
+    '#332244',
+]
+
 export const auth = { token: '', userId: '' }
 
 export const setAuth = ({ token, userId }) => {
@@ -29,18 +42,6 @@ export const getToken = async () => {
 }
 
 export function getRandomColor(chatId) {
-    const colors = [
-        '#FFCCFF',
-        '#9999FF',
-        '#66CCCC',
-        '#11AAFF',
-        '#22AAAA',
-        '#FFCC00',
-        '#FFCCCC',
-        '#996699',
-        '#66CCFF',
-        '#332244',
-    ]
     const rand = chatId.charCodeAt(0) % colors.length
     return colors[rand]
 }

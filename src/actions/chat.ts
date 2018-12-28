@@ -72,7 +72,7 @@ export const getChats = () => async dispatch => {
         })
         chats = _.map(chats, chat => ({
             ...chat,
-            chatColor: getRandomColor(chat.chatId),
+            chatColor: chat.chatColor || getRandomColor(chat.chatId),
         }))
         dispatch({
             type: GET_CHATS,
