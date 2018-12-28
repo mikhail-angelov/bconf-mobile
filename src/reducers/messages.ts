@@ -3,15 +3,17 @@ import {
     NEW_MESSAGE,
     CLEAN_FIND_MESSAGES_INPUT_VALUE,
     SET_FIND_MESSAGES_INPUT_VALUE,
-    TOGGLE_VOICE_MESSAGE_STATUS,
-    DOWNLOAD_PLAYER,
+    TOGGLE_VOICE_MESSAGE_BUTTON,
+    PLAYER_DOWNLOAD_COMPLETE,
+    CLEAN_CHAT,
+    GET_CURRENT_TIME,
 } from '../constants/actions'
 import _ from 'lodash'
 
 export const initialState = {
     findMessagesInputValue: '',
     allMessages: [],
-    isDownloaded: false,
+    currentTime: 0,
 }
 
 const messages = (state = initialState, action) => {
@@ -48,18 +50,37 @@ const messages = (state = initialState, action) => {
         case CLEAN_FIND_MESSAGES_INPUT_VALUE: {
             return { ...state, findMessagesInputValue: '' }
         }
-        case TOGGLE_VOICE_MESSAGE_STATUS: {
+        case TOGGLE_VOICE_MESSAGE_BUTTON: {
             return {
                 ...state,
-                voiceMessagePlayers: {
-                    [action.payload.playerUrl]: { playStatus: action.payload.playStatus, isDownloaded: true },
+                voiceMessagePlayer: {
+                    ...state.voiceMessagePlayer,
+                    playStatus: action.payload.playStatus,
                 },
             }
         }
-        case DOWNLOAD_PLAYER: {
+        case PLAYER_DOWNLOAD_COMPLETE: {
             return {
                 ...state,
-                voiceMessagePlayers: { [action.payload.playerUrl]: { isDownloaded: action.payload.isDownloaded } },
+                voiceMessagePlayer: {
+                    ...state.voiceMessagePlayer,
+                    audioDuration: action.payload.audioDuration,
+                    playStatus: 'pause',
+                    activeMessageId: action.payload.messageId,
+                    currentTime: 0,
+                },
+            }
+        }
+        case CLEAN_CHAT: {
+            return { ...state, voiceMessagePlayer: {} }
+        }
+        case GET_CURRENT_TIME: {
+            return {
+                ...state,
+                voiceMessagePlayer: {
+                    ...state.voiceMessagePlayer,
+                    currentTime: action.payload.currentTime,
+                },
             }
         }
         default:

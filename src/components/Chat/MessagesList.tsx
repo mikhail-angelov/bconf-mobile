@@ -1,7 +1,8 @@
 import React from 'react'
 import _ from 'lodash'
-import { FlatList, RefreshControl } from 'react-native'
-import { Message } from './Message'
+import { RefreshControl } from 'react-native'
+import { FlatList } from 'react-native'
+import Message from './Message'
 import { WHITE_COLOR } from '../../helpers/styleConstants'
 
 interface IProps {
@@ -10,6 +11,10 @@ interface IProps {
     messages: object
     currentSelectedMessage: object
     filteredMessages: object
+    voiceMessagePlayer: object
+    togglePlayer: () => void
+    clearTimeout: () => void
+    setCurrentTime: () => void
     refreshing: boolean
     chatId: string
     getMessages: (chatId: string) => void
@@ -34,9 +39,10 @@ export class MessagesList extends React.Component<IProps> {
             <Message
                 key={item._id}
                 idx={item._id}
-                voiceMessagePlayers={this.props.voiceMessagePlayers}
-                downloadPlayer={this.props.downloadPlayer}
+                voiceMessagePlayer={this.props.voiceMessagePlayer}
                 togglePlayer={this.props.togglePlayer}
+                setCurrentTime={this.props.setCurrentTime}
+                clearTimeout={this.props.clearTimeout}
                 files={item.links}
                 audioFiles={item.audioLinks}
                 text={item.text}
@@ -60,8 +66,8 @@ export class MessagesList extends React.Component<IProps> {
                 }}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => getMessages(chatId)} />}
                 style={{
-                    paddingRight: 20,
-                    paddingLeft: 20,
+                    paddingRight: 10,
+                    paddingLeft: 10,
                     display: 'flex',
                     flexDirection: 'column',
                     backgroundColor: `${WHITE_COLOR}`,

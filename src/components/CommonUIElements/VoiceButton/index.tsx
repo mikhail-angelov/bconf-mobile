@@ -52,11 +52,10 @@ class AudioExample extends Component<IProps, IState> {
             this.prepareRecordingPath(this.state.audioPath)
 
             AudioRecorder.onProgress = data => {
-                this.setState({ currentTime: Math.floor(data.currentTime) })
+                this.setState({ currentTime: data.currentTime })
             }
 
             AudioRecorder.onFinished = data => {
-                console.log('HARE!', data)
                 // Android callback comes in the form of a promise instead.
                 if (Platform.OS === 'ios') {
                     this.finishRecording(data.status === 'OK', data.audioFileURL, data.audioFileSize)

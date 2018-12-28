@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { KeyboardAvoidingView, Dimensions, Text, View } from 'react-native'
+import { KeyboardAvoidingView, Dimensions, TouchableOpacity, Text, View } from 'react-native'
 import styled from 'styled-components'
 import Header from '../Header'
 import { Navigation } from 'react-native-navigation'
@@ -13,7 +13,8 @@ import {
     setFindMessagesInputValue,
     cleanFindMessagesInputValue,
     togglePlayer,
-    downloadPlayer,
+    setCurrentTime,
+    clearTimeout,
 } from '../../actions/messages'
 import {
     sendMessage,
@@ -38,11 +39,12 @@ interface IProps {
     unsetActiveChat: () => void
     getChatlistTimestamp: () => void
     openSearchBar: () => void
+    setCurrentTime: () => void
     closeSearchBar: () => void
     setFindMessagesInputValue: () => void
     cleanFindMessagesInputValue: () => void
     togglePlayer: () => void
-    downloadPlayer: (url) => void
+    clearTimeout: () => void
     chatId: string
     chatName: string
     chatImage: string | undefined
@@ -51,7 +53,7 @@ interface IProps {
     messages: any
     messagesByUserId: object
     filteredMessages: object
-    voiceMessagePlayers: object
+    voiceMessagePlayer: object
     isSearchBarActive: boolean
 }
 class Chat extends React.PureComponent<IProps, IState> {
@@ -89,7 +91,7 @@ class Chat extends React.PureComponent<IProps, IState> {
     }
 
     public render() {
-        const { chat, width, auth, messagesByUserId, filteredMessages, voiceMessagePlayers } = this.props
+        const { chat, width, auth, messagesByUserId, filteredMessages, voiceMessagePlayer } = this.props
         const { currentSelectedMessage, currentMessageNumber } = this.state
         return (
             <ChatView style={{ width }}>
@@ -140,14 +142,15 @@ class Chat extends React.PureComponent<IProps, IState> {
                     leftIconName="arrow-left"
                 />
                 <MessagesList
-                    voiceMessagePlayers={voiceMessagePlayers}
-                    downloadPlayer={this.props.downloadPlayer}
+                    voiceMessagePlayer={voiceMessagePlayer}
                     togglePlayer={this.props.togglePlayer}
                     isSearchBarActive={chat.isSearchBarActive}
                     filteredMessages={filteredMessages}
                     messages={messagesByUserId}
                     userEmail={auth.email}
                     currentSelectedMessage={currentSelectedMessage}
+                    setCurrentTime={this.props.setCurrentTime}
+                    clearTimeout={this.props.clearTimeout}
                     getMessages={this.props.getMessages}
                     chatId={chat.activeChat.chatId}
                     refreshing={chat.chatRefreshing}
@@ -162,7 +165,6 @@ class Chat extends React.PureComponent<IProps, IState> {
                             color={SOFT_BLUE_COLOR}
                         />
                         <Text style={{ marginRight: 10, marginLeft: 10 }}>
-                            {/* to do: refactor this code */}
                             {filteredMessages.length} / {filteredMessages.length ? currentMessageNumber + 1 : 0}
                         </Text>
                         <Icon.Button
@@ -215,7 +217,8 @@ const mapDispatchToProps = {
     setFindMessagesInputValue,
     cleanFindMessagesInputValue,
     togglePlayer,
-    downloadPlayer,
+    setCurrentTime,
+    clearTimeout,
     getMessages,
 }
 
@@ -229,7 +232,7 @@ const selector = state => {
         chat: state.chat,
         messagesByUserId,
         filteredMessages,
-        voiceMessagePlayers: state.messages.voiceMessagePlayers,
+        voiceMessagePlayer: state.messages.voiceMessagePlayer,
     }
 }
 

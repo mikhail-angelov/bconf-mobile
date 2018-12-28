@@ -18,9 +18,10 @@ interface IProps {
     isMyMessage: boolean
     timestamp: number
     selectedMessage: object
-    voiceMessagePlayers: object | null
-    downloadPlayer: (url) => void
+    voiceMessagePlayer: object
     togglePlayer: () => void
+    setCurrentTime: () => void
+    clearTimeout: () => void
 }
 
 export default class Message extends React.Component<IProps> {
@@ -34,7 +35,7 @@ export default class Message extends React.Component<IProps> {
     }
 
     public render() {
-        const { text, files, audioFiles, isMyMessage, timestamp, selectedMessage, voiceMessagePlayers } = this.props
+        const { text, files, audioFiles, isMyMessage, timestamp, selectedMessage, voiceMessagePlayer, idx } = this.props
         return (
             <View style={{ backgroundColor: selectedMessage ? SOFT_BLUE_COLOR : 'transparent', borderRadius: 10 }}>
                 <MessageWrapper isMyMessage={isMyMessage}>
@@ -43,10 +44,12 @@ export default class Message extends React.Component<IProps> {
                     ))}
                     {_.map(audioFiles, fileUrl => (
                         <MessageVoice
+                            setCurrentTime={this.props.setCurrentTime}
+                            clearTimeout={this.props.clearTimeout}
                             fileUrl={fileUrl}
                             togglePlayer={this.props.togglePlayer}
-                            downloadPlayer={this.props.downloadPlayer}
-                            voiceMessagePlayers={voiceMessagePlayers ? voiceMessagePlayers[fileUrl] : null}
+                            voiceMessagePlayer={voiceMessagePlayer}
+                            idx={idx}
                         />
                     ))}
                     <MessageText isMyMessage={isMyMessage}>{text}</MessageText>

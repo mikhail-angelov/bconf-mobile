@@ -32,6 +32,7 @@ import {
     ADD_AUDIO_IN_MESSAGE_LOCALY,
     DELETE_AUDIO_IN_MESSAGE_LOCALY,
     CLEAN_AUDIO_IN_MESSAGE_LOCALY,
+    CLEAN_CHAT,
     MESSAGES_REFRESH_START,
     MESSAGES_REFRESH_END,
 } from '../constants/actions'
@@ -89,7 +90,7 @@ export const getMessages = chatId => async (dispatch, getState) => {
         const timestamp = getState().chat.lastChatsTimestamp[chatId]
         dispatch({ type: MESSAGES_REFRESH_START })
         const newMessages = await doJsonAuthRequest({
-            url: `${MESSAGE_URL + chatId}?timestamp=${timestamp || 0}`,
+            url: `${MESSAGE_URL + chatId}?timestamp=${timestamp + 1 || 0}`,
             method: 'get',
         })
         dispatch({
@@ -105,6 +106,7 @@ export const getMessages = chatId => async (dispatch, getState) => {
 }
 
 export const setActiveChat = chatId => (dispatch, getState) => {
+    dispatch({ type: CLEAN_CHAT })
     const timestampsFromState = getState().chat.lastChatsTimestamp
     dispatch(getMessages(chatId))
     saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...timestampsFromState, [chatId]: Date.now() })
@@ -210,7 +212,7 @@ export const updateChatSettings = chat => async dispatch => {
 }
 
 export const changeChatPicture = (image, chat) => async dispatch => {
-    const filenameForAndroid = getFilenameForAndroid(image)
+    const filenameForAndroid = getFilenameForAndroid(image.path)
     const token = await getToken()
     dispatch({
         type: UPLOAD_CHAT_PHOTO_START,
@@ -259,7 +261,7 @@ export const refreshChatList = () => async dispatch => {
 }
 
 export const uploadPhotoInMessage = image => async dispatch => {
-    const filenameForAndroid = getFilenameForAndroid(image)
+    const filenameForAndroid = getFilenameForAndroid(image.path)
     const token = await getToken()
     dispatch({
         type: UPLOAD_PICTURES_IN_CHAT_START,

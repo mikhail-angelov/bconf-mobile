@@ -30,6 +30,7 @@ import {
     ADD_AUDIO_IN_MESSAGE_LOCALY,
     DELETE_AUDIO_IN_MESSAGE_LOCALY,
     CLEAN_AUDIO_IN_MESSAGE_LOCALY,
+    CLEAN_CHAT,
     START_MESSAGES_REFRESH,
     FIHISHED_MESSAGES_REFRESH,
 } from '../constants/actions'
@@ -183,6 +184,9 @@ const chat = (state = initialState, action) => {
                 audioUrl => audioUrl !== action.payload
             )
             return { ...state, audiosInCurrentMessage: newAudiosInCurrentMessage }
+        }
+        case CLEAN_CHAT: {
+            return { ...state, audiosInCurrentMessage: [], imagesInCurrentMessage: [] }
         }
         default: {
             return state
