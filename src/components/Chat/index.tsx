@@ -157,28 +157,14 @@ class Chat extends React.PureComponent<IProps, IState> {
                 />
                 {chat.isSearchBarActive ? (
                     <SearchMessagesBar>
-                        <Icon.Button
-                            size={20}
-                            onPress={() => this.nextMessage(currentMessageNumber)}
-                            backgroundColor="d6efef"
-                            name="arrow-up"
-                            color={SOFT_BLUE_COLOR}
-                        />
+                        <Icon.Button size={20} onPress={() => this.nextMessage(currentMessageNumber)} backgroundColor="d6efef" name="arrow-up" color={SOFT_BLUE_COLOR} />
                         <Text style={{ marginRight: 10, marginLeft: 10 }}>
                             {filteredMessages.length} / {filteredMessages.length ? currentMessageNumber + 1 : 0}
                         </Text>
-                        <Icon.Button
-                            size={20}
-                            onPress={() => this.prevMessage(currentMessageNumber)}
-                            name="arrow-down"
-                            backgroundColor="d6efef"
-                            color={SOFT_BLUE_COLOR}
-                        />
+                        <Icon.Button size={20} onPress={() => this.prevMessage(currentMessageNumber)} name="arrow-down" backgroundColor="d6efef" color={SOFT_BLUE_COLOR} />
                     </SearchMessagesBar>
                 ) : (
-                    <MessageInput
-                        handleSendMessage={message => this.props.sendMessage(chat.activeChat.chatId, message)}
-                    />
+                    <MessageInput handleSendMessage={message => this.props.sendMessage(chat.activeChat.chatId, message)} />
                 )}
             </ChatView>
         )

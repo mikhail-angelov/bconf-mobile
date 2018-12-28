@@ -72,7 +72,7 @@ export const getChats = () => async dispatch => {
         })
         chats = _.map(chats, chat => ({
             ...chat,
-            chatColor: getRandomColor(chat.chatId),
+            chatColor: chat.chatColor || getRandomColor(chat.chatId),
         }))
         dispatch({
             type: GET_CHATS,
@@ -93,9 +93,13 @@ export const getMessages = chatId => async (dispatch, getState) => {
             url: `${MESSAGE_URL + chatId}?timestamp=${timestamp + 1 || 0}`,
             method: 'get',
         })
+        const chatUsers = await doJsonAuthRequest({
+            url: `${CHAT_URL}/${chatId}`,
+            method: 'get',
+        })
         dispatch({
             type: LOAD_MESSAGES,
-            payload: { newMessages, chatId },
+            payload: { newMessages, chatId, chatUsers },
         })
         dispatch({ type: MESSAGES_REFRESH_END })
     } catch (e) {
@@ -201,7 +205,6 @@ export const updateChatSettings = chat => async dispatch => {
             method: 'put',
             data: { chatId: chat.chatId, chatName: newChatName, chatImage: newChatImage },
         })
-        dispatch(setActiveChat(newChat))
         dispatch({
             type: UPDATE_CHAT,
             payload: newChat,

@@ -117,7 +117,6 @@ class ProfileSettings extends React.Component<IProps, IState> {
                     ))}
                 </ProfileSettingsView>
                 <View>
-                    {/* buttons */}
                     <Modal animationType="slide" transparent={true} visible={isUploadPhotoButtonVisible}>
                         <View style={{ bottom: 0, position: 'absolute', width: '95%', marginRight: 10 }}>
                             <Button onPress={() => this.getPhotos()} style={{ width: '100%' }}>
