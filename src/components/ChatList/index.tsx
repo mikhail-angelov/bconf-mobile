@@ -134,7 +134,10 @@ class ChatList extends React.Component<IProps, IState> {
                     closeMenu={this.closeChatMenu}
                     isMenuOpen={this.state.isMenuOpen}
                     animated={this.state.animated}
-                    chatMenuItems={[{ title: 'Chats', handler: this.closeChatMenu, key: 'chats' }, { title: 'Logout', handler: this.props.logout, key: 'logout' }]}
+                    chatMenuItems={[
+                        { title: 'Chats', handler: this.closeChatMenu, key: 'chats' },
+                        { title: 'Logout', handler: this.props.logout, key: 'logout' },
+                    ]}
                 />
                 <ChatListWrapper width={width} style={{ zIndex: 0 }}>
                     <Header
@@ -158,7 +161,12 @@ class ChatList extends React.Component<IProps, IState> {
                         rightIconName="user"
                     />
                     <ScrollView
-                        refreshControl={<RefreshControl refreshing={this.props.chat.refreshingChatList} onRefresh={() => this.props.refreshChatList()} />}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.props.chat.refreshingChatList}
+                                onRefresh={() => this.props.refreshChatList()}
+                            />
+                        }
                         onScrollBeginDrag={event => this.toggleAddChatButton(event)}
                     >
                         {_.map(this.props.sortedChats, chat => (
@@ -178,7 +186,8 @@ class ChatList extends React.Component<IProps, IState> {
                                 haveNewMessages={
                                     !!(
                                         this.props.chat.lastChatsTimestamp &&
-                                        chat.lastMessageTimestamp - this.props.chat.lastChatsTimestamp[chat.chatId] > 0 &&
+                                        chat.lastMessageTimestamp - this.props.chat.lastChatsTimestamp[chat.chatId] >
+                                            0 &&
                                         chat.lastMessageAuthorId !== this.props.auth.id
                                     )
                                 }

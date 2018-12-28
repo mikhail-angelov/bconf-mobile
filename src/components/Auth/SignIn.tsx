@@ -57,7 +57,12 @@ class SignIn extends React.Component<IProps, IState> {
     public render() {
         return this.state.showGithubWebview ? (
             <View style={styles.container}>
-                <DialogHeader title="Login via Github" width={width} leftIconName="arrow-left" leftIconFunction={this.hide.bind(this)} />
+                <DialogHeader
+                    title="Login via Github"
+                    width={width}
+                    leftIconName="arrow-left"
+                    leftIconFunction={this.hide.bind(this)}
+                />
                 <WebView
                     originWhitelist={['*']}
                     onNavigationStateChange={this.onLoad.bind(this)}

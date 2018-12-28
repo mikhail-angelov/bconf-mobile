@@ -16,7 +16,14 @@ import {
     setCurrentTime,
     clearTimeout,
 } from '../../actions/messages'
-import { sendMessage, unsetActiveChat, getChatlistTimestamp, openSearchBar, closeSearchBar } from '../../actions/chat'
+import {
+    sendMessage,
+    unsetActiveChat,
+    getChatlistTimestamp,
+    openSearchBar,
+    closeSearchBar,
+    getMessages,
+} from '../../actions/chat'
 import _ from 'lodash'
 
 const { height } = Dimensions.get('window') // it's for IphoneX
@@ -144,6 +151,9 @@ class Chat extends React.PureComponent<IProps, IState> {
                     currentSelectedMessage={currentSelectedMessage}
                     setCurrentTime={this.props.setCurrentTime}
                     clearTimeout={this.props.clearTimeout}
+                    getMessages={this.props.getMessages}
+                    chatId={chat.activeChat.chatId}
+                    refreshing={chat.chatRefreshing}
                 />
                 {chat.isSearchBarActive ? (
                     <SearchMessagesBar>
@@ -209,6 +219,7 @@ const mapDispatchToProps = {
     togglePlayer,
     setCurrentTime,
     clearTimeout,
+    getMessages,
 }
 
 const selector = state => {

@@ -6,10 +6,22 @@ import { View, Text, Image } from 'react-native'
 export const Avatar = ({ style, size, srcImg, name, avatarColor }: IAvatarProps) => {
     return (
         <AvatarWrapper
-            style={{ ...style, aspectRatio: 1, elevation: 3, shadowRadius: '5', shadowOpacity: '0.3', shadowOffset: { width: 2, height: 2 }, shadowColor: 'black' }}
+            style={{
+                ...style,
+                aspectRatio: 1,
+                elevation: 3,
+                shadowRadius: '5',
+                shadowOpacity: '0.3',
+                shadowOffset: { width: 2, height: 2 },
+                shadowColor: 'black',
+            }}
             avatarColor={avatarColor}
         >
-            {srcImg ? <AvaImg source={{ uri: srcImg }} /> : <AvaText size={size}>{name ? name[0].toUpperCase() : ''}</AvaText>}
+            {srcImg ? (
+                <AvaImg source={{ uri: srcImg }} />
+            ) : (
+                <AvaText size={size}>{name ? name[0].toUpperCase() : ''}</AvaText>
+            )}
         </AvatarWrapper>
     )
 }

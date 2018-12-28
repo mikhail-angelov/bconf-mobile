@@ -41,11 +41,7 @@ export const ChatListItem = ({
             }}
         >
             <AvatarSide>
-                <Avatar
-                    name={name}
-                    srcImg={chatImage}
-                    avatarColor={chatColor}
-                />
+                <Avatar name={name} srcImg={chatImage} avatarColor={chatColor} />
             </AvatarSide>
             <LastMessageArea>
                 <ChatName>
@@ -59,7 +55,9 @@ export const ChatListItem = ({
                     <LastMessageText>{lastMessageAuthor ? lastMessageText : 'Empty chat'}</LastMessageText>
                 </LastMessage>
             </LastMessageArea>
-            <Timestamp>{lastMessageTimestamp ? moment(lastMessageTimestamp).format(MESSAGE_TIMESTAMP_FORMAT) : ''}</Timestamp>
+            <Timestamp>
+                {lastMessageTimestamp ? moment(lastMessageTimestamp).format(MESSAGE_TIMESTAMP_FORMAT) : ''}
+            </Timestamp>
         </ChatListItemWrapper>
     )
 }

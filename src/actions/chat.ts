@@ -33,6 +33,8 @@ import {
     DELETE_AUDIO_IN_MESSAGE_LOCALY,
     CLEAN_AUDIO_IN_MESSAGE_LOCALY,
     CLEAN_CHAT,
+    MESSAGES_REFRESH_START,
+    MESSAGES_REFRESH_END,
 } from '../constants/actions'
 import _ from 'lodash'
 import RNFetchBlob from 'rn-fetch-blob'
@@ -86,6 +88,7 @@ export const getChats = () => async dispatch => {
 export const getMessages = chatId => async (dispatch, getState) => {
     try {
         const timestamp = getState().chat.lastChatsTimestamp[chatId]
+        dispatch({ type: MESSAGES_REFRESH_START })
         const newMessages = await doJsonAuthRequest({
             url: `${MESSAGE_URL + chatId}?timestamp=${timestamp + 1 || 0}`,
             method: 'get',
@@ -94,9 +97,11 @@ export const getMessages = chatId => async (dispatch, getState) => {
             type: LOAD_MESSAGES,
             payload: { newMessages, chatId },
         })
+        dispatch({ type: MESSAGES_REFRESH_END })
     } catch (e) {
         console.log(e)
         dispatch({ type: LOAD_MESSAGES_ERROR })
+        dispatch({ type: MESSAGES_REFRESH_END })
     }
 }
 

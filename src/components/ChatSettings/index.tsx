@@ -86,7 +86,9 @@ class ChatSettings extends React.Component<IProps, IState> {
                     width={width}
                     leftIconName="arrow-left"
                     leftIconFunction={() => Navigation.pop('ChatSettings')}
-                    rightIconFunction={isChatEdit ? () => this.updateChatSettings() : () => this.setState({ isChatEdit: true })}
+                    rightIconFunction={
+                        isChatEdit ? () => this.updateChatSettings() : () => this.setState({ isChatEdit: true })
+                    }
                     rightIconName={isChatEdit ? 'check' : 'pencil'}
                 />
                 <ChatSettingsView>
@@ -117,7 +119,8 @@ class ChatSettings extends React.Component<IProps, IState> {
                                     />
                                 ) : (
                                     <Text style={{ fontSize: 24, marginTop: 6, marginBottom: 6, maxHeight: 60 }}>
-                                        {this.state[item.fieldName] && this.state[item.fieldName].length > maxStringLength
+                                        {this.state[item.fieldName] &&
+                                        this.state[item.fieldName].length > maxStringLength
                                             ? this.state[item.fieldName].substring(0, maxStringLength - 3) + '...'
                                             : this.state[item.fieldName] || 'Empty'}
                                     </Text>
@@ -138,7 +141,10 @@ class ChatSettings extends React.Component<IProps, IState> {
                             >
                                 Choose photo
                             </Button>
-                            <Button style={{ width: '100%' }} onPress={() => this.setState({ isUploadPhotoButtonVisible: false })}>
+                            <Button
+                                style={{ width: '100%' }}
+                                onPress={() => this.setState({ isUploadPhotoButtonVisible: false })}
+                            >
                                 Cancel
                             </Button>
                         </View>
@@ -146,8 +152,16 @@ class ChatSettings extends React.Component<IProps, IState> {
                 </View>
                 {chat.uploadingChatPhoto && (
                     <UploadSection>
-                        {chat.uploadingChatPhoto && chat.uploadingChatPhotoProgress === 0 && <Progress.Circle color={SOFT_BLUE_COLOR} size={100} indeterminate={true} />}
-                        {chat.uploadingChatPhotoProgress !== 0 && <Progress.Pie color={SOFT_BLUE_COLOR} progress={chat.uploadingChatPhotoProgress} size={100} />}
+                        {chat.uploadingChatPhoto && chat.uploadingChatPhotoProgress === 0 && (
+                            <Progress.Circle color={SOFT_BLUE_COLOR} size={100} indeterminate={true} />
+                        )}
+                        {chat.uploadingChatPhotoProgress !== 0 && (
+                            <Progress.Pie
+                                color={SOFT_BLUE_COLOR}
+                                progress={chat.uploadingChatPhotoProgress}
+                                size={100}
+                            />
+                        )}
                     </UploadSection>
                 )}
             </ChatSettingsWrap>

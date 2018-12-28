@@ -39,7 +39,10 @@ function setSocketListeners(ws, store) {
         console.log('message', message)
         const currentStore = store.getState()
         if (message.chatId === currentStore.chat.activeChat.chatId) {
-            saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, { ...currentStore.chat.lastChatsTimestamp, [message.chatId]: Date.now() })
+            saveChatlistTimestamp(CHAT_LIST_TIMESTAMP, {
+                ...currentStore.chat.lastChatsTimestamp,
+                [message.chatId]: Date.now(),
+            })
         }
         store.dispatch({ type: NEW_MESSAGE, payload: message })
     }

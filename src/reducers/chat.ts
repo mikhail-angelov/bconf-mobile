@@ -31,6 +31,8 @@ import {
     DELETE_AUDIO_IN_MESSAGE_LOCALY,
     CLEAN_AUDIO_IN_MESSAGE_LOCALY,
     CLEAN_CHAT,
+    START_MESSAGES_REFRESH,
+    FIHISHED_MESSAGES_REFRESH,
 } from '../constants/actions'
 import _ from 'lodash'
 
@@ -51,6 +53,7 @@ export const initialState = {
     lastChatsTimestamp: {},
     imagesInCurrentMessage: [],
     audiosInCurrentMessage: [],
+    chatRefreshing: false,
 }
 
 const chat = (state = initialState, action) => {
@@ -131,6 +134,12 @@ const chat = (state = initialState, action) => {
         }
         case REFRESH_CHATLIST_END: {
             return { ...state, refreshingChatList: false }
+        }
+        case START_MESSAGES_REFRESH: {
+            return { ...state, chatRefreshing: true }
+        }
+        case FIHISHED_MESSAGES_REFRESH: {
+            return { ...state, chatRefreshing: false }
         }
         case ADD_PICTURE_IN_MESSAGE_LOCALY: {
             return { ...state, imagesInCurrentMessage: [...state.imagesInCurrentMessage, action.payload] }

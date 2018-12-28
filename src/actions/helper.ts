@@ -45,7 +45,7 @@ export function getRandomColor(chatId) {
     return colors[rand]
 }
 
-export const getFilenameForAndroid = (path) => {
-  const startFilenameIndex = path.lastIndexOf('/')
-  return path.substring(startFilenameIndex + 1)
+export const getFilenameForAndroid = path => {
+    const startFilenameIndex = path.lastIndexOf('/')
+    return path.substring(startFilenameIndex + 1)
 }

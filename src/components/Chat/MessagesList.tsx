@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
+import { RefreshControl } from 'react-native'
 import { FlatList } from 'react-native'
-import styled from 'styled-components'
 import Message from './Message'
 import { WHITE_COLOR } from '../../helpers/styleConstants'
 
@@ -15,6 +15,9 @@ interface IProps {
     togglePlayer: () => void
     clearTimeout: () => void
     setCurrentTime: () => void
+    refreshing: boolean
+    chatId: string
+    getMessages: (chatId: string) => void
 }
 export class MessagesList extends React.Component<IProps> {
     public componentDidUpdate(prevProps) {
@@ -53,7 +56,7 @@ export class MessagesList extends React.Component<IProps> {
     }
 
     public render() {
-        const { messages } = this.props
+        const { messages, getMessages, chatId, refreshing } = this.props
         return (
             <FlatList
                 inverted
@@ -61,9 +64,10 @@ export class MessagesList extends React.Component<IProps> {
                 ref={ref => {
                     this.flatListRef = ref
                 }}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => getMessages(chatId)} />}
                 style={{
-                    paddingRight: 20,
-                    paddingLeft: 20,
+                    paddingRight: 10,
+                    paddingLeft: 10,
                     display: 'flex',
                     flexDirection: 'column',
                     backgroundColor: `${WHITE_COLOR}`,
