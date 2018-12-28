@@ -66,6 +66,8 @@ const messages = (state = initialState, action) => {
                     ...state.voiceMessagePlayer,
                     audioDuration: action.payload.audioDuration,
                     playStatus: 'pause',
+                    activeMessageId: action.payload.messageId,
+                    currentTime: 0,
                 },
             }
         }

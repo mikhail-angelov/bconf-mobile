@@ -7,23 +7,29 @@ import {
     PLAYER_DOWNLOAD_COMPLETE,
 } from '../constants/actions'
 import Sound from 'react-native-sound'
-import { func } from 'prop-types'
 
 let playerUrl,
     player,
     isLast,
     timer = 0,
-    playStatus = 'pause'
+    playStatus = 'pause',
+    messageId
 
 const messages = store => next => async action => {
     if (action.type === TOGGLE_VOICE_MESSAGE_STATUS) {
+        if (player) {
+            player.pause()
+            playStatus = 'pause'
+            clearInterval(timer)
+        }
+        if (messageId !== action.payload.messageId) {
+            messageId = action.payload.messageId
+            playerUrl = action.payload.playerUrl
+            player = await getPlayer(playerUrl)
+            const audioDuration = player.getDuration()
+            store.dispatch({ type: PLAYER_DOWNLOAD_COMPLETE, payload: { audioDuration, playerUrl, messageId } })
+        }
         if (playStatus === 'pause') {
-            if (playerUrl !== action.payload.playerUrl) {
-                playerUrl = action.payload.playerUrl
-                player = await getPlayer(playerUrl)
-                const audioDuration = player.getDuration()
-                store.dispatch({ type: PLAYER_DOWNLOAD_COMPLETE, payload: { audioDuration, playerUrl } })
-            }
             playStatus = 'play'
             player.play(success => {
                 if (success) {
@@ -46,8 +52,6 @@ const messages = store => next => async action => {
             type: TOGGLE_VOICE_MESSAGE_BUTTON,
             payload: { playStatus, playerUrl },
         })
-    } else if (action.type === DOWNLOAD_PLAYER) {
-        //refactor this logic
     } else if (action.type === SET_CURRENT_TIME) {
         store.dispatch({ type: GET_CURRENT_TIME, payload: { currentTime: action.payload.currentTime, playerUrl } })
         player.setCurrentTime(action.payload.currentTime)

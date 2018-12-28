@@ -8,7 +8,8 @@ import _ from 'lodash'
 interface IProps {
     fileUrl: string
     playStatus: string
-    togglePlayer: (fileUrl) => void
+    idx: string
+    togglePlayer: (fileUrl, idx) => void
     setCurrentTime: (value) => void
     clearTimeout: () => void
     voiceMessagePlayer: object
@@ -37,28 +38,31 @@ export class MessageVoice extends React.Component<IProps> {
     }
 
     public render() {
-        const { fileUrl, voiceMessagePlayer } = this.props
+        const { fileUrl, voiceMessagePlayer, idx } = this.props
         return (
             <MessageVoiceWrap>
                 <Icon
-                    onPress={() => this.props.togglePlayer(fileUrl)}
-                    size={20}
+                    onPress={() => this.props.togglePlayer(fileUrl, idx)}
+                    size={25}
                     name={
-                        _.isEmpty(voiceMessagePlayer)
+                        _.isEmpty(voiceMessagePlayer) || voiceMessagePlayer.activeMessageId !== idx
                             ? 'download'
                             : voiceMessagePlayer && voiceMessagePlayer.playStatus !== 'pause'
                             ? 'pause'
                             : 'play'
                     }
                     backgroundColor={WHITE_COLOR}
-                    style={{ margin: 8 }}
+                    style={{ marginLeft: 10 }}
                     color={WHITE_COLOR}
                 />
-                {!_.isEmpty(voiceMessagePlayer) && (
+                {voiceMessagePlayer.activeMessageId === idx && (
                     <ProgressiveWrap>
                         <Progress
+                            thumbTintColor={WHITE_COLOR}
+                            maximumTrackTintColor={BLACK_COLOR}
+                            minimumTrackTintColor={WHITE_COLOR}
                             onTouchStart={() => this.props.clearTimeout()}
-                            style={{ borderRadius: 10 }}
+                            style={{ borderRadius: 10, backgroundColor: SOFT_BLUE_COLOR }}
                             value={voiceMessagePlayer.currentTime}
                             maximumValue={voiceMessagePlayer.audioDuration}
                             onValueChange={value => {
@@ -78,7 +82,9 @@ export class MessageVoice extends React.Component<IProps> {
     }
 }
 
-const Time = styled(Text)``
+const Time = styled(Text)`
+    margin-left: 15px;
+`
 
 const Progress = styled(Slider)`
     background-color: ${WHITE_COLOR};

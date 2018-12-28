@@ -35,7 +35,7 @@ export default class Message extends React.Component<IProps> {
     }
 
     public render() {
-        const { text, files, audioFiles, isMyMessage, timestamp, selectedMessage, voiceMessagePlayer } = this.props
+        const { text, files, audioFiles, isMyMessage, timestamp, selectedMessage, voiceMessagePlayer, idx } = this.props
         return (
             <View style={{ backgroundColor: selectedMessage ? SOFT_BLUE_COLOR : 'transparent', borderRadius: 10 }}>
                 <MessageWrapper isMyMessage={isMyMessage}>
@@ -49,6 +49,7 @@ export default class Message extends React.Component<IProps> {
                             fileUrl={fileUrl}
                             togglePlayer={this.props.togglePlayer}
                             voiceMessagePlayer={voiceMessagePlayer}
+                            idx={idx}
                         />
                     ))}
                     <MessageText isMyMessage={isMyMessage}>{text}</MessageText>
