@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://bconf.xyz/'
+export const BASE_URL = 'https://bconf.xyz/api/'
 export const AUTH_URL = `${BASE_URL}auth/login`
 export const AUTH_SOCIAL_URL = `${BASE_URL}auth/login-profile`
 export const AUTH_CHECK_URL = `${BASE_URL}auth/check`
